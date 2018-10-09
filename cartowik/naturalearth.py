@@ -14,29 +14,31 @@ import cartopy.io.shapereader as cshp
 # Natural Earth internals
 # -----------------------
 
-def _add_subject_feature(ax=None, category=None, name=None, scale=None,
-                         facecolor=None, subject=None, subject_facecolor=None,
-                         **kwargs):
-    """A re-implementation of Cartopy's GeoAxes.add_feature allowing different
-    edge and face colors for the subject's geometry."""
+def _add_subject_feature(category=None, name=None, scale=None, **kwargs):
+    """Plot Natural Earth feature iallowing a different color for the
+    subject."""
+    fname = cshp.natural_earth(resolution=scale, category=category, name=name)
+    _add_subject_shpfile(fname, **kwargs)
+
+
+def _add_subject_shpfile(filename, ax=None, facecolor=None, subject=None,
+                         subject_facecolor=None, **kwargs):
+    """Plot shapefile geometries allowing a different color for the subject."""
 
     # get current axes if None provided
     ax = ax or plt.gca()
 
     # prepare axes extent geometry
     crs = ccrs.PlateCarree()
-    west, east, south, north = ax.get_extent(crs=crs)
-    axes_box = sgeom.box(west, south, east, north)
+    axes_box = _get_extent_geometry(ax=ax, crs=crs)
 
     # open shapefile data
-    shp = cshp.Reader(cshp.natural_earth(
-        category=category, name=name, resolution=scale))
+    shp = cshp.Reader(filename)
 
     # loop on records
     for rec in shp.records():
-        attr = 'name'
-        attr = attr if attr in rec.attributes else attr.upper()
-        if attr in rec.attributes and rec.attributes[attr] == subject:
+        attr = 'name' if 'name' in rec.attributes else 'NAME'
+        if subject is not None and rec.attributes[attr] == subject:
             color = subject_facecolor
         else:
             color = facecolor
@@ -44,6 +46,13 @@ def _add_subject_feature(ax=None, category=None, name=None, scale=None,
         # add intersecting geometries
         if rec.geometry is not None and axes_box.intersects(rec.geometry):
             ax.add_geometries(rec.geometry, crs, facecolor=color, **kwargs)
+
+
+def _get_extent_geometry(ax=None, crs=None):
+    """Return axes extent as shapely geometry."""
+    ax = ax or plt.gca()
+    west, east, south, north = ax.get_extent(crs=crs)
+    return sgeom.box(west, south, east, north)
 
 
 # Natural Earth cultural
