@@ -94,10 +94,28 @@ TOPOGRAPHIC = mcolors.LinearSegmentedColormap.from_list('Topographic', [
 ])
 
 
+# Relief shading colormaps
+# ------------------------
+
+SHADES = mcolors.LinearSegmentedColormap.from_list('Shades', [
+    (0.0, '#00000000'),  # transparent black
+    (1.0, '#000000ff'),  # solid black
+])
+
+SHINES = mcolors.LinearSegmentedColormap.from_list('Shines', [
+    (0.0, '#ffffffff'),  # solid white
+    (0.5, '#ffffff00'),  # transparent white
+    (0.5, '#00000000'),  # transparent black
+    (1.0, '#000000ff'),  # solid black
+])
+
+
 # Colormaps dictionary
 # --------------------
 
 COLORMAPS = dict(
     Bathymetric=BATHYMETRIC,
     Topographic=TOPOGRAPHIC,
+    Shades=SHADES,
+    Shines=SHINES,
 )
