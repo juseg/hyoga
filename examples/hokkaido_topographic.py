@@ -10,6 +10,7 @@ import rasterio
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
 import cartowik.naturalearth as cne
+import cartowik.conventions as ccv
 
 
 # Main program
@@ -24,9 +25,10 @@ ax.set_extent((138.5, 146.5, 40.5, 46.5), crs=ax.projection)
 with rasterio.open('external/CleanTOPO2.tif') as dataset:
     bounds = dataset.bounds
     extent = [bounds.left, bounds.right, bounds.bottom, bounds.top]
-    data = dataset.read(1)
-    ax.imshow(data, cmap='Greys', extent=extent, interpolation='nearest',
-              origin='upper', transform=ax.projection)
+    data = dataset.read(1) - 10701.0
+    ax.imshow(data, cmap=ccv.COLORMAPS['Bathymetric'], extent=extent,
+              interpolation='bilinear', origin='upper',
+              transform=ax.projection, vmin=-6000, vmax=0)
 
 # add physical elements
 cne.add_rivers(ax)
