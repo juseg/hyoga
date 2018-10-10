@@ -69,7 +69,7 @@ BATHYMETRIC = mcolors.LinearSegmentedColormap.from_list('Bathymetric', [
     (1-250/6000, COLORS['bathy02']),   # '375  250  125
     (1-100/6000, COLORS['bathy01']),   # '150  100   50
     (1-0/6000, COLORS['bathy00']),     # '  0    0    0 light blue
-])
+], N=4096)
 
 TOPOGRAPHIC = mcolors.LinearSegmentedColormap.from_list('Topographic', [
     (0/9000, COLORS['topog01']),     # '   0     0    0    0    0
@@ -91,7 +91,8 @@ TOPOGRAPHIC = mcolors.LinearSegmentedColormap.from_list('Topographic', [
     (7000/9000, COLORS['topog17']),  # 14000 10500 7000 4667 3500
     (8000/9000, COLORS['topog18']),  # 16000 12000 8000 5333 4000
     (9000/9000, COLORS['topog19']),  # 18000 13500 9000 6000 4500 light grey
-])
+], N=4096)
+TOPOGRAPHIC.set_under(COLORS['topog00'])
 
 
 # Relief shading colormaps
