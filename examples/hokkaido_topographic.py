@@ -3,12 +3,14 @@
 # GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
 """
-Plot Hokkaido within Japan location map.
+Plot Hokkaido topographic map.
 """
 
 import rasterio
+import rasterio.mask
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
+import cartopy.io.shapereader as cshp
 import cartowik.naturalearth as cne
 import cartowik.conventions as ccv
 
@@ -29,6 +31,20 @@ with rasterio.open('external/CleanTOPO2.tif') as dataset:
     ax.imshow(data, cmap=ccv.COLORMAPS['Bathymetric'], extent=extent,
               interpolation='bilinear', origin='upper',
               transform=ax.projection, vmin=-6000, vmax=0)
+
+# prepare land mask
+fname = cshp.natural_earth(resolution='10m', category='physical', name='land')
+shp = cshp.Reader(fname)
+geometries = list(shp.geometries())
+
+# plot topography
+with rasterio.open('external/srtm.vrt') as dataset:
+    bounds = dataset.bounds
+    extent = [bounds.left, bounds.right, bounds.bottom, bounds.top]
+    data, transform = rasterio.mask.mask(dataset, geometries, filled=False)
+    ax.imshow(data[0], cmap=ccv.COLORMAPS['Topographic'], extent=extent,
+              interpolation='bilinear', origin='upper',
+              transform=ax.projection, vmin=0, vmax=9000)
 
 # add physical elements
 cne.add_rivers(ax)
