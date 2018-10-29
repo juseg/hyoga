@@ -8,12 +8,23 @@
 mkdir -p external
 cd external
 
-# download CleanTOPO (full version) worldwide elevation data
-wget -nc http://naciscdn.org/data/cleantopo/Full.zip
-unzip -jn Full.zip Full/CleanTOPO2.{tif,tfw}
+# prepare CleanTOPO2 (full version) worldwide elevation data
+if [ ! -f cleantopo2.tif ]
+then
 
-# download Hokkaido SRTM land topographic data
-if [ ! -f srtm_hokkaido.tif ]
+    # download CleanTOPO2 data
+    wget -nc http://naciscdn.org/data/cleantopo/Full.zip
+    unzip -jn Full.zip Full/CleanTOPO2.{tif,tfw}
+
+    # reproject for Hokkaido
+    gdalwarp -r cubic -s_srs "+proj=longlat" -t_srs "+proj=utm +zone=54" \
+         -te 250000 4500000 1050000 5100000 -tr 5000 5000 \
+         CleanTOPO2.tif cleantopo2.tif
+
+fi
+
+# prepare SRTM land topographic data
+if [ ! -f srtm.tif ]
 then
 
     # download SRTM data
@@ -24,7 +35,14 @@ then
         unzip -n $tile.zip $tile.{hdr,tfw,tif}
     done
 
-    # build virtual patch
-    gdalbuildvrt srtm.vrt srtm_??_??.tif
+    ## fix offset in cleantopo2
+    #gdal_translate -a_offset "-10701" -ot Int16 cleantopo2{,.tmp1}.tif
+    #gdal_translate -unscale cleantopo2{.tmp1,.tmp2}.tif
+    #rm cleantopo2{.tmp1,.tmp2}.tif
+
+    # patch and reproject for Hokkaido
+    gdalwarp -r cubic -s_srs "+proj=longlat" -t_srs "+proj=utm +zone=54" \
+             -te 250000 4500000 1050000 5100000 -tr 500 500 \
+             srtm_??_??.tif srtm.tif
 
 fi

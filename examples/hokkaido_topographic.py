@@ -17,12 +17,12 @@ import cartowik.shadedrelief as csr
 
 # initialize figure
 fig = plt.figure()
-ax = fig.add_axes([0.0, 0.0, 1.0, 1.0], projection=ccrs.PlateCarree())
-ax.set_extent((138.5, 146.5, 40.5, 46.5), crs=ax.projection)
+ax = fig.add_axes([0.0, 0.0, 1.0, 1.0], projection=ccrs.UTM(54))
+ax.set_extent((250e3, 1050e3, 4500e3, 5100e3), crs=ax.projection)
 
 # add relief maps
-csr.add_bathymetry('external/CleanTOPO2.tif', offset=10701.0)
-csr.add_topography('external/srtm.vrt', mask='land')
+csr.add_bathymetry('external/cleantopo2.tif', offset=10701.0)
+csr.add_topography('external/srtm.tif')
 
 # add physical elements
 cne.add_rivers(ax)
