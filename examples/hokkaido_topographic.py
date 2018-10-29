@@ -22,9 +22,9 @@ ax.set_extent((250e3, 1050e3, 4500e3, 5100e3), crs=ax.projection)
 
 # add relief maps
 csr.add_bathymetry('external/cleantopo2.tif', offset=10701.0)
-csr.add_hillshade('external/cleantopo2.tif')
-csr.add_topography('external/srtm.tif')
-csr.add_hillshade('external/srtm.tif')
+csr.add_multishade('external/cleantopo2.tif')
+csr.add_topography('external/srtm.tif')  # FIXME vmax=4500)
+csr.add_multishade('external/srtm.tif')
 
 # add physical elements
 cne.add_rivers(ax)

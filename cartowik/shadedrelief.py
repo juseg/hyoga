@@ -115,3 +115,26 @@ def add_hillshade(filename, ax=None, mask=None, offset=0.0, azimuth=315.0,
     # plot shading
     ax.imshow(shades, cmap=ccv.COLORMAPS['Shines'], extent=extent,
               interpolation='bilinear', origin='upper', vmin=-1.0, vmax=1.0)
+
+
+def add_multishade(filename, ax=None, mask=None, offset=0.0, altitudes=None,
+                   azimuths=None, exag=1.0):
+    """Add multi-direction hillshade image from raster file."""
+
+    # get current axes if None provided
+    ax = ax or plt.gca()
+
+    # default light source parameters
+    altitudes = altitudes or [30.0]*4
+    azimuths = azimuths or [300.0, 315.0, 315.0, 330.0]
+
+    # open topographic data and compute hillshades
+    data, extent = _open_raster_data(filename, mask=mask, offset=offset)
+    shades = [_compute_hillshade(data, extent, altitude=alti, azimuth=azim,
+                                 exag=exag)
+              for alti, azim in zip(altitudes, azimuths)]
+    shades = sum(shades)/len(shades)
+
+    # plot hillshades
+    ax.imshow(shades, cmap=ccv.COLORMAPS['Shines'], extent=extent,
+              interpolation='bilinear', origin='upper', vmin=-1.0, vmax=1.0)
