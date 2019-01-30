@@ -21,15 +21,15 @@ ax.set_extent((250e3, 1050e3, 4500e3, 5100e3), crs=ax.projection)
 ax.background_patch.set_facecolor('#c6ecff')  # drawing oceans is very slow
 
 # add cultural elements
-cne.add_countries(ax, subject='Japan', subject_facecolor='#f6e1b9')
-cne.add_states(ax, subject='Hokkaidō', facecolor='none')
-cne.add_state_borders(ax)
-cne.add_country_borders(ax)
+cne.add_countries(ax=ax, subject='Japan', subject_facecolor='#f6e1b9')
+cne.add_states(ax=ax, subject='Hokkaidō', facecolor='none')
+cne.add_state_borders(ax=ax)
+cne.add_country_borders(ax=ax)
 
 # add physical elements
-cne.add_rivers(ax)
-cne.add_lakes(ax)
-cne.add_coastline(ax)
+cne.add_rivers(ax=ax)
+cne.add_lakes(ax=ax)
+cne.add_coastline(ax=ax)
 
 # show
 plt.show()

@@ -27,15 +27,15 @@ csr.add_topography('external/srtm.tif')  # FIXME vmax=4500)
 csr.add_multishade('external/srtm.tif')
 
 # add physical elements
-cne.add_rivers(ax)
-cne.add_lakes(ax)
-cne.add_coastline(ax)
+cne.add_rivers(ax=ax)
+cne.add_lakes(ax=ax)
+cne.add_coastline(ax=ax)
 
 # add cultural elements
-cne.add_states(ax, facecolor='w',  # FIXME alpha=0.5,
+cne.add_states(ax=ax, facecolor='w', alpha=0.5,
                subject='Hokkaidō', subject_facecolor='none')
-cne.add_state_borders(ax)
-cne.add_country_borders(ax)
+cne.add_state_borders(ax=ax)
+cne.add_country_borders(ax=ax)
 
 # show
 plt.show()
