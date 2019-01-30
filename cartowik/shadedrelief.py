@@ -67,62 +67,60 @@ def _compute_hillshade(data, extent, altitude=30.0, azimuth=315.0, exag=1.0):
     return shades
 
 
+def _add_imshow(data, ax=None, cmap=None, interpolation='bilinear',
+                origin='upper', **kwargs):
+    """Wrapper for imshow enabling custom conventions and defaults."""
+    ax = ax or plt.gca()
+    cmap = ccv.COLORMAPS.get(cmap, cmap)
+    return ax.imshow(data, cmap=cmap, interpolation=interpolation,
+                     origin=origin, **kwargs)
+
+
 # Shaded relief plotting
 # ----------------------
 
-def add_bathymetry(filename, ax=None, mask=None, offset=0.0):
+def add_bathymetry(filename, mask=None, offset=0.0,
+                   cmap='Bathymetric', vmin=-6000, vmax=0, **kwargs):
     """Add bathymetric image from raster file."""
-
-    # get current axes if None provided
-    ax = ax or plt.gca()
 
     # open bathymetric data
     data, extent = _open_raster_data(filename, mask=mask, offset=offset)
 
     # plot bathymetry
-    ax.imshow(data, cmap=ccv.COLORMAPS['Bathymetric'], extent=extent,
-              interpolation='bilinear', origin='upper',
-              transform=ax.projection, vmin=-6000, vmax=0)
+    return _add_imshow(data, extent=extent, cmap=cmap,
+                       vmin=vmin, vmax=vmax, **kwargs)
 
 
-def add_topography(filename, ax=None, mask=None, offset=0.0):
+def add_topography(filename, mask=None, offset=0.0,
+                   cmap='Topographic', vmin=0, vmax=9000, **kwargs):
     """Add topographic image from raster file."""
-
-    # get current axes if None provided
-    ax = ax or plt.gca()
 
     # open topographic data
     data, extent = _open_raster_data(filename, mask=mask, offset=offset)
 
     # plot topography
-    ax.imshow(data, cmap=ccv.COLORMAPS['Topographic'], extent=extent,
-              interpolation='bilinear', origin='upper',
-              transform=ax.projection, vmin=0, vmax=9000)
+    return _add_imshow(data, extent=extent, cmap=cmap,
+                       vmin=vmin, vmax=vmax, **kwargs)
 
 
-def add_hillshade(filename, ax=None, mask=None, offset=0.0, azimuth=315.0,
-                  altitude=30.0, exag=1.0):
+def add_hillshade(filename, mask=None, offset=0.0,
+                  altitude=30.0, azimuth=315.0, exag=1.0,
+                  cmap='Shines', vmin=-1.0, vmax=1.0, **kwargs):
     """Add hillshades image from raster file."""
-
-    # get current axes if None provided
-    ax = ax or plt.gca()
 
     # open topographic data and compute hillshades
     data, extent = _open_raster_data(filename, mask=mask, offset=offset)
-    shades = _compute_hillshade(data, extent, altitude=altitude,
-                                azimuth=azimuth, exag=exag)
+    data = _compute_hillshade(data, extent, altitude, azimuth, exag)
 
     # plot shading
-    ax.imshow(shades, cmap=ccv.COLORMAPS['Shines'], extent=extent,
-              interpolation='bilinear', origin='upper', vmin=-1.0, vmax=1.0)
+    return _add_imshow(data, extent=extent, cmap=cmap,
+                       vmin=vmin, vmax=vmax, **kwargs)
 
 
-def add_multishade(filename, ax=None, mask=None, offset=0.0, altitudes=None,
-                   azimuths=None, exag=1.0):
+def add_multishade(filename, mask=None, offset=0.0,
+                   altitudes=None, azimuths=None, exag=1.0,
+                   cmap='Shines', vmin=-1.0, vmax=1.0, **kwargs):
     """Add multi-direction hillshade image from raster file."""
-
-    # get current axes if None provided
-    ax = ax or plt.gca()
 
     # default light source parameters
     altitudes = altitudes or [30.0]*4
@@ -130,11 +128,10 @@ def add_multishade(filename, ax=None, mask=None, offset=0.0, altitudes=None,
 
     # open topographic data and compute hillshades
     data, extent = _open_raster_data(filename, mask=mask, offset=offset)
-    shades = [_compute_hillshade(data, extent, altitude=alti, azimuth=azim,
-                                 exag=exag)
-              for alti, azim in zip(altitudes, azimuths)]
-    shades = sum(shades)/len(shades)
+    data = [_compute_hillshade(data, extent, altitude, azimuth, exag)
+            for altitude, azimuth in zip(altitudes, azimuths)]
+    data = sum(data)/len(data)
 
     # plot hillshades
-    ax.imshow(shades, cmap=ccv.COLORMAPS['Shines'], extent=extent,
-              interpolation='bilinear', origin='upper', vmin=-1.0, vmax=1.0)
+    return _add_imshow(data, extent=extent, cmap=cmap,
+                       vmin=vmin, vmax=vmax, **kwargs)
