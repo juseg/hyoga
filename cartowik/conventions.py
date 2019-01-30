@@ -5,6 +5,7 @@
 Wikipedia color and linestyle conventions.
 """
 
+import numpy as np
 import matplotlib.colors as mcolors
 
 
@@ -94,6 +95,10 @@ TOPOGRAPHIC = mcolors.LinearSegmentedColormap.from_list('Topographic', [
 ], N=4096)
 TOPOGRAPHIC.set_under(COLORS['topog00'])
 
+ELEVATIONAL = mcolors.LinearSegmentedColormap.from_list('Elevational', [
+    *BATHYMETRIC(np.linspace(0, 1, 2048)),
+    *TOPOGRAPHIC(np.linspace(0, 1, 2048)),
+], N=4096)
 
 # Relief shading colormaps
 # ------------------------
