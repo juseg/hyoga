@@ -67,6 +67,23 @@ def _compute_hillshade(data, extent, altitude=30.0, azimuth=315.0, exag=1.0):
     return shades
 
 
+def _compute_multishade(data, extent, altitudes=None, azimuths=None, exag=1.0):
+    """Compute multi-direction hillshade map from a data array and extent."""
+
+    # default light source parameters
+    altitudes = altitudes or [30.0]*4
+    azimuths = azimuths or [300.0, 315.0, 315.0, 330.0]
+
+    # check that the lists have equal lengths
+    if len(altitudes) != len(azimuths):
+        raise ValueError("altitudes and azimuths should have equal lengths")
+
+    # compute multi-direction hillshade
+    shades = sum([_compute_hillshade(data, extent, alti, azim, exag)
+                  for alti, azim in zip(altitudes, azimuths)])/len(altitudes)
+    return shades
+
+
 def _add_imshow(data, ax=None, cmap=None, interpolation='bilinear',
                 origin='upper', **kwargs):
     """Wrapper for imshow enabling custom conventions and defaults."""
@@ -122,15 +139,9 @@ def add_multishade(filename, mask=None, offset=0.0,
                    cmap='Shines', vmin=-1.0, vmax=1.0, **kwargs):
     """Add multi-direction hillshade image from raster file."""
 
-    # default light source parameters
-    altitudes = altitudes or [30.0]*4
-    azimuths = azimuths or [300.0, 315.0, 315.0, 330.0]
-
     # open topographic data and compute hillshades
     data, extent = _open_raster_data(filename, mask=mask, offset=offset)
-    data = [_compute_hillshade(data, extent, altitude, azimuth, exag)
-            for altitude, azimuth in zip(altitudes, azimuths)]
-    data = sum(data)/len(data)
+    data = _compute_multishade(data, extent, altitudes, azimuths, exag)
 
     # plot hillshades
     return _add_imshow(data, extent=extent, cmap=cmap,
