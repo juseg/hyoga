@@ -16,7 +16,7 @@ import cartowik.conventions as ccv
 # Shaded relief internals
 # -----------------------
 
-def _open_raster_data(filename, band=1, mask=None, offset=0.0):
+def _open_raster_data(filename, band=1, mask=None, offset=0):
     """Open raster and return data and extent."""
 
     # open raster data
