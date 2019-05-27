@@ -144,6 +144,7 @@ def add_rivers(edgecolor='#0978ab', facecolor='none', linewidth=0.5,
         edgecolor=edgecolor, facecolor=facecolor, linewidth=linewidth,
         **kwargs)
 
+
 def add_graticules(edgecolor='0.25', facecolor='none', linewidth=0.1,
                    interval=1, **kwargs):
     _add_subject_feature(

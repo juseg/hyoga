@@ -8,6 +8,7 @@ Shaded relief plotting tools.
 import numpy as np
 import rasterio
 import rasterio.mask
+import rasterio.plot
 import matplotlib.pyplot as plt
 import cartopy.io.shapereader as cshp
 import cartowik.conventions as ccv
@@ -16,17 +17,36 @@ import cartowik.conventions as ccv
 # Shaded relief internals
 # -----------------------
 
-def _open_raster_data(filename, band=1, mask=None, offset=0):
-    """Open raster and return data and extent."""
+def _open_raster_data(filename, band=1, mask=None, offset=0, bounds=None):
+    """
+    Open raster file and return data and extent.
+
+    Parameters
+    ----------
+    filename: string
+        Path to data file in any format supported by rasterio.
+    band: integer, optional
+        Band used to read data.
+    mask: {'land', None}, optional
+        Use 'land' to apply a land mask.
+    offset: scalar, optional
+        Substract this number to the data. Mostly used to fix data stored as
+        unsigned integers.
+    bounds: tuple of
+        Tuple of (left, bottom, right, top) coordinates where data is read.
+        This can significantly speed up reading portions of large datasets.
+    """
 
     # open raster data
     with rasterio.open(filename) as dataset:
-        bounds = dataset.bounds
-        extent = [bounds.left, bounds.right, bounds.bottom, bounds.top]
 
-        # extract raw data
+        # reading window (whole dataset if no bounds were provided)
+        bounds = bounds or dataset.bounds
+        window = dataset.window(*bounds)
+
+        # extract data within window
         if mask is None:
-            data = dataset.read(band, masked=True)
+            data = dataset.read(band, masked=True, window=window)
 
         # extract data with land mask
         elif mask == 'land':
@@ -35,6 +55,10 @@ def _open_raster_data(filename, band=1, mask=None, offset=0):
             shapes = list(shapefile.geometries())
             data, _ = rasterio.mask.mask(
                 dataset, shapes, indexes=band, filled=False)
+
+        # get plotting extent
+        transform = dataset.window_transform(window)
+        extent = rasterio.plot.plotting_extent(data, transform=transform)
 
     # apply offset
     data = data - offset
