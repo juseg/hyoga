@@ -20,5 +20,5 @@ setuptools.setup(
     url='http://github.com/juseg/cartowik',
     license='gpl-3.0',
     packages=setuptools.find_packages(),
-    install_requires=['cartopy', 'matplotlib'],
+    install_requires=['cartopy', 'matplotlib', 'xarray'],
 )

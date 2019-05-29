@@ -6,69 +6,54 @@ Shaded relief plotting tools.
 """
 
 import numpy as np
-import rasterio
-import rasterio.mask
-import rasterio.plot
-import matplotlib.pyplot as plt
-import cartopy.io.shapereader as cshp
+import xarray as xr
 import cartowik.conventions as ccv
 
 
 # Shaded relief internals
 # -----------------------
 
-def _open_raster_data(filename, band=1, mask=None, offset=0, bounds=None):
+def _open_raster_data(filename, mask=None, offset=0):
     """
-    Open raster file and return data and extent.
+    Open raster file and return data array.
 
     Parameters
     ----------
     filename: string
         Path to data file in any format supported by rasterio.
-    band: integer, optional
-        Band used to read data.
-    mask: {'land', None}, optional
-        Use 'land' to apply a land mask.
+    mask: None
+        Not implemented yet.
     offset: scalar, optional
         Substract this number to the data. Mostly used to fix data stored as
         unsigned integers.
-    bounds: tuple of
-        Tuple of (left, bottom, right, top) coordinates where data is read.
-        This can significantly speed up reading portions of large datasets.
     """
-
-    # open raster data
-    with rasterio.open(filename) as dataset:
-
-        # reading window (whole dataset if no bounds were provided)
-        bounds = bounds or dataset.bounds
-        window = dataset.window(*bounds)
-
-        # extract data within window
-        if mask is None:
-            data = dataset.read(band, masked=True, window=window)
-
-        # extract data with land mask
-        elif mask == 'land':
-            shapefile = cshp.Reader(cshp.natural_earth(
-                resolution='10m', category='physical', name='land'))
-            shapes = list(shapefile.geometries())
-            data, _ = rasterio.mask.mask(
-                dataset, shapes, indexes=band, filled=False)
-
-        # get plotting extent
-        transform = dataset.window_transform(window)
-        extent = rasterio.plot.plotting_extent(data, transform=transform)
-
-    # apply offset
-    data = data - offset
-
-    # return data and extent
-    return data, extent
+    darray = xr.open_rasterio(filename)
+    darray = darray.where(~darray.isin(darray.nodatavals))
+    darray = darray.squeeze() - offset
+    return darray
 
 
-def _compute_hillshade(data, extent, altitude=30.0, azimuth=315.0, exag=1.0):
-    """Compute transparent hillshade map from a data array and extent."""
+def _compute_gradient(darray):
+    """Compute gradient along a all dimensions of a data array."""
+
+    # extract coordinate data
+    dims = darray.dims
+    coords = [darray[d].data for d in dims]
+
+    # apply numpy.gradient
+    darray = xr.apply_ufunc(np.gradient, darray, *coords,
+                            input_core_dims=(dims,)+dims,
+                            output_core_dims=[('n',)+dims])
+
+    # add vector component coordinate
+    darray = darray.assign_coords(n=list(dims))
+
+    # return as single dataarray
+    return darray
+
+
+def _compute_hillshade(darray, altitude=30.0, azimuth=315.0, exag=1.0):
+    """Compute transparent hillshade map from a data array."""
 
     # convert to rad
     azimuth *= np.pi / 180.
@@ -82,17 +67,15 @@ def _compute_hillshade(data, extent, altitude=30.0, azimuth=315.0, exag=1.0):
     lsz = 0.0  # (0.0 if transparent else np.sin(altitude))
 
     # compute topographic gradient
-    xres = (extent[1]-extent[0])/data.shape[1]
-    yres = (extent[3]-extent[2])/data.shape[0]
-    grady, gradx = np.gradient(exag*data, xres, yres)
+    grady, gradx = _compute_gradient(exag*darray)
 
     # compute hillshade (minus dot product of normal and light direction)
     shades = (gradx*lsx + grady*lsy - lsz) / (1 + gradx**2 + grady**2)**(0.5)
     return shades
 
 
-def _compute_multishade(data, extent, altitudes=None, azimuths=None, exag=1.0):
-    """Compute multi-direction hillshade map from a data array and extent."""
+def _compute_multishade(darray, altitudes=None, azimuths=None, exag=1.0):
+    """Compute multi-direction hillshade map from a data array."""
 
     # default light source parameters
     altitudes = altitudes or [30.0]*4
@@ -103,18 +86,16 @@ def _compute_multishade(data, extent, altitudes=None, azimuths=None, exag=1.0):
         raise ValueError("altitudes and azimuths should have equal lengths")
 
     # compute multi-direction hillshade
-    shades = sum([_compute_hillshade(data, extent, alti, azim, exag)
+    shades = sum([_compute_hillshade(darray, alti, azim, exag)
                   for alti, azim in zip(altitudes, azimuths)])/len(altitudes)
     return shades
 
 
-def _add_imshow(data, ax=None, cmap=None, interpolation='bilinear',
-                origin='upper', **kwargs):
+def _add_imshow(darray, cmap=None, interpolation='bilinear', **kwargs):
     """Wrapper for imshow enabling custom conventions and defaults."""
-    ax = ax or plt.gca()
     cmap = ccv.COLORMAPS.get(cmap, cmap)
-    return ax.imshow(data, cmap=cmap, interpolation=interpolation,
-                     origin=origin, **kwargs)
+    return darray.plot.imshow(add_colorbar=False, add_labels=False, cmap=cmap,
+                              interpolation=interpolation, **kwargs)
 
 
 # Shaded relief plotting
@@ -125,11 +106,10 @@ def add_bathymetry(filename, mask=None, offset=0.0,
     """Add bathymetric image from raster file."""
 
     # open bathymetric data
-    data, extent = _open_raster_data(filename, mask=mask, offset=offset)
+    darray = _open_raster_data(filename, mask=mask, offset=offset)
 
     # plot bathymetry
-    return _add_imshow(data, extent=extent, cmap=cmap,
-                       vmin=vmin, vmax=vmax, **kwargs)
+    return _add_imshow(darray, cmap=cmap, vmin=vmin, vmax=vmax, **kwargs)
 
 
 def add_topography(filename, mask=None, offset=0.0,
@@ -137,11 +117,10 @@ def add_topography(filename, mask=None, offset=0.0,
     """Add topographic image from raster file."""
 
     # open topographic data
-    data, extent = _open_raster_data(filename, mask=mask, offset=offset)
+    darray = _open_raster_data(filename, mask=mask, offset=offset)
 
     # plot topography
-    return _add_imshow(data, extent=extent, cmap=cmap,
-                       vmin=vmin, vmax=vmax, **kwargs)
+    return _add_imshow(darray, cmap=cmap, vmin=vmin, vmax=vmax, **kwargs)
 
 
 def add_hillshade(filename, mask=None, offset=0.0,
@@ -150,12 +129,11 @@ def add_hillshade(filename, mask=None, offset=0.0,
     """Add hillshades image from raster file."""
 
     # open topographic data and compute hillshades
-    data, extent = _open_raster_data(filename, mask=mask, offset=offset)
-    data = _compute_hillshade(data, extent, altitude, azimuth, exag)
+    darray = _open_raster_data(filename, mask=mask, offset=offset)
+    darray = _compute_hillshade(darray, altitude, azimuth, exag)
 
     # plot shading
-    return _add_imshow(data, extent=extent, cmap=cmap,
-                       vmin=vmin, vmax=vmax, **kwargs)
+    return _add_imshow(darray, cmap=cmap, vmin=vmin, vmax=vmax, **kwargs)
 
 
 def add_multishade(filename, mask=None, offset=0.0,
@@ -164,9 +142,8 @@ def add_multishade(filename, mask=None, offset=0.0,
     """Add multi-direction hillshade image from raster file."""
 
     # open topographic data and compute hillshades
-    data, extent = _open_raster_data(filename, mask=mask, offset=offset)
-    data = _compute_multishade(data, extent, altitudes, azimuths, exag)
+    darray = _open_raster_data(filename, mask=mask, offset=offset)
+    darray = _compute_multishade(darray, altitudes, azimuths, exag)
 
     # plot hillshades
-    return _add_imshow(data, extent=extent, cmap=cmap,
-                       vmin=vmin, vmax=vmax, **kwargs)
+    return _add_imshow(darray, cmap=cmap, vmin=vmin, vmax=vmax, **kwargs)

@@ -14,7 +14,7 @@ Cartowik
 
 Draw Wikipedia_ style location and topographic maps.
 
-Requires matplotlib_ and cartopy_.
+Requires cartopy_, matplotlib_ and xarray_.
 
 .. Here come installation instructions after the first release.
    Installation::
