@@ -11,9 +11,10 @@ import matplotlib.pyplot as plt
 # Annotation methods
 # ------------------
 
-def _annotate_by_loc(*args, ax=None, color=None, loc='ul', offset=8, **kwargs):
+def annotate_by_compass(*args, ax=None, color=None, point='ne', offset=8,
+                        **kwargs):
     """
-    Annotate by location keyword and offset.
+    Annotate by compass point and offset.
 
     Parameters
     ----------
@@ -23,8 +24,8 @@ def _annotate_by_loc(*args, ax=None, color=None, loc='ul', offset=8, **kwargs):
         Coordinates of the point to annotate.
     ax: Axes
         Axes to draw on, defaults to the current axes.
-    loc: string
-        Label location ll, lc, lr, cl, cr, ul, uc or ur.
+    point: 'n', 'e', 's', 'w', 'ne', 'nw', 'se', or 'sw'.
+        Compass point giving the annotation direction.
     offset: scalar, optional
         Distance between the data point and text label.
     **kwargs:
@@ -34,17 +35,29 @@ def _annotate_by_loc(*args, ax=None, color=None, loc='ul', offset=8, **kwargs):
     # get axes if None provided
     ax = ax or plt.gca()
 
-    # default keyword arguments
-    relpos = ({'l': 1, 'c': 0.5, 'r': 0}[loc[1]],
-              {'l': 1, 'c': 0.5, 'u': 0}[loc[0]])
+    # check location keyword validity
+    valid_points = 'n', 'e', 's', 'w', 'ne', 'nw', 'se', 'sw'
+    if point not in valid_points:
+        raise ValueError('Unrecognized compass point {!r} not in {}.'
+                         .format(point, valid_points))
+
+    # text label position and relative anchor for the text box
+    xpos = 1 if 'e' in point else -1 if 'w' in point else 0
+    ypos = 1 if 'n' in point else -1 if 's' in point else 0
+    offset = offset / (xpos*xpos+ypos*ypos)**0.5
+    xytext = xpos*offset, ypos*offset
+    relpos = (1-xpos)/2, (1-ypos)/2
+
+    # text alignement
+    halign = 'left' if 'e' in point else 'right' if 'w' in point else 'center'
+    valign = 'bottom' if 'n' in point else 'top' if 's' in point else 'center'
+
+    # default style; use transparent bbox for positioning
     arrowprops = {**dict(arrowstyle='-', color=color, relpos=relpos),
                   **kwargs.pop('arrowprops', {})}
     bbox = {**dict(pad=0, ec='none', fc='none'), **kwargs.pop('bbox', {})}
 
     # plot annotated waypoint
-    return ax.annotate(color=color, textcoords='offset points',
-                       xytext=({'l': -1, 'c': 0, 'r': 1}[loc[1]]*offset,
-                               {'l': -1, 'c': 0, 'u': 1}[loc[0]]*offset),
-                       ha={'l': 'right', 'c': 'center', 'r': 'left'}[loc[1]],
-                       va={'l': 'top', 'c': 'center', 'u': 'bottom'}[loc[0]],
-                       arrowprops=arrowprops, bbox=bbox, *args, **kwargs)
+    return ax.annotate(arrowprops=arrowprops, bbox=bbox, color=color,
+                       textcoords='offset points', xytext=xytext,
+                       ha=halign, va=valign, *args, **kwargs)
