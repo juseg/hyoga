@@ -6,6 +6,7 @@ Map annotations and GPX interface.
 """
 
 import matplotlib.pyplot as plt
+import cartopy.crs as ccrs
 
 
 # Annotation methods
@@ -61,3 +62,39 @@ def annotate_by_compass(*args, ax=None, color=None, point='ne', offset=8,
     return ax.annotate(arrowprops=arrowprops, bbox=bbox, color=color,
                        textcoords='offset points', xytext=xytext,
                        ha=halign, va=valign, *args, **kwargs)
+
+
+def annotate_location(location, ax=None, color=None, marker='o', text=None,
+                      **kwargs):
+    """
+    Mark and annotate a geographic location.
+
+    Parameters
+    ----------
+    location: object
+        A location object with longitude and latitude attributes, and
+        optionally a name. This could be a waypoint from a GPX file.
+    ax: GeoAxes, optional
+        Axes used for plotting. Default to current axes.
+    color:
+        Color for plot and annotation.
+    marker:
+        Marker for plot.
+    text: string, optional.
+        Label text. Default to location name or None.
+    **kwargs:
+        Additional keyword arguments are passed to annotate_by_compass.
+    """
+
+    # process arguments
+    ax = ax or plt.gca()
+    text = text or getattr(location, 'name', None)
+
+    # reproject waypoint coordinates
+    crs = ccrs.PlateCarree()
+    coords = location.longitude, location.latitude
+    coords = ax.projection.transform_point(*coords, crs)
+
+    # plot annotated waypoint
+    ax.plot(*coords, color=color, marker=marker)
+    return annotate_by_compass(text, coords, ax=ax, color=color, **kwargs)
