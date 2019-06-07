@@ -86,15 +86,22 @@ def annotate_location(location, ax=None, color=None, marker='o', text=None,
         Additional keyword arguments are passed to annotate_by_compass.
     """
 
-    # process arguments
+    # get axes if None provided
     ax = ax or plt.gca()
-    text = text or getattr(location, 'name', None)
+
+    # default text to name tag if None provided
+    if text is None:
+        text = text or getattr(location, 'name', None)
 
     # reproject waypoint coordinates
     crs = ccrs.PlateCarree()
     coords = location.longitude, location.latitude
     coords = ax.projection.transform_point(*coords, crs)
 
-    # plot annotated waypoint
-    ax.plot(*coords, color=color, marker=marker)
+    # plot annotated waypoint and stop here if text is empty or (still) None
+    line = ax.plot(*coords, color=color, marker=marker)
+    if text in ('', None):
+        return line
+
+    # otherwise add annotation
     return annotate_by_compass(text, coords, ax=ax, color=color, **kwargs)
