@@ -64,7 +64,7 @@ def annotate_by_compass(*args, ax=None, color=None, point='ne', offset=8,
                        ha=halign, va=valign, *args, **kwargs)
 
 
-def annotate_location(location, ax=None, color=None, marker='o', text=None,
+def annotate_location(location, ax=None, color=None, marker='o', text='',
                       **kwargs):
     """
     Mark and annotate a geographic location.
@@ -72,8 +72,8 @@ def annotate_location(location, ax=None, color=None, marker='o', text=None,
     Parameters
     ----------
     location: object
-        A location object with longitude and latitude attributes, and
-        optionally a name. This could be a waypoint from a GPX file.
+        A location object with longitude and latitude attributes, and by
+        default a name (see text). This could be a waypoint from a GPX file.
     ax: GeoAxes, optional
         Axes used for plotting. Default to current axes.
     color:
@@ -81,17 +81,14 @@ def annotate_location(location, ax=None, color=None, marker='o', text=None,
     marker:
         Marker for plot.
     text: string, optional.
-        Label text. Default to location name or None.
+        Label text. Can be a format string with custom location object
+        attribute in curly brackets, for isntance '{location.name}'.
     **kwargs:
         Additional keyword arguments are passed to annotate_by_compass.
     """
 
     # get axes if None provided
     ax = ax or plt.gca()
-
-    # default text to name tag if None provided
-    if text is None:
-        text = text or getattr(location, 'name', None)
 
     # reproject waypoint coordinates
     crs = ccrs.PlateCarree()
@@ -100,8 +97,9 @@ def annotate_location(location, ax=None, color=None, marker='o', text=None,
 
     # plot annotated waypoint and stop here if text is empty or (still) None
     line = ax.plot(*coords, color=color, marker=marker)
-    if text in ('', None):
+    if not text:
         return line
 
-    # otherwise add annotation
+    # otherwise format text against location attributes and add annotation
+    text = text.format(location=location)
     return annotate_by_compass(text, coords, ax=ax, color=color, **kwargs)
