@@ -104,6 +104,12 @@ def add_coastline(edgecolor='#0978ab', facecolor='none', linewidth=0.25,
         edgecolor=edgecolor, facecolor=facecolor, linewidth=linewidth,
         **kwargs)
 
+def add_glaciers(edgecolor='#0978ab', facecolor='#ffffff', linewidth=0.25,
+                 **kwargs):
+    _add_subject_feature(
+        category='physical', name='glaciated_areas',
+        edgecolor=edgecolor, facecolor=facecolor, linewidth=linewidth,
+        **kwargs)
 
 def add_lakes(edgecolor='#0978ab', facecolor='#d8f2fe', linewidth=0.25,
               **kwargs):
