@@ -21,9 +21,11 @@ def _add_subject_feature(category=None, name=None, scale='10m', **kwargs):
     _add_subject_shpfile(fname, **kwargs)
 
 
-def _add_subject_shpfile(filename, ax=None, facecolor=None, subject=None,
+def _add_subject_shpfile(filename, ax=None, edgecolor=None, facecolor=None,
+                         subject=None, subject_edgecolor=None,
                          subject_facecolor=None, **kwargs):
     """Plot shapefile geometries allowing a different color for the subject."""
+    # FIXME ideally this should allow any subject properties like lw etc.
 
     # get current axes if None provided
     ax = ax or plt.gca()
@@ -39,13 +41,14 @@ def _add_subject_shpfile(filename, ax=None, facecolor=None, subject=None,
     for rec in shp.records():
         attr = 'name' if 'name' in rec.attributes else 'NAME'
         if subject is not None and rec.attributes[attr] == subject:
-            color = subject_facecolor
+            props = dict(edgecolor=subject_edgecolor,
+                         facecolor=subject_facecolor)
         else:
-            color = facecolor
+            props = dict(edgecolor=edgecolor, facecolor=facecolor)
 
         # add intersecting geometries
         if rec.geometry is not None and axes_box.intersects(rec.geometry):
-            ax.add_geometries(rec.geometry, crs, facecolor=color, **kwargs)
+            ax.add_geometries(rec.geometry, crs, **props, **kwargs)
 
 
 def _get_extent_geometry(ax=None, crs=None):
