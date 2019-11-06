@@ -21,11 +21,8 @@ def _add_subject_feature(category=None, name=None, scale='10m', **kwargs):
     _add_subject_shpfile(fname, **kwargs)
 
 
-def _add_subject_shpfile(filename, ax=None, edgecolor=None, facecolor=None,
-                         subject=None, subject_edgecolor=None,
-                         subject_facecolor=None, **kwargs):
+def _add_subject_shpfile(filename, ax=None, subject=None, **kwargs):
     """Plot shapefile geometries allowing a different color for the subject."""
-    # FIXME ideally this should allow any subject properties like lw etc.
 
     # get current axes if None provided
     ax = ax or plt.gca()
@@ -37,18 +34,17 @@ def _add_subject_shpfile(filename, ax=None, edgecolor=None, facecolor=None,
     # open shapefile data
     shp = cshp.Reader(filename)
 
-    # loop on records
-    for rec in shp.records():
-        attr = 'name' if 'name' in rec.attributes else 'NAME'
-        if subject is not None and rec.attributes[attr] == subject:
-            props = dict(edgecolor=subject_edgecolor,
-                         facecolor=subject_facecolor)
-        else:
-            props = dict(edgecolor=edgecolor, facecolor=facecolor)
+    # separate subject and default kwargs
+    subject_kw = {k[8:]: kwargs[k] for k in kwargs if k.startswith('subject_')}
+    default_kw = {k: kwargs[k] for k in kwargs if not k.startswith('subject_')}
 
-        # add intersecting geometries
+    # add intersecting geometries
+    for rec in shp.records():
         if rec.geometry is not None and axes_box.intersects(rec.geometry):
-            ax.add_geometries(rec.geometry, crs, **props, **kwargs)
+            name = rec.attributes.get('name', rec.attributes.get('NAME', None))
+            props = (subject_kw if subject is not None and name == subject
+                     else default_kw)
+            ax.add_geometries(rec.geometry, crs, **props)
 
 
 def _get_extent_geometry(ax=None, crs=None):
@@ -107,12 +103,14 @@ def add_coastline(edgecolor='#0978ab', facecolor='none', linewidth=0.25,
         edgecolor=edgecolor, facecolor=facecolor, linewidth=linewidth,
         **kwargs)
 
+
 def add_glaciers(edgecolor='#0978ab', facecolor='#ffffff', linewidth=0.25,
                  **kwargs):
     _add_subject_feature(
         category='physical', name='glaciated_areas',
         edgecolor=edgecolor, facecolor=facecolor, linewidth=linewidth,
         **kwargs)
+
 
 def add_lakes(edgecolor='#0978ab', facecolor='#d8f2fe', linewidth=0.25,
               **kwargs):
