@@ -12,9 +12,6 @@ import cartowik.naturalearth as cne
 import cartowik.shadedrelief as csr
 
 
-# Main program
-# ------------
-
 # initialize figure
 fig = plt.figure()
 ax = fig.add_axes([0.0, 0.0, 1.0, 1.0], projection=ccrs.UTM(54))

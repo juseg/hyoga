@@ -11,9 +11,6 @@ import cartopy.crs as ccrs
 import cartowik.naturalearth as cne
 
 
-# Main program
-# ------------
-
 # initialize figure
 fig = plt.figure()
 ax = fig.add_axes([0.0, 0.0, 1.0, 1.0], projection=ccrs.UTM(54))

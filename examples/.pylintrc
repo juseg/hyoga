@@ -1,0 +1,3 @@
+[ basic ]
+disable = C0103,  # Constant name doesn't conform to UPPER_CASE (invalid-name)
+          R0801   # Similar lines in 2 files (duplicate-code)
