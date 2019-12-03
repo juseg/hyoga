@@ -122,6 +122,7 @@ SHINES = mcolors.LinearSegmentedColormap.from_list('Shines', [
 COLORMAPS = dict(
     Bathymetric=BATHYMETRIC,
     Topographic=TOPOGRAPHIC,
+    Elevational=ELEVATIONAL,
     Shades=SHADES,
     Shines=SHINES,
 )
