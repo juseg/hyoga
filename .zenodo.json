@@ -1,0 +1,11 @@
+{
+    "title": "PISMX: a thin wrapper around Xarray to open PISM files.",
+    "license": "GPL-3.0",
+    "creators": [
+        {
+            "name": "Julien Seguinot",
+            "orcid": "0000-0002-5315-0761",
+            "affiliation": "ETH Zurich"
+        }
+    ]
+}
