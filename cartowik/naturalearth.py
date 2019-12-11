@@ -1,4 +1,4 @@
-# Copyright (c) 2018, Julien Seguinot <seguinot@vaw.baug.ethz.ch>
+# Copyright (c) 2018--2019, Julien Seguinot <seguinot@vaw.baug.ethz.ch>
 # GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
 """
@@ -118,14 +118,15 @@ def add_lakes(edgecolor='#0978ab', facecolor='#d8f2fe', linewidth=0.25,
         category='physical', name='lakes',
         edgecolor=edgecolor, facecolor=facecolor, linewidth=linewidth,
         **kwargs)
-    _add_subject_feature(
-        category='physical', name='lakes_europe',
-        edgecolor=edgecolor, facecolor=facecolor, linewidth=linewidth,
-        **kwargs)
-    _add_subject_feature(
-        category='physical', name='lakes_north_america',
-        edgecolor=edgecolor, facecolor=facecolor, linewidth=linewidth,
-        **kwargs)
+    if 'scale' in kwargs and 'scale' == '10m':
+        _add_subject_feature(
+            category='physical', name='lakes_europe',
+            edgecolor=edgecolor, facecolor=facecolor, linewidth=linewidth,
+            **kwargs)
+        _add_subject_feature(
+            category='physical', name='lakes_north_america',
+            edgecolor=edgecolor, facecolor=facecolor, linewidth=linewidth,
+            **kwargs)
 
 
 def add_ocean(edgecolor='#0978ab', facecolor='#c6ecff', linewidth=0.25,
@@ -142,14 +143,15 @@ def add_rivers(edgecolor='#0978ab', facecolor='none', linewidth=0.5,
         category='physical', name='rivers_lake_centerlines',
         edgecolor=edgecolor, facecolor=facecolor, linewidth=linewidth,
         **kwargs)
-    _add_subject_feature(
-        category='physical', name='rivers_europe',
-        edgecolor=edgecolor, facecolor=facecolor, linewidth=linewidth,
-        **kwargs)
-    _add_subject_feature(
-        category='physical', name='rivers_north_america',
-        edgecolor=edgecolor, facecolor=facecolor, linewidth=linewidth,
-        **kwargs)
+    if 'scale' in kwargs and 'scale' == '10m':
+        _add_subject_feature(
+            category='physical', name='rivers_europe',
+            edgecolor=edgecolor, facecolor=facecolor, linewidth=linewidth,
+            **kwargs)
+        _add_subject_feature(
+            category='physical', name='rivers_north_america',
+            edgecolor=edgecolor, facecolor=facecolor, linewidth=linewidth,
+            **kwargs)
 
 
 def add_graticules(edgecolor='0.25', facecolor='none', linewidth=0.1,
