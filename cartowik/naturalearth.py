@@ -21,14 +21,14 @@ def add_feature(category=None, name=None, scale='10m', **kwargs):
     add_shapefile(fname, **kwargs)
 
 
-def add_shapefile(filename, ax=None, subject=None, **kwargs):
+def add_shapefile(filename, ax=None, crs=None, subject=None, **kwargs):
     """Plot shapefile geometries allowing a different color for the subject."""
 
     # get current axes if None provided
     ax = ax or plt.gca()
 
     # prepare axes extent geometry
-    crs = ccrs.PlateCarree()
+    crs = crs or ccrs.PlateCarree()
     axes_box = _get_extent_geometry(ax=ax, crs=crs)
 
     # open shapefile data
