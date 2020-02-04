@@ -55,44 +55,64 @@ COLORS = dict(
     bathy09='#71ABD8',  # dark blue
 )
 
+CLISTS = dict(
+    Bathymetric=[COLORS['bathy{:02d}'.format(9-i)] for i in range(10)],
+    Topographic=[COLORS['topog{:02d}'.format(i)] for i in range(19)],
+)
 
-# Topographic colormaps
-# ---------------------
 
-BATHYMETRIC = mcolors.LinearSegmentedColormap.from_list('Bathymetric', [
-    (1-6000/6000, COLORS['bathy09']),  # 9000 6000 3000 dark blue
-    (1-3000/6000, COLORS['bathy08']),  # 4500 3000 1500
-    (1-2000/6000, COLORS['bathy07']),  # 3000 2000 1000
-    (1-1500/6000, COLORS['bathy06']),  # 2250 1500  750
-    (1-1000/6000, COLORS['bathy05']),  # 1500 1000  500
-    (1-750/6000, COLORS['bathy04']),   # 1125  750  325
-    (1-500/6000, COLORS['bathy03']),   # '750  500  250
-    (1-250/6000, COLORS['bathy02']),   # '375  250  125
-    (1-100/6000, COLORS['bathy01']),   # '150  100   50
-    (1-0/6000, COLORS['bathy00']),     # '  0    0    0 light blue
-], N=4096)
+# Contour level conventions
+# -------------------------
 
-TOPOGRAPHIC = mcolors.LinearSegmentedColormap.from_list('Topographic', [
-    (0/9000, COLORS['topog01']),     # '   0     0    0    0    0
-    (50/9000, COLORS['topog02']),    # ' 100    75   50   33   25 dark green
-    (100/9000, COLORS['topog03']),   # ' 200   150  100   67   50
-    (250/9000, COLORS['topog04']),   # ' 500   375  250  167  125
-    (500/9000, COLORS['topog05']),   # '1000   750  500  333  250
-    (750/9000, COLORS['topog06']),   # '1500  1125  750  500  375
-    (1000/9000, COLORS['topog07']),  # '2000  1500 1000  667  500 light yellow
-    (1500/9000, COLORS['topog08']),  # '3000  2250 1500 1000  750
-    (2000/9000, COLORS['topog09']),  # '4000  3000 2000 1333 1000
-    (2500/9000, COLORS['topog10']),  # '5000  3750 2500 1667 1250
-    (3000/9000, COLORS['topog11']),  # '6000  4500 3000 2000 1500
-    (3500/9000, COLORS['topog12']),  # '7000  5250 3500 2333 1750
-    (4000/9000, COLORS['topog13']),  # '8000  6000 4000 2667 2000
-    (4500/9000, COLORS['topog14']),  # '9000  6750 4500 3000 2550 dark brown
-    (5000/9000, COLORS['topog15']),  # 10000  7500 5000 3333 2500
-    (6000/9000, COLORS['topog16']),  # 12000  9000 6000 4000 3000
-    (7000/9000, COLORS['topog17']),  # 14000 10500 7000 4667 3500
-    (8000/9000, COLORS['topog18']),  # 16000 12000 8000 5333 4000
-    (9000/9000, COLORS['topog19']),  # 18000 13500 9000 6000 4500 light grey
-], N=4096)
+LEVELS = dict(
+    Bathymetric=[  # -color-  -example linear rescaling-
+        -6000,     # bathy09   9000 6000 3000 dark blue
+        -3000,     # bathy08   4500 3000 1500
+        -2000,     # bathy07   3000 2000 1000
+        -1500,     # bathy06   2250 1500  750
+        -1000,     # bathy05   1500 1000  500
+        -750,      # bathy04   1125  750  325
+        -500,      # bathy03    750  500  250
+        -250,      # bathy02    375  250  125
+        -100,      # bathy01    150  100   50
+        -0,        # bathy00      0    0    0 light blue
+    ],
+    Topographic=[  # -color-  -example linear rescaling-
+        0,         # topog01      0     0    0    0    0
+        50,        # topog02    100    75   50   33   25 dark green
+        100,       # topog03    200   150  100   67   50
+        250,       # topog04    500   375  250  167  125
+        500,       # topog05   1000   750  500  333  250
+        750,       # topog06   1500  1125  750  500  375
+        1000,      # topog07   2000  1500 1000  667  500 light yellow
+        1500,      # topog08   3000  2250 1500 1000  750
+        2000,      # topog09   4000  3000 2000 1333 1000
+        2500,      # topog10   5000  3750 2500 1667 1250
+        3000,      # topog11   6000  4500 3000 2000 1500
+        3500,      # topog12   7000  5250 3500 2333 1750
+        4000,      # topog13   8000  6000 4000 2667 2000
+        4500,      # topog14   9000  6750 4500 3000 2550 dark brown
+        5000,      # topog15  10000  7500 5000 3333 2500
+        6000,      # topog16  12000  9000 6000 4000 3000
+        7000,      # topog17  14000 10500 7000 4667 3500
+        8000,      # topog18  16000 12000 8000 5333 4000
+        9000,      # topog19  18000 13500 9000 6000 4500 light grey
+    ],
+)
+
+
+# Cartowik colormaps
+# ------------------
+
+# topographic colormaps
+
+BATHYMETRIC = mcolors.LinearSegmentedColormap.from_list(
+    'Bathymetric', list(zip([1+l/6000 for l in LEVELS['Bathymetric']],
+                            CLISTS['Bathymetric'])), N=4096)
+
+TOPOGRAPHIC = mcolors.LinearSegmentedColormap.from_list(
+    'Topographic', list(zip([l/9000 for l in LEVELS['Topographic']],
+                            CLISTS['Topographic'])), N=4096)
 TOPOGRAPHIC.set_under(COLORS['topog00'])
 
 ELEVATIONAL = mcolors.LinearSegmentedColormap.from_list('Elevational', [
@@ -100,8 +120,7 @@ ELEVATIONAL = mcolors.LinearSegmentedColormap.from_list('Elevational', [
     *TOPOGRAPHIC(np.linspace(0, 1, 2048)),
 ], N=4096)
 
-# Relief shading colormaps
-# ------------------------
+# relief shading colormaps
 
 SHADES = mcolors.LinearSegmentedColormap.from_list('Shades', [
     (0.0, '#00000000'),  # transparent black
@@ -115,9 +134,7 @@ SHINES = mcolors.LinearSegmentedColormap.from_list('Shines', [
     (1.0, '#000000ff'),  # solid black
 ])
 
-
-# Colormaps dictionary
-# --------------------
+# colormaps dictionary
 
 COLORMAPS = dict(
     Bathymetric=BATHYMETRIC,
