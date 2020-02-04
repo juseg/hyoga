@@ -146,6 +146,17 @@ def add_bathymetry(filename, mask=None, offset=0.0,
     return _add_imshow(darray, cmap=cmap, vmin=vmin, vmax=vmax, **kwargs)
 
 
+def add_bathymetry_contours(filename, mask=None, offset=0.0,
+                            cmap='Bathymetric', vmin=-6000, vmax=0, **kwargs):
+    """Add bathymetric contours from raster file."""
+
+    # open topographic data
+    darray = _open_raster_data(filename, mask=mask, offset=offset)
+
+    # plot topography
+    return _add_contours(darray, cmap=cmap, vmin=vmin, vmax=vmax, **kwargs)
+
+
 def add_topography(filename, mask=None, offset=0.0,
                    cmap='Topographic', vmin=0, vmax=9000, **kwargs):
     """Add topographic image from raster file."""
@@ -155,6 +166,17 @@ def add_topography(filename, mask=None, offset=0.0,
 
     # plot topography
     return _add_imshow(darray, cmap=cmap, vmin=vmin, vmax=vmax, **kwargs)
+
+
+def add_topography_contours(filename, mask=None, offset=0.0,
+                            cmap='Topographic', vmin=0, vmax=9000, **kwargs):
+    """Add topographic contours from raster file."""
+
+    # open topographic data
+    darray = _open_raster_data(filename, mask=mask, offset=offset)
+
+    # plot topography
+    return _add_contours(darray, cmap=cmap, vmin=vmin, vmax=vmax, **kwargs)
 
 
 def add_hillshade(filename, mask=None, offset=0.0,
