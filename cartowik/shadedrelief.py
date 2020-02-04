@@ -91,11 +91,12 @@ def _compute_multishade(darray, altitudes=None, azimuths=None, exag=1.0):
     return shades
 
 
-def _add_imshow(darray, cmap=None, interpolation='bilinear', **kwargs):
+def _add_imshow(darray, add_colorbar=False, add_labels=False, cmap=None,
+                interpolation='bilinear', **kwargs):
     """Wrapper for imshow enabling custom conventions and defaults."""
     cmap = ccv.COLORMAPS.get(cmap, cmap)
-    return darray.plot.imshow(add_colorbar=False, add_labels=False, cmap=cmap,
-                              interpolation=interpolation, **kwargs)
+    return darray.plot.imshow(add_colorbar=add_colorbar, add_labels=add_labels,
+                              cmap=cmap, interpolation=interpolation, **kwargs)
 
 
 # Shaded relief plotting
