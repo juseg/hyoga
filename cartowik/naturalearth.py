@@ -44,9 +44,10 @@ def add_shapefile(filename, ax=None, crs=None, subject=None, **kwargs):
     for rec in shp.records():
         if rec.geometry is not None and axes_box.intersects(rec.geometry):
             name = rec.attributes.get('name', rec.attributes.get('NAME', None))
-            if subject is not None and name == subject:
+            if subject is not None and name == subject and \
+                    rec.geometry not in subject_geometries:
                 subject_geometries.append(rec.geometry)
-            else:
+            elif rec.geometry not in context_geometries:
                 context_geometries.append(rec.geometry)
 
     # plot interseecting geometries
