@@ -36,15 +36,22 @@ def add_shapefile(filename, ax=None, crs=None, subject=None, **kwargs):
 
     # separate subject and default kwargs
     subject_kw = {k[8:]: kwargs[k] for k in kwargs if k.startswith('subject_')}
-    default_kw = {k: kwargs[k] for k in kwargs if not k.startswith('subject_')}
+    context_kw = {k: kwargs[k] for k in kwargs if not k.startswith('subject_')}
 
-    # add intersecting geometries
+    # find intersecting geometries
+    subject_geometries = []
+    context_geometries = []
     for rec in shp.records():
         if rec.geometry is not None and axes_box.intersects(rec.geometry):
             name = rec.attributes.get('name', rec.attributes.get('NAME', None))
-            props = (subject_kw if subject is not None and name == subject
-                     else default_kw)
-            ax.add_geometries(rec.geometry, crs, **props)
+            if subject is not None and name == subject:
+                subject_geometries.append(rec.geometry)
+            else:
+                context_geometries.append(rec.geometry)
+
+    # plot interseecting geometries
+    return (ax.add_geometries(context_geometries, crs, **context_kw),
+            ax.add_geometries(subject_geometries, crs, **subject_kw))
 
 
 def _get_extent_geometry(ax=None, crs=None):
