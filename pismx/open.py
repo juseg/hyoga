@@ -31,10 +31,11 @@ def dataset(filename, **kwargs):
 def mfdataset(filename, **kwargs):
     """Open multi-file dataset with age coordinate."""
     filename = os.path.expanduser(filename)
-    # get global attributes from last file (issue #2382 fixed in juseg/xarray)
+    filelist = sorted(glob.glob(filename))
+    # get global attributes from last file (attrs_file)
     # do not concatenate lon, lat etc (data_vars='minimal')
     ds = xr.open_mfdataset(
-        filename, attrs_file=sorted(glob.glob(filename))[-1],
+        filename, attrs_file=(filelist[-1] if filelist else None),
         combine='by_coords', data_vars='minimal', decode_cf=False, **kwargs)
     ds = _assign_age_dim(ds)
     return ds
