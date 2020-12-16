@@ -1,4 +1,4 @@
-# Copyright (c) 2019, Julien Seguinot (juseg.github.io)
+# Copyright (c) 2019--2020, Julien Seguinot (juseg.github.io)
 # GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
 """
@@ -38,7 +38,7 @@ def read_shp_coords(filename, crs=None, **kwargs):
 
     # read profile from shapefile
     shp = cshp.Reader(filename)
-    geom = next(shp.geometries())[0]
+    geom = next(shp.geometries())
     points = np.asarray(geom)
     if crs is not None:
         points = crs.transform_points(ccrs.PlateCarree(), *points.T)[:, :2]
