@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright (c) 2019, Julien Seguinot <seguinot@vaw.baug.ethz.ch>
+# Copyright (c) 2019, Julien Seguinot (juseg.github.io)
 # GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
 """Build script for pismx."""
@@ -13,7 +13,6 @@ setuptools.setup(
     name='pismx',
     version='0.0',
     author='Julien Seguinot',
-    author_email='seguinot@vaw.baug.ethz.ch',
     description='A thin wrapper around xarray to open PISM files',
     long_description=README,
     long_description_content_type='text/x-rst',
