@@ -6,8 +6,10 @@ A thin wrapper around xarray to open PISM output files with age coordinates.
 """
 
 import os
+import re
 import glob
 import xarray as xr
+import numpy as np
 
 
 def _assign_age_dim(ds):
@@ -44,4 +46,14 @@ def mfdataset(filename, **kwargs):
         filename, attrs_file=(filelist[-1] if filelist else None),
         data_vars='minimal', decode_cf=False, **kwargs)
     ds = _assign_age_dim(ds)
+    return ds
+
+
+def subdataset(filename, time, shift=0, **kwargs):
+    """Open subdataset in multi-file based on format string."""
+    filename = os.path.expanduser(filename)
+    filelist = sorted(glob.glob(re.sub('{.*}', '*', filename)))
+    filename = filelist[np.searchsorted(filelist, filename.format(shift+time))]
+    ds = dataset(filename, **kwargs)
+    ds = ds.sel(age=-time/1e3, method='nearest', tolerance=1e-12)
     return ds
