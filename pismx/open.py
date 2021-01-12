@@ -16,14 +16,22 @@ from scipy import ndimage
 # Private methods
 # ---------------
 
-def _assign_age_dim(ds):
-    """Assign age dimension to a dataset with time coordinates."""
+def _preprocess(ds):
+    """Prepare a newly opened dataset for convenient plotting."""
+
+    # transpose dimensions to zyx (for older pism files)
+    if 'x' in ds.dims and 'y' in ds.dims:
+        ds = ds.transpose(..., 'y', 'x')
+
+    # and assign an age dimension to a dataset with time coordinates
     if 'time' in ds.coords and 'seconds' in ds.time.units:
         ds = ds.assign_coords(age=(-ds.time/(1e3*365*24*60*60)).assign_attrs(
             long_name='model age', units='ka')).swap_dims(dict(time='age'))
     elif 'time' in ds.coords and 'years' in ds.time.units:
         ds = ds.assign_coords(age=(-ds.time/1e3).assign_attrs(
             long_name='model age', units='ka')).swap_dims(dict(time='age'))
+
+    # return preprocessed dataset
     return ds
 
 
@@ -57,7 +65,7 @@ def _coords_from_extent(extent, cols, rows):
 def dataset(filename, **kwargs):
     """Open single-file dataset with age coordinate."""
     ds = xr.open_dataset(filename, decode_cf=False, **kwargs)
-    ds = _assign_age_dim(ds)
+    ds = _preprocess(ds)
     return ds
 
 
@@ -76,7 +84,7 @@ def mfdataset(filename, **kwargs):
     ds = xr.open_mfdataset(
         filename, attrs_file=(filelist[-1] if filelist else None),
         data_vars='minimal', decode_cf=False, **kwargs)
-    ds = _assign_age_dim(ds)
+    ds = _preprocess(ds)
     return ds
 
 
