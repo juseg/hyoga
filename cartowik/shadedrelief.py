@@ -20,16 +20,19 @@ def _open_raster_data(filename, mask=None, offset=0):
     Parameters
     ----------
     filename: string
-        Path to data file in any format supported by rasterio.
+        A data array or the path to a data file to be opened with rasterio.
     mask: None
         Not implemented yet.
     offset: scalar, optional
         Substract this number to the data. Mostly used to fix data stored as
         unsigned integers.
     """
-    darray = xr.open_rasterio(filename)
-    darray = darray.where(~darray.isin(darray.nodatavals))
-    darray = darray.squeeze() - offset
+    if isinstance(filename, xr.DataArray):
+        darray = filename
+    else:
+        darray = xr.open_rasterio(filename)
+        darray = darray.where(~darray.isin(darray.nodatavals))
+        darray = darray.squeeze() - offset
     return darray
 
 
