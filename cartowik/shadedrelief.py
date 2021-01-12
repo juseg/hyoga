@@ -13,13 +13,13 @@ import cartowik.conventions as ccv
 # Shaded relief internals
 # -----------------------
 
-def _open_raster_data(filename, mask=None, offset=0):
+def _open_data_source(datasource, mask=None, offset=0):
     """
-    Open raster file and return data array.
+    Open data source and return data array needed for plotting.
 
     Parameters
     ----------
-    filename: string
+    datasource: string
         A data array or the path to a data file to be opened with rasterio.
     mask: None
         Not implemented yet.
@@ -27,10 +27,10 @@ def _open_raster_data(filename, mask=None, offset=0):
         Substract this number to the data. Mostly used to fix data stored as
         unsigned integers.
     """
-    if isinstance(filename, xr.DataArray):
-        darray = filename
+    if isinstance(datasource, xr.DataArray):
+        darray = datasource
     else:
-        darray = xr.open_rasterio(filename)
+        darray = xr.open_rasterio(datasource)
         darray = darray.where(~darray.isin(darray.nodatavals))
         darray = darray.squeeze() - offset
     return darray
@@ -138,70 +138,70 @@ def _add_imshow(darray, add_colorbar=False, add_labels=False, cmap=None,
 # Shaded relief plotting
 # ----------------------
 
-def add_bathymetry(filename, mask=None, offset=0.0,
+def add_bathymetry(datasource, mask=None, offset=0.0,
                    cmap='Bathymetric', vmin=-6000, vmax=0, **kwargs):
     """Add bathymetric image from raster file."""
 
     # open bathymetric data
-    darray = _open_raster_data(filename, mask=mask, offset=offset)
+    darray = _open_data_source(datasource, mask=mask, offset=offset)
 
     # plot bathymetry
     return _add_imshow(darray, cmap=cmap, vmin=vmin, vmax=vmax, **kwargs)
 
 
-def add_bathymetry_contours(filename, mask=None, offset=0.0,
+def add_bathymetry_contours(datasource, mask=None, offset=0.0,
                             cmap='Bathymetric', vmin=-6000, vmax=0, **kwargs):
     """Add bathymetric contours from raster file."""
 
     # open topographic data
-    darray = _open_raster_data(filename, mask=mask, offset=offset)
+    darray = _open_data_source(datasource, mask=mask, offset=offset)
 
     # plot topography
     return _add_contours(darray, cmap=cmap, vmin=vmin, vmax=vmax, **kwargs)
 
 
-def add_topography(filename, mask=None, offset=0.0,
+def add_topography(datasource, mask=None, offset=0.0,
                    cmap='Topographic', vmin=0, vmax=9000, **kwargs):
     """Add topographic image from raster file."""
 
     # open topographic data
-    darray = _open_raster_data(filename, mask=mask, offset=offset)
+    darray = _open_data_source(datasource, mask=mask, offset=offset)
 
     # plot topography
     return _add_imshow(darray, cmap=cmap, vmin=vmin, vmax=vmax, **kwargs)
 
 
-def add_topography_contours(filename, mask=None, offset=0.0,
+def add_topography_contours(datasource, mask=None, offset=0.0,
                             cmap='Topographic', vmin=0, vmax=9000, **kwargs):
     """Add topographic contours from raster file."""
 
     # open topographic data
-    darray = _open_raster_data(filename, mask=mask, offset=offset)
+    darray = _open_data_source(datasource, mask=mask, offset=offset)
 
     # plot topography
     return _add_contours(darray, cmap=cmap, vmin=vmin, vmax=vmax, **kwargs)
 
 
-def add_hillshade(filename, mask=None, offset=0.0,
+def add_hillshade(datasource, mask=None, offset=0.0,
                   altitude=30.0, azimuth=315.0, exag=1.0,
                   cmap='Shines', vmin=-1.0, vmax=1.0, **kwargs):
     """Add hillshades image from raster file."""
 
     # open topographic data and compute hillshades
-    darray = _open_raster_data(filename, mask=mask, offset=offset)
+    darray = _open_data_source(datasource, mask=mask, offset=offset)
     darray = _compute_hillshade(darray, altitude, azimuth, exag)
 
     # plot shading
     return _add_imshow(darray, cmap=cmap, vmin=vmin, vmax=vmax, **kwargs)
 
 
-def add_multishade(filename, mask=None, offset=0.0,
+def add_multishade(datasource, mask=None, offset=0.0,
                    altitudes=None, azimuths=None, exag=1.0,
                    cmap='Shines', vmin=-1.0, vmax=1.0, **kwargs):
     """Add multi-direction hillshade image from raster file."""
 
     # open topographic data and compute hillshades
-    darray = _open_raster_data(filename, mask=mask, offset=offset)
+    darray = _open_data_source(datasource, mask=mask, offset=offset)
     darray = _compute_multishade(darray, altitudes, azimuths, exag)
 
     # plot hillshades
