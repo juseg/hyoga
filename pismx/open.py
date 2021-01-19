@@ -133,15 +133,14 @@ def visual(filename, bootfile, interpfile, time, ax=None, sigma=None,
 
     # load extra data
     with subdataset(filename, time, **kwargs) as ds:
-        ds = ds[['thk', 'topg', 'usurf', 'velbase_mag', 'velsurf_mag']]
 
         # compute ice mask and bedrock uplift
-        ds['icy'] = 1.0 * (ds.thk >= 1.0)  # IDEA: return thk instead?
+        ds['icy'] = 1.0 * (ds.thk >= 1.0)
         ds['uplift'] = ds.topg - boot
 
         # interpolate surfaces to axes coords
         # FIXME custom vars besides thk, topg, usurf?
-        ds = ds[['icy', 'uplift', 'usurf', 'velbase_mag', 'velsurf_mag']]
+        ds = ds[['icy', 'thk', 'uplift', 'usurf', 'velbase_mag', 'velsurf_mag']]
         ds = ds.interp(x=x, y=y)
 
     # interpolate hires topography
@@ -151,8 +150,10 @@ def visual(filename, bootfile, interpfile, time, ax=None, sigma=None,
     ds['topg'] = ds.topg + ds.uplift.fillna(0.0)
 
     # refine ice mask and pop nunataks
-    ds['icy'] = (ds.icy >= 0.5) * (ds.usurf > ds.topg)
+    ds['icy'] = ds.icy * (ds.usurf > ds.topg)
+    ds['thk'] = ds.thk.where(ds.icy)
     ds['usurf'] = ds.usurf.where(ds.icy)
+    ds['velbase_mag'] = ds.velbase_mag.where(ds.icy)
     ds['velsurf_mag'] = ds.velsurf_mag.where(ds.icy)
 
     # return interpolated data
