@@ -38,7 +38,8 @@ def _preprocess(ds):
 def _coords_from_axes(ax):
     """Compute coordinate vectors from matplotlib axes."""
     bbox = ax.get_window_extent()
-    return _coords_from_extent(ax.get_extent(), bbox.width, bbox.height)
+    return _coords_from_extent(
+        ax.get_extent(), int(round(bbox.width)), int(round(bbox.height)))
 
 
 def _coords_from_extent(extent, cols, rows):
