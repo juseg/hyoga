@@ -57,7 +57,7 @@ COLORS = dict(
 
 CLISTS = dict(
     Bathymetric=[COLORS['bathy{:02d}'.format(9-i)] for i in range(10)],
-    Topographic=[COLORS['topog{:02d}'.format(i)] for i in range(19)],
+    Topographic=[COLORS['topog{:02d}'.format(i)] for i in range(20)],
 )
 
 
@@ -112,7 +112,7 @@ BATHYMETRIC = mcolors.LinearSegmentedColormap.from_list(
 
 TOPOGRAPHIC = mcolors.LinearSegmentedColormap.from_list(
     'Topographic', list(zip([l/9000 for l in LEVELS['Topographic']],
-                            CLISTS['Topographic'])), N=4096)
+                            CLISTS['Topographic'][1:])), N=4096)
 TOPOGRAPHIC.set_under(COLORS['topog00'])
 
 ELEVATIONAL = mcolors.LinearSegmentedColormap.from_list('Elevational', [
