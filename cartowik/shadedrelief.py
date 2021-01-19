@@ -63,10 +63,9 @@ def _compute_hillshade(darray, altitude=30.0, azimuth=315.0, exag=1.0):
     altitude *= np.pi / 180.
 
     # compute cartesian coords of the illumination direction
-    # rasterio's y-axis is inverted from north to south
     # for transparent shades set horizontal surfaces to zero
     lsx = np.sin(azimuth) * np.cos(altitude)
-    lsy = -np.cos(azimuth) * np.cos(altitude)
+    lsy = np.cos(azimuth) * np.cos(altitude)
     lsz = 0.0  # (0.0 if transparent else np.sin(altitude))
 
     # compute topographic gradient
