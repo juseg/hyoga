@@ -150,8 +150,10 @@ def visual(filename, bootfile, interpfile, time, ax=None, sigma=None,
     # correct basal topo for uplift
     ds['topg'] = ds.topg + ds.uplift.fillna(0.0)
 
-    # refine ice mask and pop nunataks
-    ds['icy'] = ds.icy * (ds.usurf > ds.topg)
+    # refine ice mask based on interpolated values
+    ds['icy'] = (ds.icy >= 0.5) * (ds.usurf > ds.topg)
+
+    # apply interpolated mask on glacier variables
     ds['thk'] = ds.thk.where(ds.icy)
     ds['usurf'] = ds.usurf.where(ds.icy)
     ds['velbase_mag'] = ds.velbase_mag.where(ds.icy)
