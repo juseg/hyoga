@@ -65,6 +65,41 @@ def _get_extent_geometry(ax=None, crs=None):
 # Natural Earth cultural
 # ----------------------
 
+def add_cities(ax=None, ranks=None, **kwargs):
+    """
+    Plot populated places as an annotated scatter plot.
+
+    Parameters
+    ----------
+    ax : :class:`matplotlib.axes.Axes` (or a subclass)
+        Axes used for plotting, default to current axes.
+    **kwargs :
+        Additional keyword arguments are passed to
+        :meth:`matplotlib.axes.Axes.scatter`.
+
+    Returns
+    -------
+    paths : :class:`matplotlib.collections.PathCollection`
+        The scatter plot path collection.
+    """
+
+    # get current axes if None provided
+    ax = ax or plt.gca()
+
+    # open shapefile data
+    shp = cshp.Reader(cshp.natural_earth(
+        resolution='10m', category='cultural', name='populated_places'))
+
+    # filter
+    records = shp.records()
+    if ranks is not None:
+        records = [r for r in records if r.attributes['SCALERANK'] in ranks]
+
+    return ax.scatter(
+        *zip(*[(rec.geometry.x, rec.geometry.y) for rec in records]),
+        transform=ccrs.PlateCarree(), **kwargs)
+
+
 def add_countries(edgecolor='none', facecolor='#e0e0e0', linewidth=1.0,
                   subject=None, subject_facecolor='#fefee9', **kwargs):
     return add_feature(
