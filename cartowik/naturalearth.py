@@ -65,7 +65,8 @@ def _get_extent_geometry(ax=None, crs=None):
 # Natural Earth cultural
 # ----------------------
 
-def add_cities(ax=None, lang=None, ranks=None, **kwargs):
+def add_cities(ax=None, lang=None, include=None, exclude=None, ranks=None,
+               **kwargs):
     """
     Plot populated places as an annotated scatter plot.
 
@@ -76,6 +77,12 @@ def add_cities(ax=None, lang=None, ranks=None, **kwargs):
     lang : str
         Two-letters lowercase language code used to add text labels. Defaults
         to None, implying a scatter plot without text labels.
+    include : list of str
+        List of cities to explicitly include regardless of rank, by their
+        English name. Has no effect if ranks is None.
+    exclude : list of str
+        List of cities to explicitly exclude regardless of rank, by their
+        English name. Has no effect if ranks is None.
     ranks : list of int
         List of ranks used to filter cities by regional importance, ranging
         from 1 (more important) to 10 (less important).
@@ -96,10 +103,13 @@ def add_cities(ax=None, lang=None, ranks=None, **kwargs):
     shp = cshp.Reader(cshp.natural_earth(
         resolution='10m', category='cultural', name='populated_places'))
 
-    # filter
+    # filter by rank, include and exclude
     records = shp.records()
     if ranks is not None:
-        records = [r for r in records if r.attributes['SCALERANK'] in ranks]
+        records = [rec for rec in records if (
+            rec.attributes['SCALERANK'] in ranks and
+            rec.attributes['name_en'] not in (exclude or []) or
+            rec.attributes['name_en'] in (include or []))]
 
     # filter intersecting geometries (this saves some time when annotating
     # cities of high rank, which are numerous, and also avoids warning-like
