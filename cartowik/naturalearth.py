@@ -126,7 +126,7 @@ def add_lakes(edgecolor='#0978ab', facecolor='#d8f2fe', linewidth=0.25,
     kwargs = dict(category='physical', edgecolor=edgecolor,
                   facecolor=facecolor, linewidth=linewidth, **kwargs)
     features = add_feature(name='lakes', **kwargs)
-    if 'scale' not in kwargs or kwargs[scale] == '10m':
+    if 'scale' not in kwargs or kwargs['scale'] == '10m':
         features = (features,
                     add_feature(name='lakes_europe', **kwargs),
                     add_feature(name='lakes_north_america', **kwargs))
@@ -146,7 +146,7 @@ def add_rivers(edgecolor='#0978ab', facecolor='none', linewidth=0.5,
     kwargs = dict(category='physical', edgecolor=edgecolor,
                   facecolor=facecolor, linewidth=linewidth, **kwargs)
     features = add_feature(name='rivers_lake_centerlines', **kwargs)
-    if 'scale' not in kwargs or kwargs[scale] == '10m':
+    if 'scale' not in kwargs or kwargs['scale'] == '10m':
         features = (features,
                     add_feature(name='rivers_europe', **kwargs),
                     add_feature(name='rivers_north_america', **kwargs))
