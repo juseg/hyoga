@@ -65,7 +65,7 @@ def _get_extent_geometry(ax=None, crs=None):
 # Natural Earth cultural
 # ----------------------
 
-def add_cities(ax=None, ranks=None, **kwargs):
+def add_cities(ax=None, lang=None, ranks=None, **kwargs):
     """
     Plot populated places as an annotated scatter plot.
 
@@ -73,6 +73,12 @@ def add_cities(ax=None, ranks=None, **kwargs):
     ----------
     ax : :class:`matplotlib.axes.Axes` (or a subclass)
         Axes used for plotting, default to current axes.
+    lang : str
+        Two-letters lowercase language code used to add text labels. Defaults
+        to None, implying a scatter plot without text labels.
+    ranks : list of int
+        List of ranks used to filter cities by regional importance, ranging
+        from 1 (more important) to 10 (less important).
     **kwargs :
         Additional keyword arguments are passed to
         :meth:`matplotlib.axes.Axes.scatter`.
@@ -95,9 +101,26 @@ def add_cities(ax=None, ranks=None, **kwargs):
     if ranks is not None:
         records = [r for r in records if r.attributes['SCALERANK'] in ranks]
 
+    # filter intersecting geometries (this saves some time when annotating
+    # cities of high rank, which are numerous, and also avoids warning-like
+    # messages 'posx and posy should be finite values'.
+    crs = ccrs.PlateCarree()
+    axes_box = _get_extent_geometry(ax=ax, crs=crs)
+    records = [r for r in records if axes_box.intersects(r.geometry)]
+
+    # add text labels
+    if lang is not None:
+        for rec in records:
+            ax.annotate(
+                rec.attributes['name_'+lang], color=kwargs.get('color'),
+                xy=(rec.geometry.x, rec.geometry.y), xytext=(3, 3),
+                xycoords=crs._as_mpl_transform(ax), textcoords='offset points')
+
+    # return scatter plot
     return ax.scatter(
-        *zip(*[(rec.geometry.x, rec.geometry.y) for rec in records]),
-        transform=ccrs.PlateCarree(), **kwargs)
+        [rec.geometry.x for rec in records],
+        [rec.geometry.y for rec in records],
+        transform=crs, **kwargs)
 
 
 def add_countries(edgecolor='none', facecolor='#e0e0e0', linewidth=1.0,
