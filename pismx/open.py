@@ -89,13 +89,13 @@ def mfdataset(filename, **kwargs):
     return ds
 
 
-def subdataset(filename, time, shift=0, **kwargs):
+def subdataset(filename, time, shift=0, tolerance=1e-9, **kwargs):
     """Open subdataset in multi-file based on format string."""
     filename = os.path.expanduser(filename)
     filelist = sorted(glob.glob(re.sub('{.*}', '*', filename)))
     filename = filelist[np.searchsorted(filelist, filename.format(shift+time))]
     ds = dataset(filename, **kwargs)
-    ds = ds.sel(age=-time/1e3, method='nearest', tolerance=1e-12)
+    ds = ds.sel(age=-time/1e3, method='nearest', tolerance=tolerance)
     return ds
 
 
