@@ -127,7 +127,7 @@ def subdataset(filename, time, shift=0, tolerance=1e-9, **kwargs):
 
 
 def visual(filename, bootfile, interpfile, time, ax=None, sigma=None,
-           **kwargs):
+           variables=None, **kwargs):
     """Open interpolated output for visualization."""
     # IDEA: would it make more sense as a dataset method?
     # the way to go about this apparently is through accessors
@@ -167,8 +167,7 @@ def visual(filename, bootfile, interpfile, time, ax=None, sigma=None,
         ds['uplift'] = ds.topg - boot
 
         # interpolate surfaces to axes coords
-        # FIXME custom vars besides thk, topg, usurf?
-        ds = ds[['icy', 'thk', 'uplift', 'usurf', 'velbase_mag', 'velsurf_mag']]
+        ds = ds[['icy', 'uplift', 'usurf']+(variables or [])]
         ds = ds.interp(x=x, y=y)
 
     # interpolate hires topography
@@ -181,10 +180,8 @@ def visual(filename, bootfile, interpfile, time, ax=None, sigma=None,
     ds['icy'] = (ds.icy >= 0.5) * (ds.usurf > ds.topg)
 
     # apply interpolated mask on glacier variables
-    ds['thk'] = ds.thk.where(ds.icy)
-    ds['usurf'] = ds.usurf.where(ds.icy)
-    ds['velbase_mag'] = ds.velbase_mag.where(ds.icy)
-    ds['velsurf_mag'] = ds.velsurf_mag.where(ds.icy)
+    for var in ['usurf']+(variables or []):
+        ds[var] = ds[var].where(ds.icy)
 
     # return interpolated data
     return ds
