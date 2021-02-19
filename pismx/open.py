@@ -90,7 +90,34 @@ def mfdataset(filename, **kwargs):
 
 
 def subdataset(filename, time, shift=0, tolerance=1e-9, **kwargs):
-    """Open subdataset in multi-file based on format string."""
+    """
+    Open subdataset in multi-file based on format string.
+
+    Parameters
+    ----------
+    filename : str
+        A format string informing the path to a series of files,
+        where the unique replacement field indicate the final time in years of
+        each file. For instance `path/to/ex.{:07.0f}.nc`.
+    time : int of float
+        Time in years (-age*1e3) used to find the file to open in the list
+        matching the filename pattern, and to select a corresponding time
+        slice. The format (int or float) should correspond to the format
+        string used in the filename.
+    shift : int or float
+        Shift in years in the filename numbering relative to the model time.
+        This is useful when output files are named relative to an arbitrary
+        start date rather than zero.
+    tolerance: float
+        Largest acceptable error when selected the nearest time frame, passed
+        to :meth:`xarray.Dataset.sel`.
+
+    Returns
+    -------
+    ds : :class:`xarray.Dataset`
+        A dataset containing the time slice defined by `time` in the multi-file
+        dataset matching the `filename` pattern.
+    """
     filename = os.path.expanduser(filename)
     filelist = sorted(glob.glob(re.sub('{.*}', '*', filename)))
     filename = filelist[np.searchsorted(filelist, filename.format(shift+time))]
