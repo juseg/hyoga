@@ -46,6 +46,7 @@ class IceDataset:
 
     def __init__(self, dataset):
         self._ds = dataset
+        self.plot = pismx.plot.IcePlotMethods(dataset)
 
     def interp(self, bootfile, interpfile, ax=None, sigma=None,
                variables=None, **kwargs):
