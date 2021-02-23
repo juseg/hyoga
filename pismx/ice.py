@@ -48,20 +48,28 @@ class IceDataset:
         self._ds = dataset
         self.plot = pismx.plot.IcePlotMethods(dataset)
 
-    def getvar(self, standard_name, infer=True):
+    def getvar(self, standard_name, infer=True, directions=None):
         """Get a variable by conventional standard name.
 
         Parameters
         ----------
         standard_name : str
-            The variable's ``standard_name`` attribute, which in principle
+            The variable's "standard_name" attribute, which in principle
             should be set according to netCDF Climate and Forecast (CF)
             conventions (http://cfconventions.org/standard-names.html).
         infer : bool
-            Try to infer missing variables from others present in the
-            dataset. If one of the topographic variables (``bedrock_altitude``,
-            ``land_ice_thickness``, and ``surface_altitude``) is requested and
+            Try to infer missing variables from others present in the dataset.
+            If one of the topographic variables ("bedrock_altitude",
+            "land_ice_thickness", and "surface_altitude") is requested and
             missing from the data, try to compute it from the other two.
+            If a variable name starting with "magnitude_of_" is requested and
+            missing, try to compute it as the norm of its components.
+        directions : iterable
+            Allowed direction keywords for computing vector magnitudes.
+            Defaults to ("upward", "downward", "x", "y"). Computing magnitudes
+            on a sphere is not supported and thus longitude and latitude
+            directions ("northward", "southward", "eastward", "westward")
+            are not included by default.
 
         Returns
         -------
@@ -104,6 +112,18 @@ class IceDataset:
                 return (
                     self._ds.ice.getvar('bedrock_altitude', infer=False) +
                     self._ds.ice.getvar('land_ice_thickness', infer=False))
+
+            # try to get the magnitude of a vector from its components
+            if standard_name.startswith('magnitude_of_'):
+                vector = standard_name.removeprefix('magnitude_of_')
+                directions = directions or ('upward', 'downward', 'x', 'y')
+                components = [
+                    var for name, var in self._ds.items() if 'standard_name' in
+                    var.attrs and vector in [
+                        var.attrs['standard_name'].replace('_'+d, '') for d in
+                        directions]]
+                if len(components) > 0:
+                    return sum(var**2 for var in components)**0.5
 
         # really nothing worked, give up
         raise ValueError(
