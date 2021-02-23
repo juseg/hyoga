@@ -48,15 +48,20 @@ class IceDataset:
         self._ds = dataset
         self.plot = pismx.plot.IcePlotMethods(dataset)
 
-    def getvar(self, standard_name):
+    def getvar(self, standard_name, calculate=True):
         """Get a variable by conventional standard name.
 
         Parameters
         ----------
         standard_name : str
-            The variable's standard_name attribute, which in principle should
-            be set according to netCDF Climate and Forecast (CF) conventions
-            (http://cfconventions.org/standard-names.html).
+            The variable's ``standard_name`` attribute, which in principle
+            should be set according to netCDF Climate and Forecast (CF)
+            conventions (http://cfconventions.org/standard-names.html).
+        calculate : bool
+            Try to compute missing variables from others present in the
+            dataset. If one of the topographic variables (``bedrock_altitude``,
+            ``land_ice_thickness``, and ``surface_altitude``) is requested and
+            missing from the data, try to compute it from the other two.
 
         Returns
         -------
@@ -84,7 +89,23 @@ class IceDataset:
                 "Several variables ({}) match standard name {}".format(
                     ds.data_vars, standard_name))
 
-        # no variable found, raise an error
+        # no variable found, try to compute it from other variables
+        # (calculate=False is needed to avoid infinite recursion)
+        if calculate is True:
+            if standard_name == 'bedrock_altitude':
+                return (
+                    self._ds.ice.getvar('surface_altitude', calculate=False) -
+                    self._ds.ice.getvar('land_ice_thickness', calculate=False))
+            if standard_name == 'land_ice_thickness':
+                return (
+                    self._ds.ice.getvar('surface_altitude', calculate=False) -
+                    self._ds.ice.getvar('bedrock_altitude', calculate=False))
+            if standard_name == 'surface_altitude':
+                return (
+                    self._ds.ice.getvar('bedrock_altitude', calculate=False) +
+                    self._ds.ice.getvar('land_ice_thickness', calculate=False))
+
+        # really nothing worked, give up
         raise ValueError(
             "No variable found with standard name {}.".format(
                 standard_name))
