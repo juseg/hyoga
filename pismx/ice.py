@@ -85,40 +85,41 @@ class IceDataset:
         """
 
         # filter dataset by standard name
-        ds = self._ds.filter_by_attrs(standard_name=standard_name)
+        ds = self._ds
+        matching = ds.filter_by_attrs(standard_name=standard_name)
 
         # one variable found, return it
-        if len(ds) == 1:
-            return ds[list(ds.data_vars)[0]]
+        if len(matching) == 1:
+            return matching[list(matching.data_vars)[0]]
 
         # more than one variable, raise an error
-        if len(ds) > 1:
+        if len(matching) > 1:
             raise ValueError(
                 "Several variables ({}) match standard name {}".format(
-                    ds.data_vars, standard_name))
+                    matching.data_vars, standard_name))
 
         # no variable found, try to compute it from other variables
         # (infer=False is needed to avoid infinite recursion)
         if infer is True:
             if standard_name == 'bedrock_altitude':
                 return (
-                    self._ds.ice.getvar('surface_altitude', infer=False) -
-                    self._ds.ice.getvar('land_ice_thickness', infer=False))
+                    ds.ice.getvar('surface_altitude', infer=False) -
+                    ds.ice.getvar('land_ice_thickness', infer=False))
             if standard_name == 'land_ice_thickness':
                 return (
-                    self._ds.ice.getvar('surface_altitude', infer=False) -
-                    self._ds.ice.getvar('bedrock_altitude', infer=False))
+                    ds.ice.getvar('surface_altitude', infer=False) -
+                    ds.ice.getvar('bedrock_altitude', infer=False))
             if standard_name == 'surface_altitude':
                 return (
-                    self._ds.ice.getvar('bedrock_altitude', infer=False) +
-                    self._ds.ice.getvar('land_ice_thickness', infer=False))
+                    ds.ice.getvar('bedrock_altitude', infer=False) +
+                    ds.ice.getvar('land_ice_thickness', infer=False))
 
             # try to get the magnitude of a vector from its components
             if standard_name.startswith('magnitude_of_'):
                 vector = standard_name.removeprefix('magnitude_of_')
                 directions = directions or ('upward', 'downward', 'x', 'y')
                 components = [
-                    var for name, var in self._ds.items() if 'standard_name' in
+                    var for name, var in ds.items() if 'standard_name' in
                     var.attrs and vector in [
                         var.attrs['standard_name'].replace('_'+d, '') for d in
                         directions]]
