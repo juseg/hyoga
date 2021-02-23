@@ -48,6 +48,40 @@ class IceDataset:
         self._ds = dataset
         self.plot = pismx.plot.IcePlotMethods(dataset)
 
+    def getvar(self, standard_name):
+        """Get a variable by conventional standard name.
+
+        Parameters
+        ----------
+        standard_name : str
+            The variable's standard_name attribute, which in principle should
+            be set according to netCDF Climate and Forecast (CF) conventions
+            (http://cfconventions.org/standard-names.html).
+
+        Returns
+        -------
+        array : :class:`xarray.DataArray`
+            The data array corresponding to that variable if a unique variable
+            with that standard name has been found.
+
+        Raises
+        ------
+        ValueError
+            If either more or less than one variable with the corresponding
+            standard name are found.
+        """
+        ds = self._ds.filter_by_attrs(standard_name=standard_name)
+        if len(ds) == 1:
+            return ds[list(ds.data_vars)[0]]
+        if len(ds) > 1:
+            raise ValueError(
+                "Several variables ({}) match standard name {}".format(
+                    ds.data_vars, standard_name))
+        elif len(ds) == 0:
+            raise ValueError(
+                "No variable found with standard name {}.".format(
+                    standard_name))
+
     def interp(self, bootfile, interpfile, ax=None, sigma=None,
                variables=None, **kwargs):
         """Interpolate onto higher resolution topography for visualization."""
