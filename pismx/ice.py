@@ -70,17 +70,24 @@ class IceDataset:
             If either more or less than one variable with the corresponding
             standard name are found.
         """
+
+        # filter dataset by standard name
         ds = self._ds.filter_by_attrs(standard_name=standard_name)
+
+        # one variable found, return it
         if len(ds) == 1:
             return ds[list(ds.data_vars)[0]]
+
+        # more than one variable, raise an error
         if len(ds) > 1:
             raise ValueError(
                 "Several variables ({}) match standard name {}".format(
                     ds.data_vars, standard_name))
-        elif len(ds) == 0:
-            raise ValueError(
-                "No variable found with standard name {}.".format(
-                    standard_name))
+
+        # no variable found, raise an error
+        raise ValueError(
+            "No variable found with standard name {}.".format(
+                standard_name))
 
     def interp(self, bootfile, interpfile, ax=None, sigma=None,
                variables=None, **kwargs):
