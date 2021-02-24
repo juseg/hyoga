@@ -115,7 +115,7 @@ class HyogaDataset:
 
             # try to get the magnitude of a vector from its components
             if standard_name.startswith('magnitude_of_'):
-                vector = standard_name.removeprefix('magnitude_of_')
+                vector = standard_name.replace('magnitude_of_', '', 1)
                 directions = directions or ('upward', 'downward', 'x', 'y')
                 components = [
                     var for name, var in self._ds.items() if 'standard_name' in

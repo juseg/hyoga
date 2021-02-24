@@ -9,6 +9,6 @@ version: 2
 
 # python version and requirements
 python:
-  version: 3.9
+  version: 3.7
   install:
     - requirements: doc/requirements.txt
