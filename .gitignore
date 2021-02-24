@@ -1,5 +1,9 @@
 *.nc
 *.pyc
+/doc/_build
+/doc/examples
+/doc/generated
+/doc/savefig
 /build
 /dist
 /*.egg-info
