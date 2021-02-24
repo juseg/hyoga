@@ -7,9 +7,11 @@
 # config file version (required)
 version: 2
 
-# python version and requirements
+# install hyoga for autodoc etc
 python:
-  version: 3.7
   install:
-    - requirements: doc/requirements.txt
-  system_packages: true
+    - path: .
+
+# conda is required by cartopy (proj)
+conda:
+  environment: doc/environment.yml
