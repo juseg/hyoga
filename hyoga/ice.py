@@ -11,8 +11,8 @@ xarray dataset 'ice' accessor. Plotting methods are kept in a separate module.
 import numpy as np
 import scipy.ndimage
 import xarray as xr
-import pismx.open
-import pismx.plot
+import hyoga.open
+import hyoga.plot
 
 
 def _coords_from_axes(ax):
@@ -42,11 +42,11 @@ def _coords_from_extent(extent, cols, rows):
 
 @xr.register_dataset_accessor('ice')
 class IceDataset:
-    """PISMX extension to xarray datasets."""
+    """Hyoga extension to xarray datasets."""
 
     def __init__(self, dataset):
         self._ds = dataset
-        self.plot = pismx.plot.IcePlotMethods(dataset)
+        self.plot = hyoga.plot.IcePlotMethods(dataset)
 
     def getvar(self, standard_name, infer=True, directions=None):
         """Get a variable by conventional standard name.
@@ -137,7 +137,7 @@ class IceDataset:
         # FIXME: include all vars by defaults, cause little slowdown
 
         # load hires bedrock topography
-        with pismx.open.dataset(interpfile) as ds:
+        with hyoga.open.dataset(interpfile) as ds:
             hires = ds.usurf.fillna(0.0) - ds.thk.fillna(0.0)
 
         # interpolation coordinates
@@ -158,7 +158,7 @@ class IceDataset:
 
         # load boot topo
         # NOTE: make boot topo optional?
-        with pismx.open.dataset(bootfile) as ds:
+        with hyoga.open.dataset(bootfile) as ds:
             boot = ds.topg
 
         # compute ice mask and bedrock uplift

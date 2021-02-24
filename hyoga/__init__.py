@@ -3,4 +3,4 @@
 
 """A thin wrapper around xarray to read and plot PISM output files."""
 
-import pismx.ice  # noqa (register ice accesor)
+import hyoga.ice  # noqa (register ice accesor)
