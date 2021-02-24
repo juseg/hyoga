@@ -40,13 +40,13 @@ def _coords_from_extent(extent, cols, rows):
     return x, y
 
 
-@xr.register_dataset_accessor('ice')
-class IceDataset:
+@xr.register_dataset_accessor('hyoga')
+class HyogaDataset:
     """Hyoga extension to xarray datasets."""
 
     def __init__(self, dataset):
         self._ds = dataset
-        self.plot = hyoga.plot.IcePlotMethods(dataset)
+        self.plot = hyoga.plot.HyogaPlotMethods(dataset)
 
     def getvar(self, standard_name, infer=True, directions=None):
         """Get a variable by conventional standard name.
@@ -85,8 +85,7 @@ class IceDataset:
         """
 
         # filter dataset by standard name
-        ds = self._ds
-        matching = ds.filter_by_attrs(standard_name=standard_name)
+        matching = self._ds.filter_by_attrs(standard_name=standard_name)
 
         # one variable found, return it
         if len(matching) == 1:
@@ -103,23 +102,23 @@ class IceDataset:
         if infer is True:
             if standard_name == 'bedrock_altitude':
                 return (
-                    ds.ice.getvar('surface_altitude', infer=False) -
-                    ds.ice.getvar('land_ice_thickness', infer=False))
+                    self.getvar('surface_altitude', infer=False) -
+                    self.getvar('land_ice_thickness', infer=False))
             if standard_name == 'land_ice_thickness':
                 return (
-                    ds.ice.getvar('surface_altitude', infer=False) -
-                    ds.ice.getvar('bedrock_altitude', infer=False))
+                    self.getvar('surface_altitude', infer=False) -
+                    self.getvar('bedrock_altitude', infer=False))
             if standard_name == 'surface_altitude':
                 return (
-                    ds.ice.getvar('bedrock_altitude', infer=False) +
-                    ds.ice.getvar('land_ice_thickness', infer=False))
+                    self.getvar('bedrock_altitude', infer=False) +
+                    self.getvar('land_ice_thickness', infer=False))
 
             # try to get the magnitude of a vector from its components
             if standard_name.startswith('magnitude_of_'):
                 vector = standard_name.removeprefix('magnitude_of_')
                 directions = directions or ('upward', 'downward', 'x', 'y')
                 components = [
-                    var for name, var in ds.items() if 'standard_name' in
+                    var for name, var in self._ds.items() if 'standard_name' in
                     var.attrs and vector in [
                         var.attrs['standard_name'].replace('_'+d, '') for d in
                         directions]]

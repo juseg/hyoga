@@ -14,7 +14,7 @@ import cartowik.conventions as ccv
 import cartowik.shadedrelief as csr
 
 
-class IcePlotMethods:
+class HyogaPlotMethods:
     """
     A namespace to keep all plot methods in one place.
     """
@@ -31,7 +31,7 @@ class IcePlotMethods:
 
     def bedrock_shaded_relief(self, ax=None, sealevel=0, style='grey'):
         """Plot bedrock topography shaded relief and shoreline."""
-        var = self._ds.ice.getvar('bedrock_altitude') - sealevel
+        var = self._ds.hyoga.getvar('bedrock_altitude') - sealevel
         var.plot.imshow(
             ax=ax, add_colorbar=False, zorder=-1,
             cmap=(ccv.ELEVATIONAL if style == 'wiki' else 'Greys'),
@@ -79,7 +79,7 @@ class IcePlotMethods:
     def surface_velocity(self, ax=None):
         """Plot surface velocity map."""
         ds = self._ds
-        var = self._ds.ice.getvar('magnitude_of_land_ice_surface_velocity')
+        var = self._ds.hyoga.getvar('magnitude_of_land_ice_surface_velocity')
         return var.plot.imshow(
             ax=ax, add_colorbar=False, alpha=0.75,
             cmap='Blues', norm=mcolors.LogNorm(1e1, 1e3))
@@ -107,7 +107,7 @@ class IcePlotMethods:
 
     def surface_topo_contours(self, ax=None, minor=200, major=1000):
         """Plot minor and major surface topography contours."""
-        var = self._ds.ice.getvar('surface_altitude')
+        var = self._ds.hyoga.getvar('surface_altitude')
         levels = range(0, 5001, minor)
         return (
             var.plot.contour(
