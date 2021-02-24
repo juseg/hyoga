@@ -62,7 +62,7 @@ class IceDataset:
             If one of the topographic variables ("bedrock_altitude",
             "land_ice_thickness", and "surface_altitude") is requested and
             missing from the data, try to compute it from the other two.
-            If a variable name starting with "magnitude_of_" is requested and
+            If a variable name starting with "magnitude_of" is requested and
             missing, try to compute it as the norm of its components.
         directions : iterable
             Allowed direction keywords for computing vector magnitudes.

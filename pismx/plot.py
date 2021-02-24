@@ -31,16 +31,14 @@ class IcePlotMethods:
 
     def bedrock_shaded_relief(self, ax=None, sealevel=0, style='grey'):
         """Plot bedrock topography shaded relief and shoreline."""
-        ds = self._ds
-
-        # plot topography and sea level contour
-        (ds.topg-sealevel).plot.imshow(
+        var = self._ds.ice.getvar('bedrock_altitude') - sealevel
+        var.plot.imshow(
             ax=ax, add_colorbar=False, zorder=-1,
             cmap=(ccv.ELEVATIONAL if style == 'wiki' else 'Greys'),
             vmin=(-4500 if style == 'wiki' else 0), vmax=4500)
         csr.add_multishade(
-            ds.topg, ax=ax, add_colorbar=False, zorder=-1)
-        (ds.topg-sealevel).plot.contour(
+            var, ax=ax, add_colorbar=False, zorder=-1)
+        var.plot.contour(
             ax=ax, colors=('#0978ab' if style == 'wiki' else '0.25'),
             levels=[0], linestyles='dashed', linewidths=0.25, zorder=0)
 
@@ -81,9 +79,8 @@ class IcePlotMethods:
     def surface_velocity(self, ax=None):
         """Plot surface velocity map."""
         ds = self._ds
-        if 'velsurf_mag' not in ds:
-            ds['velsurf_mag'] = (ds.uvelsurf**2+ds.vvelsurf**2)**0.5
-        return ds.velsurf_mag.plot.imshow(
+        var = self._ds.ice.getvar('magnitude_of_land_ice_surface_velocity')
+        return var.plot.imshow(
             ax=ax, add_colorbar=False, alpha=0.75,
             cmap='Blues', norm=mcolors.LogNorm(1e1, 1e3))
 
@@ -110,12 +107,12 @@ class IcePlotMethods:
 
     def surface_topo_contours(self, ax=None, minor=200, major=1000):
         """Plot minor and major surface topography contours."""
-        ds = self._ds
+        var = self._ds.ice.getvar('surface_altitude')
         levels = range(0, 5001, minor)
         return (
-            ds.usurf.plot.contour(
+            var.plot.contour(
                 levels=[lev for lev in levels if lev % major == 0],
                 ax=ax, colors=['0.25'], linewidths=0.25),
-            ds.usurf.plot.contour(
+            var.plot.contour(
                 levels=[lev for lev in levels if lev % major != 0],
                 ax=ax, colors=['0.25'], linewidths=0.1))
