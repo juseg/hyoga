@@ -1,4 +1,9 @@
 # cartowik  # FIXME release
+cartopy
+ipython
+matplotlib
+numpy
+scipy
 sphinx
 sphinx_gallery
 sphinx_rtd_theme
