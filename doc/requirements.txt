@@ -1,0 +1,5 @@
+# cartowik  # FIXME release
+sphinx
+sphinx_gallery
+sphinx_rtd_theme
+xarray
