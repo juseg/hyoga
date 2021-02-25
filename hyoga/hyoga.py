@@ -184,3 +184,48 @@ class HyogaDataset:
 
         # return interpolated data
         return ds
+
+    def where(self, cond, **kwargs):
+        """Filter glacier (non-bedrock) variables according to a condition.
+
+        Parameters
+        ----------
+        cond : DataArray, Dataset, or callable
+            Locations at which to preserve glacier variables.
+        kwargs :
+            Additional keyword arguments are passed to
+            :meth:`xarray.Dataset.where`.
+
+        Returns
+        -------
+        dataset : Dataset
+            Corresponing dataset with variables whose standard name does not
+            start with "bedrock_altitude" filtered by the condition.
+        """
+        ds = self._ds
+        for name, var in ds.items():
+            if not var.attrs.get(
+                    'standard_name', '').startswith('bedrock_altitude'):
+                print(name, var.attrs.get('standard_name', ''))
+                ds[name] = var.where(cond, **kwargs)
+        return ds
+
+    def where_thicker(self, threshold=1, **kwargs):
+        """Filter glacier (non-bedrock) variables using a thickness threshold.
+
+        Parameters
+        ----------
+        threshold : scalar
+            Thickness below which to mask glacier variables.
+        kwargs :
+            Additional keyword arguments are passed to
+            :meth:`xarray.Dataset.where`.
+
+        Returns
+        -------
+        dataset : Dataset
+            Corresponing dataset with variables whose standard name does not
+            start with "bedrock_altitude" masked below threshold.
+        """
+        return self.where(
+            self.getvar('land_ice_thickness') >= threshold, **kwargs)
