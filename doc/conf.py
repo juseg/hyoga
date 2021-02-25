@@ -30,6 +30,25 @@ sphinx_gallery_conf = {
     'examples_dirs': '../examples', # path to example scripts
     'gallery_dirs': 'examples',     # where to save gallery plots
     }
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/3.7/', None),
+    'xarray': ('http://xarray.pydata.org/en/stable/', None)
+}
+napoleon_use_param = True           # add :param: roles to parameters
+napoleon_use_rtype = False          # do not show return type
+napoleon_preprocess_types = True    # appears needed by aliases
+napoleon_type_aliases = {
+    # general terms (https://docs.python.org/3/glossary.html)
+    'callable': ':py:func:`callable`',
+    'file-like': ':term:`file-like <file-like object>`',
+    'iterable': ':term:`iterable`',
+    'mapping': ':term:`mapping`',
+    'sequence': ':term:`sequence`',
+    # object shortcuts
+    'DataArray': ':class:`xarray.DataArray`',
+    'Dataset': '~xarray.Dataset',
+    'Path': '~~pathlib.Path',
+}
 
 # location of additional templates
 # templates_path = ['_templates']
