@@ -46,8 +46,32 @@ class HyogaDataset:
     """Hyoga extension to xarray datasets."""
 
     def __init__(self, dataset):
+        # FIXME decide here about age dim and units
         self._ds = dataset
+        self._ds = self._fill_standard_names()
         self.plot = hyoga.plot.HyogaPlotMethods(dataset)
+
+    def _fill_standard_names(self):
+        """Add missing standard names in old PISM files.
+
+        Currently this method only supports PISM. In the future other models
+        will be supported, ideally detected using netCDF metadata, and
+        otherwise through a keyword argument in hyoga.open methods."""
+        pism_names = {
+            'bedrock_altitude':                         'topg',
+            'land_ice_basal_x_velocity':                'uvelbase',
+            'land_ice_basal_y_velocity':                'vvelbase',
+            'land_ice_surface_x_velocity':              'uvelsurf',
+            'land_ice_surface_y_velocity':              'uvelsurf',
+            'land_ice_thickness':                       'thk',
+            'magnitude_of_land_ice_basal_velocity':     'velbase_mag',
+            'magnitude_of_land_ice_surface_velocity':   'velsurf_mag',
+            'surface_altitude':                         'usurf'}
+        ds = self._ds
+        for standard_name, name in pism_names.items():
+            if name in self._ds and 'standard_name' not in ds[name].attrs:
+                ds[name] = ds[name].assign_attrs(standard_name=standard_name)
+        return ds
 
     def assign_isostasy(self, datasource):
         """Compute bedrock isostatic adjustment using a separate file.
