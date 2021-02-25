@@ -182,13 +182,12 @@ class HyogaDataset:
             "No variable found with standard name {}.".format(
                 standard_name))
 
-    def interp(self, bootfile, interpfile, ax=None, sigma=None,
-               variables=None, **kwargs):
+    def interp(self, filename, ax=None, sigma=None):
         """Interpolate onto higher resolution topography for visualization."""
-        # FIXME: include all vars by defaults, cause little slowdown
+        # FIXME replace filename by datasource
 
         # load hires bedrock topography
-        with hyoga.open.dataset(interpfile) as ds:
+        with hyoga.open.dataset(filename) as ds:
             hires = ds.usurf.fillna(0.0) - ds.thk.fillna(0.0)
 
         # interpolation coordinates
@@ -207,33 +206,26 @@ class HyogaDataset:
             filt = scipy.ndimage.gaussian_filter(hires, sigma=float(sigma/dx))
             hires += np.clip(filt-hires, -1.0, 1.0)
 
-        # load boot topo
-        # NOTE: make boot topo optional?
-        with hyoga.open.dataset(bootfile) as ds:
-            boot = ds.topg
-
-        # compute ice mask and bedrock uplift
-        # FIXME compute ice mask elsewhere
-        ds = self._ds
-        ds['icy'] = 1.0 * (ds.thk >= 1.0)
-        ds['uplift'] = ds.topg - boot
-
-        # interpolate surfaces to axes coords
-        ds = ds[['icy', 'uplift', 'usurf']+(variables or [])]
+        # assign ice mask and interpolate all variables
+        # FIXME use standard names, what if thk is missing?
+        ds = self._ds.assign(icy=ds.thk.fillna(0) > 0)
         ds = ds.interp(x=x, y=y)
 
         # interpolate hires topography
+        # FIXME has no effect if ax is None
         ds['topg'] = hires.interp(x=x, y=y)
 
-        # correct basal topo for uplift
-        ds['topg'] = ds.topg + ds.uplift.fillna(0.0)
+        # correct for uplift if present
+        # FIXME use standard names
+        if 'uplift' in ds:
+            ds['topg'] = ds.topg + ds.uplift.fillna(0.0)
 
         # refine ice mask based on interpolated values
-        ds['icy'] = (ds.icy >= 0.5) * (ds.usurf > ds.topg)
+        # FIXME use standard names, what if usurf or topg is missing?
+        icy = (ds.icy >= 0.5) * (ds.usurf > ds.topg)
 
         # apply interpolated mask on glacier variables
-        for var in ['usurf']+(variables or []):
-            ds[var] = ds[var].where(ds.icy)
+        ds = ds.hyoga.where(icy)
 
         # return interpolated data
         return ds
@@ -259,7 +251,6 @@ class HyogaDataset:
         for name, var in ds.items():
             if not var.attrs.get(
                     'standard_name', '').startswith('bedrock_altitude'):
-                print(name, var.attrs.get('standard_name', ''))
                 ds[name] = var.where(cond, **kwargs)
         return ds
 
