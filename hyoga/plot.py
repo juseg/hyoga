@@ -10,8 +10,6 @@ shortcuts to oft-used plot methods with sensible defaults.
 
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
-import cartowik.conventions as ccv
-import cartowik.shadedrelief as csr
 
 
 class HyogaPlotMethods:
@@ -29,15 +27,12 @@ class HyogaPlotMethods:
                 ax=ax, add_colorbar=False, alpha=0.75, cmap='YlOrBr',
                 levels=[10**i for i in range(-9, 1)])
 
-    def bedrock_shaded_relief(self, ax=None, sealevel=0, style='grey'):
-        """Plot bedrock topography shaded relief and shoreline."""
+    def bedrock_topo(self, ax=None, sealevel=0, style='grey'):
+        """Plot bedrock topography and shoreline."""
         var = self._ds.hyoga.getvar('bedrock_altitude') - sealevel
         var.plot.imshow(
             ax=ax, add_colorbar=False, zorder=-1,
-            cmap=(ccv.ELEVATIONAL if style == 'wiki' else 'Greys'),
-            vmin=(-4500 if style == 'wiki' else 0), vmax=4500)
-        csr.add_multishade(
-            var, ax=ax, add_colorbar=False, zorder=-1)
+            cmap='Greys', vmin=0, vmax=4500)
         var.plot.contour(
             ax=ax, colors=('#0978ab' if style == 'wiki' else '0.25'),
             levels=[0], linestyles='dashed', linewidths=0.25, zorder=0)
@@ -78,7 +73,6 @@ class HyogaPlotMethods:
 
     def surface_velocity(self, ax=None):
         """Plot surface velocity map."""
-        ds = self._ds
         var = self._ds.hyoga.getvar('magnitude_of_land_ice_surface_velocity')
         return var.plot.imshow(
             ax=ax, add_colorbar=False, alpha=0.75,

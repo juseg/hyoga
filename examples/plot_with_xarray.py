@@ -21,7 +21,7 @@ with hyoga.open.dataset(hyoga.demo.gridded()) as ds:
     ds = ds.sel(age=24)
 
     # plot model output
-    ds.hyoga.plot.bedrock_shaded_relief(ax=ax, sealevel=-100)
+    ds.hyoga.plot.bedrock_topo(ax=ax, sealevel=-100)
     ds.hyoga.plot.surface_topo_contours(ax=ax)
     ds.hyoga.plot.surface_velocity(ax=ax)
     ds.hyoga.plot.ice_margin(ax=ax)
