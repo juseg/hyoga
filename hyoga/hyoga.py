@@ -8,6 +8,7 @@ masking and interpolation. This functionality is made available through an
 xarray dataset 'ice' accessor. Plotting methods are kept in a separate module.
 """
 
+import warnings
 import numpy as np
 import scipy.ndimage
 import xarray as xr
@@ -47,6 +48,58 @@ class HyogaDataset:
     def __init__(self, dataset):
         self._ds = dataset
         self.plot = hyoga.plot.HyogaPlotMethods(dataset)
+
+    def assign_isostasy(self, datasource):
+        """Compute bedrock isostatic adjustment using a separate file.
+
+        Parameters
+        ----------
+        datasource: DataArray, srt, Path, file-like or DataStore
+            Data array or path to file containing the reference bedrock
+            topography (standard name bedrock_altitude) or reference surface
+            topography and ice thickness (standard names surface_altitude and
+            land_ice_thickness) from which it is computed.
+
+        Returns
+        -------
+        dataset : Dataset
+            The dataset with added uplift variable, with variable name
+            "isostasy" (warn and add trailing underscores if taken) and
+            standard name "bedrock_altitude_change_due_to_isostatic_adjustment"
+            (warn and create a duplicate if standard name is taken).
+        """
+
+        # warn if bedrock isostatic appears to be present in dataset
+        # NOTE: in the future we may consider an override switch, and perhaps a
+        # separate method to assign variables by standard name
+        ds = self._ds
+        standard_name = 'bedrock_altitude_change_due_to_isostatic_adjustment'
+        for name, var in ds.items():
+            if var.attrs.get('standard_name', '') == standard_name:
+                warnings.warn(
+                    "found existing variable {} with standard name {} while"
+                    "computing bedrock isostatic adjustment, will result in"
+                    "a duplicate".format(name, standard_name), UserWarning)
+
+        # add trailing underscores until we find a free variable name
+        variable_name = 'isostasy'
+        while variable_name in ds:
+            warnings.warn(
+                "found existing variable {name} while computing bedrock"
+                "isostatic adjustment, using {name}_ instead".format(
+                    name=variable_name), UserWarning)
+            variable_name += '_'
+
+        # read topography from file if it is not an array
+        if not isinstance(datasource, xr.DataArray):
+            with hyoga.open.dataset(datasource) as ds:
+                topo = ds.hyoga.getvar('bedrock_altitude')
+
+        # compute bedrock isostatic adjustment
+        ds[variable_name] = (
+            ds.hyoga.getvar('bedrock_altitude')-topo).assign_attrs(
+                standard_name=standard_name)
+        return ds
 
     def getvar(self, standard_name, infer=True, directions=None):
         """Get a variable by conventional standard name.

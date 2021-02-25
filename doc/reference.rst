@@ -12,6 +12,7 @@ Dataset accessor
    :recursive:
 
    HyogaDataset
+   HyogaDataset.assign_isostasy
    HyogaDataset.getvar
    HyogaDataset.interp
    HyogaDataset.where
