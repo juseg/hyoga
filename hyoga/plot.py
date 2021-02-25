@@ -20,14 +20,7 @@ class HyogaPlotMethods:
     def __init__(self, dataset):
         self._ds = dataset
 
-    def bedrock_erosion(self, ax=None):
-        """Plot erosion rate based on basal velocity."""
-        ds = self._ds
-        return (5.2e-8*ds.velbase_mag**2.34).plot.contourf(
-                ax=ax, add_colorbar=False, alpha=0.75, cmap='YlOrBr',
-                levels=[10**i for i in range(-9, 1)])
-
-    def bedrock_topo(self, ax=None, sealevel=0, style='grey'):
+    def bedrock_altitude(self, ax=None, sealevel=0, style='grey'):
         """Plot bedrock topography and shoreline."""
         var = self._ds.hyoga.getvar('bedrock_altitude') - sealevel
         var.plot.imshow(
@@ -37,11 +30,19 @@ class HyogaPlotMethods:
             ax=ax, colors=('#0978ab' if style == 'wiki' else '0.25'),
             levels=[0], linestyles='dashed', linewidths=0.25, zorder=0)
 
-    def bedrock_uplift(self, ax=None):
+    def bedrock_erosion(self, ax=None):
+        """Plot erosion rate based on basal velocity."""
+        ds = self._ds
+        return (5.2e-8*ds.velbase_mag**2.34).plot.contourf(
+                ax=ax, add_colorbar=False, alpha=0.75, cmap='YlOrBr',
+                levels=[10**i for i in range(-9, 1)])
+
+    def bedrock_isostasy(self, ax=None):
         """Plot bedrock deformation contours."""
         ds = self._ds
 
         # locate maximum depression (xarray has no idxmin yet)
+        # FIXME bedrock_altitude_change_due_to_isostatic_adjustment
         ax = ax or plt.gca()
         i, j = divmod(int(ds.uplift.argmin()), ds.uplift.shape[1])
         maxdep = float(-ds.uplift[i, j])
@@ -71,6 +72,18 @@ class HyogaPlotMethods:
                 levels=[0.5, 1.5], **kwargs))
         return contours if len(contours) > 1 else contours[0]
 
+    def surface_altitude_contours(self, ax=None, minor=200, major=1000):
+        """Plot minor and major surface topography contours."""
+        var = self._ds.hyoga.getvar('surface_altitude')
+        levels = range(0, 5001, minor)
+        return (
+            var.plot.contour(
+                levels=[lev for lev in levels if lev % major == 0],
+                ax=ax, colors=['0.25'], linewidths=0.25),
+            var.plot.contour(
+                levels=[lev for lev in levels if lev % major != 0],
+                ax=ax, colors=['0.25'], linewidths=0.1))
+
     def surface_velocity(self, ax=None):
         """Plot surface velocity map."""
         var = self._ds.hyoga.getvar('magnitude_of_land_ice_surface_velocity')
@@ -98,15 +111,3 @@ class HyogaPlotMethods:
         # streamplot colormapping fails on empty arrays (mpl issue #19323)
         except ValueError:
             return None
-
-    def surface_topo_contours(self, ax=None, minor=200, major=1000):
-        """Plot minor and major surface topography contours."""
-        var = self._ds.hyoga.getvar('surface_altitude')
-        levels = range(0, 5001, minor)
-        return (
-            var.plot.contour(
-                levels=[lev for lev in levels if lev % major == 0],
-                ax=ax, colors=['0.25'], linewidths=0.25),
-            var.plot.contour(
-                levels=[lev for lev in levels if lev % major != 0],
-                ax=ax, colors=['0.25'], linewidths=0.1))
