@@ -73,6 +73,34 @@ class HyogaDataset:
                 ds[name] = ds[name].assign_attrs(standard_name=standard_name)
         return ds
 
+    def _safe_apply(self, func, *standard_names, **kwargs):
+        """Apply a function to a list of variables after checking units."""
+
+        # get vars and assert all units are the same (allowing None)
+        variables = [self.getvar(name, **kwargs) for name in standard_names]
+        units = variables[0].attrs.get('units')
+        assert all(var.attrs.get('units') == units for var in variables)
+
+        # compute new variable and assign common attributes
+        attrs = {
+            k: v for k, v in variables[0].attrs.items() if
+            all(var.attrs[k] == v for var in variables)}
+        return func(var for var in variables).assign_attrs(**attrs)
+
+    def _safe_mag(self, *args, **kwargs):
+        """Compute the magnitude of several variables if units match."""
+        return self._safe_apply(
+            lambda l: sum(v**2 for v in l)**0.5, *args, **kwargs)
+
+    def _safe_sub(self, *args, **kwargs):
+        """Compute the sum of several variables if units match."""
+        assert len(args) == 2
+        return self._safe_apply(lambda l: l[0]-l[1], *args, **kwargs)
+
+    def _safe_sum(self, *args, **kwargs):
+        """Compute the sum of two variables if units match."""
+        return self._safe_apply(sum, *args, **kwargs)
+
     def assign_isostasy(self, datasource):
         """Compute bedrock isostatic adjustment using a separate file.
 
