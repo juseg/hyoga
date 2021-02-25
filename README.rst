@@ -10,7 +10,7 @@ developed library around paleo-glacier models. Hyōga (氷河) is the
 Japanese word for glacier (lit. ice river).
 
 Hyoga is at a very early stage of development and things may break.
-Feel free to get in touch (https://juseg.github.io).
+Documentation is under construction at https://hyoga.readthedocs.io.
 
 .. _PISM: http://pism-docs.org
 .. _xarray: http://xarray.pydata.org
