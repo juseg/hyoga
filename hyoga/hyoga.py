@@ -118,10 +118,9 @@ class HyogaDataset:
                 vector = standard_name.replace('magnitude_of_', '', 1)
                 directions = directions or ('upward', 'downward', 'x', 'y')
                 components = [
-                    var for name, var in self._ds.items() if 'standard_name' in
-                    var.attrs and vector in [
-                        var.attrs['standard_name'].replace('_'+d, '') for d in
-                        directions]]
+                    var for var in self._ds.values() if vector in [
+                        var.attrs.get('standard_name', '').replace('_'+d, '')
+                        for d in directions]]
                 if len(components) > 0:
                     return sum(var**2 for var in components)**0.5
 
