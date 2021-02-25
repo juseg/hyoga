@@ -14,6 +14,8 @@ Dataset accessor
    HyogaDataset
    HyogaDataset.getvar
    HyogaDataset.interp
+   HyogaDataset.where
+   HyogaDataset.where_thicker
 
 
 Plot methods

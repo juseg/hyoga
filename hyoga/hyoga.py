@@ -73,7 +73,7 @@ class HyogaDataset:
 
         Returns
         -------
-        array : :class:`xarray.DataArray`
+        array : DataArray
             The data array corresponding to that variable if a unique variable
             with that standard name has been found.
 
@@ -192,7 +192,7 @@ class HyogaDataset:
         ----------
         cond : DataArray, Dataset, or callable
             Locations at which to preserve glacier variables.
-        kwargs :
+        **kwargs : optional
             Additional keyword arguments are passed to
             :meth:`xarray.Dataset.where`.
 
@@ -217,7 +217,7 @@ class HyogaDataset:
         ----------
         threshold : scalar
             Thickness below which to mask glacier variables.
-        kwargs :
+        **kwargs : optional
             Additional keyword arguments are passed to
             :meth:`xarray.Dataset.where`.
 
