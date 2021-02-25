@@ -5,10 +5,11 @@ dependencies:
   - python=3.7
   - cartopy
   - ipython
+  - matplotlib
+  - netcdf4
   - numpy
   - pandas
-  - sphinx
-  - matplotlib
-  - xarray
-  - sphinx-gallery
   - scipy
+  - sphinx
+  - sphinx-gallery
+  - xarray
