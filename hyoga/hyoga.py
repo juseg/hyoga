@@ -207,28 +207,30 @@ class HyogaDataset:
         # (infer=False is needed to avoid infinite recursion)
         if infer is True:
             if standard_name == 'bedrock_altitude':
-                return (
-                    self.getvar('surface_altitude', infer=False) -
-                    self.getvar('land_ice_thickness', infer=False))
+                return self._safe_sub(
+                    'surface_altitude', 'land_ice_thickness', infer=False
+                ).assign_attrs(standard_name=standard_name)
             if standard_name == 'land_ice_thickness':
-                return (
-                    self.getvar('surface_altitude', infer=False) -
-                    self.getvar('bedrock_altitude', infer=False))
+                return self._safe_sub(
+                    'surface_altitude', 'bedrock_altitude', infer=False
+                ).assign_attrs(standard_name=standard_name)
             if standard_name == 'surface_altitude':
-                return (
-                    self.getvar('bedrock_altitude', infer=False) +
-                    self.getvar('land_ice_thickness', infer=False))
+                return self._safe_sum(
+                    'bedrock_altitude', 'land_ice_thickness', infer=False
+                ).assign_attrs(standard_name=standard_name)
 
             # try to get the magnitude of a vector from its components
             if standard_name.startswith('magnitude_of_'):
                 vector = standard_name.replace('magnitude_of_', '', 1)
                 directions = directions or ('upward', 'downward', 'x', 'y')
                 components = [
-                    var for var in self._ds.values() if vector in [
+                    var.attrs['standard_name'] for var in self._ds.values() if
+                    vector in [
                         var.attrs.get('standard_name', '').replace('_'+d, '')
                         for d in directions]]
                 if len(components) > 0:
-                    return sum(var**2 for var in components)**0.5
+                    return self._safe_mag(*components).assign_attrs(
+                        standard_name=standard_name)
 
         # really nothing worked, give up
         raise ValueError(
