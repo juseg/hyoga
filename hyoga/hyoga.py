@@ -82,10 +82,11 @@ class HyogaDataset:
         assert all(var.attrs.get('units') == units for var in variables)
 
         # compute new variable and assign common attributes
+        # (np.all is necessary for arrays but also works on non-arrays)
         attrs = {
             k: v for k, v in variables[0].attrs.items() if
-            all(var.attrs[k] == v for var in variables)}
-        return func(var for var in variables).assign_attrs(**attrs)
+            all(np.all(var.attrs[k] == v) for var in variables)}
+        return func(variables).assign_attrs(**attrs)
 
     def _safe_mag(self, *args, **kwargs):
         """Compute the magnitude of several variables if units match."""
