@@ -122,6 +122,11 @@ class HyogaDataset:
             (warn and create a duplicate if standard name is taken).
         """
 
+        # read topography from file if it is not an array
+        if not isinstance(datasource, xr.DataArray):
+            with hyoga.open.dataset(datasource) as ds:
+                topo = ds.hyoga.getvar('bedrock_altitude')
+
         # warn if bedrock isostatic appears to be present in dataset
         # NOTE: in the future we may consider an override switch, and perhaps a
         # separate method to assign variables by standard name
@@ -142,11 +147,6 @@ class HyogaDataset:
                 "isostatic adjustment, using {name}_ instead".format(
                     name=variable_name), UserWarning)
             variable_name += '_'
-
-        # read topography from file if it is not an array
-        if not isinstance(datasource, xr.DataArray):
-            with hyoga.open.dataset(datasource) as ds:
-                topo = ds.hyoga.getvar('bedrock_altitude')
 
         # compute bedrock isostatic adjustment
         ds[variable_name] = (
