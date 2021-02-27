@@ -237,13 +237,13 @@ class HyogaDataset:
             "No variable found with standard name {}.".format(
                 standard_name))
 
-    def interp(self, filename, ax=None, sigma=None):
+    def interp(self, filename, ax=None, sigma=None, threshold=1):
         """Interpolate onto higher resolution topography for visualization."""
         # FIXME replace filename by datasource
 
         # load hires bedrock topography
         with hyoga.open.dataset(filename) as ds:
-            hires = ds.usurf.fillna(0.0) - ds.thk.fillna(0.0)
+            hires = ds.hyoga.getvar('bedrock_altitude')
 
         # interpolation coordinates
         if ax is not None:
@@ -264,21 +264,33 @@ class HyogaDataset:
         # assign ice mask and interpolate (bool variables are dropped)
         # FIXME use standard names, what if thk is missing?
         ds = self._ds
-        ds = ds.assign(icy=1*(ds.thk.fillna(0) > 0))
+        ds = ds.assign(
+            icy=1*(ds.hyoga.getvar('land_ice_thickness') > threshold))
         ds = ds.interp(x=x, y=y)
+
+        # lookup bedrock_topography short name, default to topg
+        # NOTE: will results in data gaps if computed as surf-thk
+        try:
+            name = ds.hyoga.getvar('bedrock_topography').name
+        except ValueError:
+            name = hires.name or 'topg'
 
         # interpolate hires topography
         # FIXME has no effect if ax is None
-        ds['topg'] = hires.interp(x=x, y=y)
+        ds[name] = hires.interp(x=x, y=y)
 
         # correct for uplift if present
-        # FIXME use standard names
-        if 'uplift' in ds:
-            ds['topg'] = ds.topg + ds.uplift.fillna(0.0)
+        try:
+            ds[name] += ds.hyoga.getvar(
+                'bedrock_altitude_change_due_to_isostatic_adjustment')
+        except ValueError:
+            pass
 
         # refine ice mask based on interpolated values
-        # FIXME use standard names, what if usurf or topg is missing?
-        icy = (ds.icy >= 0.5) * (ds.usurf > ds.topg)
+        # FIXME what if usurf or topg is missing?
+        icy = (ds.icy >= 0.5) * (
+            ds.hyoga.getvar('surface_altitude') >
+            ds.hyoga.getvar('bedrock_altitude'))
 
         # apply interpolated mask on glacier variables
         ds = ds.hyoga.where(icy)
