@@ -261,9 +261,10 @@ class HyogaDataset:
             filt = scipy.ndimage.gaussian_filter(hires, sigma=float(sigma/dx))
             hires += np.clip(filt-hires, -1.0, 1.0)
 
-        # assign ice mask and interpolate all variables
+        # assign ice mask and interpolate (bool variables are dropped)
         # FIXME use standard names, what if thk is missing?
-        ds = self._ds.assign(icy=ds.thk.fillna(0) > 0)
+        ds = self._ds
+        ds = ds.assign(icy=1*(ds.thk.fillna(0) > 0))
         ds = ds.interp(x=x, y=y)
 
         # interpolate hires topography
