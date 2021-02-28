@@ -104,20 +104,22 @@ class HyogaPlotMethods:
             contours.append(var.notnull().plot.contourf(**style))
         return contours if len(contours) > 1 else contours[0]
 
-    def surface_altitude_contours(
-            self, major=1000, minor=200, major_linewidths=0.25,
-            minor_linewidths=0.1, **kwargs):
+    def surface_altitude_contours(self, major=1000, minor=200, **kwargs):
         """Plot minor and major surface topography contours."""
-        # FIXME allow minor=None
         var = self._ds.hyoga.getvar('surface_altitude')
         levels = range(0, 5001, minor)
-        return (
-            var.plot.contour(
-                levels=[lev for lev in levels if lev % major == 0],
-                colors=['0.25'], linewidths=major_linewidths, **kwargs),
-            var.plot.contour(
-                levels=[lev for lev in levels if lev % major != 0],
-                colors=['0.25'], linewidths=minor_linewidths, **kwargs))
+        contours = []
+        if major is not None:
+            style = dict(colors=['0.25'], linewidths=0.25)
+            style.update(kwargs)
+            contours.append(var.plot.contour(
+                levels=[lev for lev in levels if lev % major == 0], **style))
+        if minor is not None:
+            style = dict(colors=['0.25'], linewidths=0.1)
+            style.update(kwargs)
+            contours.append(var.plot.contour(
+                levels=[lev for lev in levels if lev % major != 0], **style))
+        return contours if len(contours) > 1 else contours[0]
 
     def surface_velocity(self, **kwargs):
         """Plot surface velocity map."""
