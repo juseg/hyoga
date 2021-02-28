@@ -20,24 +20,20 @@ class HyogaPlotMethods:
     def __init__(self, dataset):
         self._ds = dataset
 
-    def bedrock_altitude(
-            self, add_colorbar=False, sealevel=0, cmap='Greys', zorder=-1,
-            **kwargs):
+    def bedrock_altitude(self, sealevel=0, cmap='Greys', zorder=-1, **kwargs):
         """Plot bedrock topography and shoreline."""
         var = self._ds.hyoga.getvar('bedrock_altitude') - sealevel
         var.plot.imshow(
-            add_colorbar=add_colorbar, zorder=zorder, cmap=cmap, **kwargs)
+            zorder=zorder, cmap=cmap, **kwargs)
 
-    def bedrock_erosion(
-            self, add_colorbar=False, alpha=0.75, cmap='YlOrBr', **kwargs):
+    def bedrock_erosion(self, alpha=0.75, cmap='YlOrBr', **kwargs):
         """Plot erosion rate based on basal velocity."""
+        # FIXME add choice of law
         ds = self._ds
         return (5.2e-8*ds.velbase_mag**2.34).plot.contourf(
-            add_colorbar=add_colorbar, alpha=alpha, cmap=cmap, **kwargs)
+            alpha=alpha, cmap=cmap, **kwargs)
 
-    def bedrock_isostasy(
-            self, ax=None, add_colorbar=False, alpha=0.75, cmap='PRGn_r',
-            **kwargs):
+    def bedrock_isostasy(self, ax=None, alpha=0.75, cmap='PRGn_r', **kwargs):
         """Plot bedrock deformation contours."""
         var = self._ds.hyoga.getvar(
             'bedrock_altitude_change_due_to_isostatic_adjustment')
@@ -53,8 +49,7 @@ class HyogaPlotMethods:
             xytext=(3, 3), textcoords='offset points')
 
         # plot bedrock deformation contours
-        return var.plot.contourf(
-            ax=ax, add_colorbar=add_colorbar, alpha=alpha, cmap=cmap, **kwargs)
+        return var.plot.contourf(ax=ax, alpha=alpha, cmap=cmap, **kwargs)
 
     def bedrock_shoreline(
             self, sealevel=0, colors='0.25', linewidths=0.25, zorder=0,
@@ -77,8 +72,8 @@ class HyogaPlotMethods:
                 **kwargs))
         if facecolor is not None:
             contours.append(var.notnull().plot.contourf(
-                add_colorbar=False, colors=facecolor, extend='neither',
-                levels=[0.5, 1.5], **kwargs))
+                colors=facecolor, extend='neither', levels=[0.5, 1.5],
+                **kwargs))
         return contours if len(contours) > 1 else contours[0]
 
     def surface_altitude_contours(
@@ -96,15 +91,11 @@ class HyogaPlotMethods:
                 levels=[lev for lev in levels if lev % major != 0],
                 colors=['0.25'], linewidths=minor_lw, **kwargs))
 
-    def surface_velocity(
-            self, add_colorbar=False, alpha=0.75, cmap='Blues',
-            norm=None, **kwargs):
+    def surface_velocity(self, alpha=0.75, cmap='Blues', norm=None, **kwargs):
         """Plot surface velocity map."""
         norm = norm or mcolors.LogNorm()
         var = self._ds.hyoga.getvar('magnitude_of_land_ice_surface_velocity')
-        return var.plot.imshow(
-            add_colorbar=add_colorbar, alpha=alpha, cmap=cmap, norm=norm,
-            **kwargs)
+        return var.plot.imshow(alpha=alpha, cmap=cmap, norm=norm, **kwargs)
 
     def surface_velocity_streamplot(
             self, ax=None, cmap='Blues', norm=None, arrowsize=0.25,
