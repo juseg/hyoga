@@ -107,7 +107,7 @@ class HyogaDataset:
 
         Parameters
         ----------
-        datasource: DataArray, srt, Path, file-like or DataStore
+        datasource: DataArray, str, Path, file-like or DataStore
             Data array or path to file containing the reference bedrock
             topography (standard name bedrock_altitude) or reference surface
             topography and ice thickness (standard names surface_altitude and
@@ -238,7 +238,41 @@ class HyogaDataset:
                 standard_name))
 
     def interp(self, datasource, ax=None, sigma=None, threshold=1):
-        """Interpolate onto higher resolution topography for visualization."""
+        """Interpolate onto higher resolution topography for visualization.
+
+        Parameters
+        ----------
+        datasource: DataArray, str, Path, file-like or DataStore
+            Data array or path to file containing the high-resolution bedrock
+            topography (standard name bedrock_altitude) or reference surface
+            topography and ice thickness (standard names surface_altitude and
+            land_ice_thickness) from which it is computed.
+        ax : Axes, optional
+            If axes are provided, "axes coordinates" will be generated so that
+            the data are interpolated onto a grid where each point is a pixel
+            in the current figure (using the current figure dpi). By default,
+            the data are interpolated onto coordinates in the ``datasource``.
+        sigma: float, optional
+            Some batyhmetric datasets (e.g. ETOPO) are delivered with integer
+            precision. This will cause artefacts in rendered paleo-shorelines
+            on shallow slopes, looking especially strange if a float-precision
+            isostatic correction is applied on the integer-precision elevation
+            data. This parameter activates a mechanism that attempts to smooth
+            shallow slopes with little effect on steep mountains. The value
+            for ``sigma`` is the gaussian window size in projections units.
+        threshold: float, optional
+            Thickness threshold used to compute a glacier mask. The mask will
+            be refined after interpolation, so that any mountains in the
+            high-resolution topography that are higher than the interpolated
+            ice surface will appear as nunataks in the visualization.
+
+        Returns
+        -------
+        dataset : Dataset
+            The interpolated dataset, with new horizontal resolution
+            corresponding to either the data provided in ``datasource``, or
+            the pixel count of axes provided with ``ax``.
+        """
 
         # read topography from file if it is not an array
         if not isinstance(datasource, xr.DataArray):

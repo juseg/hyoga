@@ -31,6 +31,7 @@ sphinx_gallery_conf = {
     'gallery_dirs': 'examples',     # where to save gallery plots
     }
 intersphinx_mapping = {
+    'matplotlib': ('https://matplotlib.org/stable/', None),
     'python': ('https://docs.python.org/3.7/', None),
     'xarray': ('http://xarray.pydata.org/en/stable/', None)
 }
@@ -45,7 +46,8 @@ napoleon_type_aliases = {
     'mapping': ':term:`mapping`',
     'sequence': ':term:`sequence`',
     # object shortcuts
-    'DataArray': ':class:`xarray.DataArray`',
+    'Axes': '~matplotlib.axes.Axes',
+    'DataArray': '~xarray.DataArray',
     'Dataset': '~xarray.Dataset',
     'Path': '~~pathlib.Path',
 }
