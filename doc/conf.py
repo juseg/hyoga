@@ -47,6 +47,9 @@ napoleon_type_aliases = {
     'sequence': ':term:`sequence`',
     # object shortcuts
     'Axes': '~matplotlib.axes.Axes',
+    'AxesImage': '~matplotlib.image.AxesImage',
+    'QuadContourSet': '~matplotlib.contour.QuadContourSet',
+    'StreamplotSet': '~matplotlib.streamplot.StreamplotSet',
     'DataArray': '~xarray.DataArray',
     'Dataset': '~xarray.Dataset',
     'Path': '~~pathlib.Path',
