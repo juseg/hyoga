@@ -254,14 +254,13 @@ class HyogaDataset:
             y = topo.y
 
         # try to smooth integer-precision steps
-        # NOTE: is it possible to avoid scipy.ndimage?
         if sigma is not None:
             dx = (x[-1]-x[0])/(len(x)-1)
             dy = (y[-1]-y[0])/(len(y)-1)
             assert abs(dy-dx) < 1e12
             topo = 1.0*topo  # convert to float
-            filt = scipy.ndimage.gaussian_filter(topo, sigma=float(sigma/dx))
-            topo += np.clip(filt-topo, -1.0, 1.0)
+            filt = scipy.ndimage.gaussian_filter(topo, sigma=sigma/dx)
+            topo += np.clip(filt-topo, -0.5, 0.5)
 
         # lookup bedrock_topography short name, default to topg
         try:
