@@ -124,12 +124,12 @@ class HyogaPlotMethods:
 
     def surface_velocity_streamplot(
             self, ax=None, cmap='Blues', norm=None, arrowsize=0.25,
-            linewidth=0.5, **kwargs):
+            linewidth=0.5, vmin=None, vmax=None, **kwargs):
         """Plot surface velocity streamlines."""
 
         # get axes, norm, data
         ax = ax or plt.gca()
-        norm = norm or mcolors.LogNorm()
+        norm = norm or mcolors.LogNorm(vmin=vmin, vmax=vmax)
         uvar = self._ds.hyoga.getvar('land_ice_surface_x_velocity')
         vvar = self._ds.hyoga.getvar('land_ice_surface_y_velocity')
 
