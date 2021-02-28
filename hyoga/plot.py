@@ -26,12 +26,37 @@ class HyogaPlotMethods:
         var.plot.imshow(
             zorder=zorder, cmap=cmap, **kwargs)
 
-    def bedrock_erosion(self, alpha=0.75, cmap='YlOrBr', **kwargs):
-        """Plot erosion rate based on basal velocity."""
-        # FIXME add choice of law
-        ds = self._ds
-        return (5.2e-8*ds.velbase_mag**2.34).plot.contourf(
-            alpha=alpha, cmap=cmap, **kwargs)
+    def bedrock_erosion(
+            self, alpha=0.75, cmap='YlOrBr', constant=5.2e-8, exponent=2.34,
+            **kwargs):
+        """Plot erosion rate based on basal velocity.
+
+        Parameters
+        ----------
+        constant: float, optional
+            Constant in the erosion law, in units of ``1e-3 m^(1-l) a^(l-1)``
+            where ``l`` corresponds to the exponent. Published values include
+            ``1.665e-1`` (Cook et al., 2020), ``2.7e-4`` (Herman et al., 2015),
+            ``1e-1`` (Humphrey and Raymond, 1994), and the default ``5.2e-8``
+            (Koppes et al., 2015).
+        exponent: float, optional
+            Exponent in the erosion law, unitless. Published values include
+            ``0.6459`` (Cook et al., 2020), ``2.02`` (Herman et al., 2015),
+            ``1`` (Humphrey and Raymond, 1994), and the default ``2.34``
+            (Koppes et al., 2015).
+        **kwargs:
+            Additional keyword arguments are passed to
+            :meth:`matplotlib.axes.Axes.contourf`.
+
+        Returns
+        -------
+        contours : QuadContourSet
+            The resulting matplotlib contour set.
+        """
+        var = self._ds.hyoga.getvar('magnitude_of_land_ice_basal_velocity')
+        var = (constant*var**exponent).assign_attrs(
+            long_name='glacier erosion rate', units='mm a-1')
+        return var.plot.contourf(alpha=alpha, cmap=cmap, **kwargs)
 
     def bedrock_isostasy(self, ax=None, alpha=0.75, cmap='PRGn_r', **kwargs):
         """Plot bedrock deformation contours."""
