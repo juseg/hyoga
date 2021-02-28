@@ -263,10 +263,9 @@ class HyogaDataset:
 
         # assign ice mask and interpolate (bool variables are dropped)
         # FIXME use standard names, what if thk is missing?
-        ds = self._ds
-        ds = ds.assign(
-            icy=1*(ds.hyoga.getvar('land_ice_thickness') > threshold))
-        ds = ds.interp(x=x, y=y)
+        icy = self.getvar('land_ice_thickness') > threshold
+        icy = (1*icy).interp(x=x, y=y)
+        ds = self._ds.interp(x=x, y=y)
 
         # lookup bedrock_topography short name, default to topg
         # NOTE: will results in data gaps if computed as surf-thk
@@ -288,12 +287,9 @@ class HyogaDataset:
 
         # refine ice mask based on interpolated values
         # FIXME what if usurf or topg is missing?
-        icy = (ds.icy >= 0.5) * (
+        ds = ds.hyoga.where((icy >= 0.5) * (
             ds.hyoga.getvar('surface_altitude') >
-            ds.hyoga.getvar('bedrock_altitude'))
-
-        # apply interpolated mask on glacier variables
-        ds = ds.hyoga.where(icy)
+            ds.hyoga.getvar('bedrock_altitude')))
 
         # return interpolated data
         return ds
