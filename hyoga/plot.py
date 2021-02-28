@@ -22,14 +22,10 @@ class HyogaPlotMethods:
 
     def bedrock_altitude(self, sealevel=0, style='grey', **kwargs):
         """Plot bedrock topography and shoreline."""
-        # FIXME: separate altitude and shoreline?
         var = self._ds.hyoga.getvar('bedrock_altitude') - sealevel
         var.plot.imshow(
             add_colorbar=False, zorder=-1,
             cmap='Greys', vmin=0, vmax=4500, **kwargs)
-        var.plot.contour(
-            colors=('#0978ab' if style == 'wiki' else '0.25'), levels=[0],
-            linestyles='dashed', linewidths=0.25, zorder=0, **kwargs)
 
     def bedrock_erosion(self, **kwargs):
         """Plot erosion rate based on basal velocity."""
@@ -57,6 +53,13 @@ class HyogaPlotMethods:
         return var.plot.contourf(
             ax=ax, add_colorbar=False, alpha=0.75, cmap='PRGn_r',
             levels=[-100, -50, -20, 0, 2, 5, 10])
+
+    def bedrock_shoreline(self, sealevel=0, **kwargs):
+        """Plot bedrock topography and shoreline."""
+        var = self._ds.hyoga.getvar('bedrock_altitude') - sealevel
+        var.plot.contour(
+            colors=('#0978ab' if style == 'wiki' else '0.25'), levels=[0],
+            linestyles='dashed', linewidths=0.25, zorder=0, **kwargs)
 
     def ice_margin(self, edgecolor='0.25', facecolor=None, **kwargs):
         """Plot ice margin line and/or filled contour."""
