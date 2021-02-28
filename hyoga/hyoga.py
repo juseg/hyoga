@@ -248,6 +248,7 @@ class HyogaDataset:
         # get interpolation coordinates
         if ax is not None:
             x, y = _coords_from_axes(ax)
+            topo = topo.interp(x=x, y=y)
         else:
             x = topo.x
             y = topo.y
@@ -261,10 +262,6 @@ class HyogaDataset:
             topo = 1.0*topo  # convert to float
             filt = scipy.ndimage.gaussian_filter(topo, sigma=float(sigma/dx))
             topo += np.clip(filt-topo, -1.0, 1.0)
-
-        # interpolate topo if needed
-        if ax is not None:
-            topo = topo.interp(x=x, y=y)
 
         # lookup bedrock_topography short name, default to topg
         try:
