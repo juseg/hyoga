@@ -19,11 +19,12 @@ ax = plt.axes()
 # open demo data
 with hyoga.open.dataset(hyoga.demo.gridded()) as ds:
     ds = ds.sel(age=24)
+    ds = ds.hyoga.where_thicker(1)
 
     # plot model output
-    ds.hyoga.plot.bedrock_altitude(ax=ax, sealevel=-100)
+    ds.hyoga.plot.bedrock_altitude(ax=ax, vmin=0, vmax=4500)
     ds.hyoga.plot.surface_altitude_contours(ax=ax)
-    ds.hyoga.plot.surface_velocity(ax=ax)
+    ds.hyoga.plot.surface_velocity(ax=ax, vmin=1e1, vmax=1e3)
     ds.hyoga.plot.ice_margin(ax=ax)
 
     # needed to avoid distorsion
