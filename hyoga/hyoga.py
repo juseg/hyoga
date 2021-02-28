@@ -46,7 +46,7 @@ class HyogaDataset:
     """Hyoga extension to xarray datasets."""
 
     def __init__(self, dataset):
-        # FIXME decide here about age dim and units
+        # NOTE in the future we will decide here about age dim and units
         self._ds = dataset
         self._ds = self._fill_standard_names()
         self.plot = hyoga.plot.HyogaPlotMethods(dataset)

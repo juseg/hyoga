@@ -84,13 +84,11 @@ class HyogaPlotMethods:
         style = dict(colors=['0.25'], levels=[0], linewidths=0.25, zorder=0)
         style.update(**kwargs)
         var = self._ds.hyoga.getvar('bedrock_altitude') - sealevel
-        print(var)
-        print(style)
         return var.plot.contour(**style)
 
     def ice_margin(self, edgecolor='0.25', facecolor=None, **kwargs):
         """Plot ice margin line and/or filled contour."""
-        # FIXME make variable customizable
+        # NOTE this method may use a mask variable in the future (#9)
         var = self._ds.hyoga.getvar('land_ice_thickness')
         contours = []
         if edgecolor is not None:
