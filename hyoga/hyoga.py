@@ -243,14 +243,14 @@ class HyogaDataset:
         # read topography from file if it is not an array
         if not isinstance(datasource, xr.DataArray):
             with hyoga.open.dataset(datasource) as ds:
-                hires = ds.hyoga.getvar('bedrock_altitude')
+                topo = ds.hyoga.getvar('bedrock_altitude')
 
-        # interpolation coordinates
+        # get interpolation coordinates
         if ax is not None:
             x, y = _coords_from_axes(ax)
         else:
-            x = hires.x
-            y = hires.y
+            x = topo.x
+            y = topo.y
 
         # try to smooth integer-precision steps
         # NOTE: is it possible to avoid scipy.ndimage?
@@ -258,38 +258,37 @@ class HyogaDataset:
             dx = (x[-1]-x[0])/(len(x)-1)
             dy = (y[-1]-y[0])/(len(y)-1)
             assert abs(dy-dx) < 1e12
-            filt = scipy.ndimage.gaussian_filter(hires, sigma=float(sigma/dx))
-            hires += np.clip(filt-hires, -1.0, 1.0)
+            topo = 1.0*topo  # convert to float
+            filt = scipy.ndimage.gaussian_filter(topo, sigma=float(sigma/dx))
+            topo += np.clip(filt-topo, -1.0, 1.0)
 
-        # assign ice mask and interpolate (bool variables are dropped)
-        # FIXME use standard names, what if thk is missing?
-        icy = self.getvar('land_ice_thickness') > threshold
-        icy = (1*icy).interp(x=x, y=y)
-        ds = self._ds.interp(x=x, y=y)
+        # interpolate topo if needed
+        if ax is not None:
+            topo = topo.interp(x=x, y=y)
 
         # lookup bedrock_topography short name, default to topg
-        # NOTE: will results in data gaps if computed as surf-thk
         try:
             name = ds.hyoga.getvar('bedrock_topography').name
         except ValueError:
-            name = hires.name or 'topg'
+            name = None
+        name = name or topo.name or 'topg'
 
-        # interpolate hires topography
-        # FIXME has no effect if ax is None
-        ds[name] = hires.interp(x=x, y=y)
+        # interpolate data variables and assign new topo
+        ds = self._ds.interp(x=x, y=y).assign({name: topo})
 
-        # correct for uplift if present
+        # correct for isostasy if it is present
         try:
             ds[name] += ds.hyoga.getvar(
                 'bedrock_altitude_change_due_to_isostatic_adjustment')
         except ValueError:
             pass
 
-        # refine ice mask based on interpolated values
-        # FIXME what if usurf or topg is missing?
-        ds = ds.hyoga.where((icy >= 0.5) * (
-            ds.hyoga.getvar('surface_altitude') >
-            ds.hyoga.getvar('bedrock_altitude')))
+        # interp mask and refine based on interpolated surface
+        # NOTE will throw an error if thk or usurf is missing
+        icy = self.getvar('land_ice_thickness') > threshold
+        icy = (1*icy).interp(x=x, y=y)
+        icy = (icy >= 0.5) * (ds.hyoga.getvar('surface_altitude') > ds[name])
+        ds = ds.hyoga.where(icy)
 
         # return interpolated data
         return ds
