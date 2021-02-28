@@ -237,13 +237,13 @@ class HyogaDataset:
             "No variable found with standard name {}.".format(
                 standard_name))
 
-    def interp(self, filename, ax=None, sigma=None, threshold=1):
+    def interp(self, datasource, ax=None, sigma=None, threshold=1):
         """Interpolate onto higher resolution topography for visualization."""
-        # FIXME replace filename by datasource
 
-        # load hires bedrock topography
-        with hyoga.open.dataset(filename) as ds:
-            hires = ds.hyoga.getvar('bedrock_altitude')
+        # read topography from file if it is not an array
+        if not isinstance(datasource, xr.DataArray):
+            with hyoga.open.dataset(datasource) as ds:
+                hires = ds.hyoga.getvar('bedrock_altitude')
 
         # interpolation coordinates
         if ax is not None:
