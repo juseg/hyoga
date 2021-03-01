@@ -27,7 +27,7 @@ extensions = [
 # options to sphinx extensions
 autosummary_generate = True         # autogen files for listed entroes
 sphinx_gallery_conf = {
-    'examples_dirs': '../examples', # path to example scripts
+    'examples_dirs': '../examples',  # path to example scripts
     'gallery_dirs': 'examples',     # where to save gallery plots
     }
 intersphinx_mapping = {

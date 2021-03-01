@@ -10,7 +10,7 @@ series and plotting output from other models.
 
 import os.path
 import requests
-import warnings
+
 
 def _download(url):
     """Download a file from the web, store in cache dir and return path."""
@@ -23,15 +23,18 @@ def _download(url):
             binaryfile.write(requests.get(url).content)
     return filename
 
+
 def _download_zenodo(record, filename):
     """Download a file from Zenodo based on record number and filename."""
     url = 'https://zenodo.org/record/{}/files/{}'.format(record, filename)
     return _download(url)
 
+
 def pism_gridded():
     """Download Alps public gridded data from Zenodo, return path."""
     return _download_zenodo(
         record='3604142', filename='alpcyc.1km.epic.pp.ex.1ka.nc')
+
 
 def pism_series():
     """Download Alps public gridded data from Zenodo, return path."""
