@@ -72,6 +72,7 @@ class HyogaPlotMethods:
         contours : QuadContourSet
             The plotted bedrock erosion contour set.
         """
+        # NOTE locator=mpl.ticker.LogLocator() seem to have no effect?
         style = dict(alpha=0.75, cmap='YlOrBr')
         style.update(kwargs)
         var = self._ds.hyoga.getvar('magnitude_of_land_ice_basal_velocity')
