@@ -10,13 +10,30 @@ series and plotting output from other models.
 
 import os.path
 import requests
+import warnings
 
-
-def gridded():
-    """Download Alps public gridded data from Zenodo, return path."""
-    filename = 'alpcyc.1km.epic.pp.ex.1ka.nc'
+def _download(url):
+    """Download a file from the web, store in cache dir and return path."""
+    cachedir = os.path.expanduser(os.path.join('~', '.cache', 'hyoga'))
+    filename = os.path.join(cachedir, url.split('/')[-1])
     if not os.path.isfile(filename):
-        req = requests.get('https://zenodo.org/record/3604142/files/'+filename)
+        os.makedirs(cachedir, exist_ok=True)
         with open(filename, 'wb') as binaryfile:
-            binaryfile.write(req.content)
+            print("downloading {}...".format(url))
+            binaryfile.write(requests.get(url).content)
     return filename
+
+def _download_zenodo(record, filename):
+    """Download a file from Zenodo based on record number and filename."""
+    url = 'https://zenodo.org/record/{}/files/{}'.format(record, filename)
+    return _download(url)
+
+def pism_gridded():
+    """Download Alps public gridded data from Zenodo, return path."""
+    return _download_zenodo(
+        record='3604142', filename='alpcyc.1km.epic.pp.ex.1ka.nc')
+
+def pism_series():
+    """Download Alps public gridded data from Zenodo, return path."""
+    return _download_zenodo(
+        record='3604142', filename='alpcyc.1km.epic.pp.ts.10a.nc')
