@@ -232,7 +232,7 @@ class HyogaPlotMethods:
         ----------
         **kwargs: optional
             Keyword arguments passed to :meth:`matplotlib.Axes.streamplot`.
-            Defaults to a blue colormap logarithmic scaling, whose limits can
+            Defaults to a blue colormap and logarithmic scaling, whose limits can
             be adjusted using ``vmin`` and ``vmax``. Note that the ``density``
             keyword can greaty affect plotting speed. If the domain plotted is
             not square, you may also want to set ``density`` as a tuple

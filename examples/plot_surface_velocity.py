@@ -5,19 +5,19 @@
 """
 Plot surface velocity
 =====================
-
-Plot Alps dataset surface velocity map.
 """
 
 import matplotlib.pyplot as plt
+import cartopy.crs as ccrs
+import cartopy.feature as cfeature
 import hyoga.open
 import hyoga.demo
 
 # initialize figure
-ax = plt.axes()
+ax = plt.subplot(projection=ccrs.UTM(32))
 
 # open demo data
-with hyoga.open.dataset(hyoga.demo.gridded()) as ds:
+with hyoga.open.dataset(hyoga.demo.pism_gridded()) as ds:
     ds = ds.sel(age=24)
     ds = ds.hyoga.where_thicker(1)
 
@@ -27,7 +27,12 @@ with hyoga.open.dataset(hyoga.demo.gridded()) as ds:
     ds.hyoga.plot.surface_velocity(ax=ax, vmin=1e1, vmax=1e3)
     ds.hyoga.plot.ice_margin(ax=ax)
 
-    # needed to avoid distorsion
-    ax.set_aspect('equal')
+# add coastlines and rivers
+ax.coastlines(edgecolor='0.25', linewidth=0.5)
+ax.add_feature(
+    cfeature.NaturalEarthFeature(
+        category='physical', name='rivers_lake_centerlines', scale='10m'),
+    edgecolor='0.25', facecolor='none', linewidth=0.5, zorder=0)
 
+# show
 plt.show()
