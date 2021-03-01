@@ -232,11 +232,11 @@ class HyogaPlotMethods:
         ----------
         **kwargs: optional
             Keyword arguments passed to :meth:`matplotlib.Axes.streamplot`.
-            Defaults to a blue colormap, light transparency, and logarithmic
-            scaling, whose limits can be adjusted using ``vmin`` and ``vmax``.
-            Note that the ``density`` keyword can greaty affect plotting speed.
-            If the domain plotted is not square, you may also want to set
-            ``density`` as a tuple proportional to the axes aspect ratio.
+            Defaults to a blue colormap logarithmic scaling, whose limits can
+            be adjusted using ``vmin`` and ``vmax``. Note that the ``density``
+            keyword can greaty affect plotting speed. If the domain plotted is
+            not square, you may also want to set ``density`` as a tuple
+            proportional to the axes aspect ratio.
 
         Returns
         -------
@@ -245,11 +245,11 @@ class HyogaPlotMethods:
         """
 
         # get style parameters
-        ax = kwargs.get('ax', plt.gca())
+        ax = kwargs.pop('ax', plt.gca())  # not a mpl kwargs
         vmin = kwargs.pop('vmin', None)  # not a streamplot param
         vmax = kwargs.pop('vmax', None)  # not a streamplot param
         norm = kwargs.get('norm', mcolors.LogNorm(vmin=vmin, vmax=vmax))
-        style = dict(alpha=0.75, arrowsize=0.25, cmap='Blues', linewidth=0.5)
+        style = dict(arrowsize=0.25, cmap='Blues', linewidth=0.5)
         style.update(kwargs)
 
         # get velocity component variables
