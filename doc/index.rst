@@ -16,7 +16,7 @@ Japanese word for glacier (lit. ice river).
 
    The project is still in a very early stage and comes with absolutely no
    warranty. I will do my best to develop backward-compatible and document
-   pending breaking changes with future warning. Still, things may break.
+   pending breaking changes with "future warnings". Still, things may break.
 
 .. toctree::
    :caption: User guide
@@ -71,6 +71,18 @@ one year after my last position ended. The rest of the story is yet to be
 .. _dask: https://dask.org/
 .. _iceplotlib: https://github.com/juseg/iceplotlib/
 .. _pandas: https://pandas.pydata.org
+
+Citing
+------
+
+Every hyoga release of is long-term archived in Zenodo_ and attributed a DOI.
+This badge always indicates the latest record: |doi|.
+
+.. |doi| image:: https://zenodo.org/badge/227465038.svg
+   :target: https://zenodo.org/badge/latestdoi/227465038
+
+.. this link always points to the latest record, too
+.. _Zenodo: https://zenodo.org/record/4570420
 
 License
 -------
