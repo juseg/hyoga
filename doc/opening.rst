@@ -16,7 +16,6 @@ the next time.
    import xarray as xr
    import hyoga.demo
    ds = xr.open_dataset(hyoga.demo.pism_gridded())
-   print(ds)
 
 Alternatively, ``hyoga.open`` provides thin wrappers around xarray functions to
 open a single-file dataset, a multi-file dataset, and a single time slice
@@ -44,8 +43,7 @@ xarray, selecting an age-slice of the ice thickness is as easy as:
 
 .. ipython:: python
 
-   var = ds.sel(age=24).thk  # or ds.thk.sel(age=24)
-   print(var)
+   ds.sel(age=24).thk  # or ds.thk.sel(age=24)
 
 Please refer to the excellent xarray_ to explore the many other ways of
 indexing and subsetting data. As long as hyoga (or any submodule) has been
@@ -54,7 +52,7 @@ attribute ``ds.hyoga``:
 
 .. ipython:: python
 
-   print(ds.hyoga)
+   ds.hyoga
 
 In particular, hyoga never accesses model variables by their "short names" (e.g.
 ``thk``) as was done in the example above. While ``thk`` refers to ice
@@ -64,8 +62,9 @@ access a variable by standard name you may use:
 
 .. ipython:: python
 
-   var = ds.hyoga.getvar('land_ice_thickness')
-   print(var)
+   var = ds.hyoga.getvar('land_ice_thickness');
+   var.max()
+   var.units
 
 Because `CF standard names`_ for land ice variables are relatively recent,
 older ice sheet models may not include them in output metadata. For PISM, a

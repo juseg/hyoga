@@ -30,7 +30,6 @@ The project is at a very early stage but feel free to report bugs and
 suggestions on Github_, and to get in touch per email
 -- Julien Seguinot (https://juseg.github.io).
 
-.. _twitter: https://twitter.com/pyjeo
 
 .. _me: https://juseg.github.io
 .. _Github: https://github.com/juseg/hyoga/
