@@ -8,6 +8,8 @@
 project = 'hyoga'
 copyright = '2021, Julien Seguinot'
 author = 'Julien Seguinot'
+version = '0.1 Akaishi'
+release = '0.1.0'
 
 
 # -- General configuration ---------------------------------------------------
