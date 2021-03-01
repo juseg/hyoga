@@ -37,7 +37,6 @@ Input functions
    dataset
    mfdataset
    subdataset
-   visual
 
 Plot methods
 ------------

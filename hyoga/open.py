@@ -18,6 +18,8 @@ import xarray as xr
 
 def _preprocess(ds):
     """Prepare a newly opened dataset for convenient plotting."""
+    # NOTE this will be moved to hyoga.hyoga in the future
+    # NOTE code will be more robust if using decode_cf=True
 
     # transpose dimensions to zyx (for older pism files)
     if 'x' in ds.dims and 'y' in ds.dims:
@@ -39,14 +41,49 @@ def _preprocess(ds):
 # --------------
 
 def dataset(filename, **kwargs):
-    """Open single-file dataset with age coordinate."""
-    ds = xr.open_dataset(filename, decode_cf=False, **kwargs)
+    """Open a single-file model output dataset.
+
+    Parameters
+    ----------
+    filename : str, Path, file-like or DataStore
+        Path to a model input or output file containing the data to open.
+        Variables should in principle contain a ``'standard_name'`` attribute
+        following the Climate and Forecast conventions. Some standard names
+        will be filled according to PISM variable short names if missing.
+        This mechanism is not yet implemented for other models.
+    **kwargs : optional
+        Keyword arguments passed :func:`xarray.open_dataset`.
+
+    Returns
+    -------
+    ds : Dataset
+        Xarray dataset containing variables in the file.
+    """
+    kwargs.setdefault('decode_cf', False)  # NOTE needed by current age code
+    ds = xr.open_dataset(filename, **kwargs)
     ds = _preprocess(ds)
     return ds
 
 
 def mfdataset(filename, **kwargs):
-    """Open multi-file dataset with age coordinate."""
+    """Open a multi-file model output dataset.
+
+    Parameters
+    ----------
+    filename : str or sequence
+        Either a string containing wildcards (``'path/to/*.nc'``) or an
+        explicit list of files to open (see :func:`xarray.open_mfdataset`).
+    **kwargs : optional
+        Keyword arguments passed :func:`xarray.open_mfdataset`. By default
+        global attributes will be read from the last file (preserving history
+        from a series of runs) and a ``'minimal'`` set of data variables (not
+        including lon, lat, etc) will be concatenated across files.
+
+    Returns
+    -------
+    ds : Dataset
+        Xarray dataset containing variables in the files.
+    """
 
     # xarray expand user dir in lists but not on patterns (#4783)
     if isinstance(filename, str):
@@ -57,23 +94,25 @@ def mfdataset(filename, **kwargs):
 
     # get global attributes from last file (attrs_file)
     # do not concatenate lon, lat etc (data_vars='minimal')
-    ds = xr.open_mfdataset(
-        filename, attrs_file=(filelist[-1] if filelist else None),
-        data_vars='minimal', decode_cf=False, **kwargs)
+    options = dict(
+        attrs_file=(filelist[-1] if filelist else None),
+        data_vars='minimal', decode_cf=False)
+    options.update(**kwargs)
+    ds = xr.open_mfdataset(filename, **options)
     ds = _preprocess(ds)
     return ds
 
 
 def subdataset(filename, time, shift=0, tolerance=1e-9, **kwargs):
     """
-    Open subdataset in multi-file based on format string.
+    Open a single file in a multi-file dataset.
 
     Parameters
     ----------
     filename : str
-        A format string informing the path to a series of files,
-        where the unique replacement field indicate the final time in years of
-        each file. For instance `path/to/ex.{:07.0f}.nc`.
+        A format string informing the path to a series of files. A single
+        replacement field should indicate the final time in years of each file
+        (e.g. ``'path/to/ex.{:07.0f}.nc'``).
     time : int of float
         Time in years (-age*1e3) used to find the file to open in the list
         matching the filename pattern, and to select a corresponding time
@@ -82,16 +121,18 @@ def subdataset(filename, time, shift=0, tolerance=1e-9, **kwargs):
     shift : int or float
         Shift in years in the filename numbering relative to the model time.
         This is useful when output files are named relative to an arbitrary
-        start date rather than zero.
+        start date rather than zero, for instance in paleo-glacier runs.
     tolerance: float
         Largest acceptable error when selected the nearest time frame, passed
         to :meth:`xarray.Dataset.sel`.
+    **kwargs : optional
+        Keyword arguments passed :func:`dataset`.
 
     Returns
     -------
-    ds : :class:`xarray.Dataset`
-        A dataset containing the time slice defined by `time` in the multi-file
-        dataset matching the `filename` pattern.
+    ds : Dataset
+        Dataset containing the time slice defined by ``time`` in the multi-file
+        dataset matching the ``filename`` pattern.
     """
     filename = os.path.expanduser(filename)
     filelist = sorted(glob.glob(re.sub('{.*}', '*', filename)))
@@ -110,6 +151,4 @@ def visual(filename, bootfile, interpfile, time, ax=None, sigma=None,
     ds = subdataset(filename, time, **kwargs)
     ds = ds.ice.visual(bootfile=bootfile, interpfile=interpfile, ax=ax,
                        sigma=sigma, variables=variables)
-
-    # return interpolated data
     return ds
