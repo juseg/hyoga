@@ -66,6 +66,18 @@ access a variable by standard name you may use:
    var.max()
    var.units
 
+If a particular variable is missing, hyoga will additionally try to reconstruct
+it from others, such as the sum of bedrock altitude and ice thickness for
+surface altitude, or the norm of velocity components for its magnitude.  This
+mechanism can be disable using ``infer=False`` when unwanted:
+
+.. ipython:: python
+   :okexcept:
+
+   ds.hyoga.getvar('surface_altitude');
+   ds.hyoga.getvar('magnitude_of_land_ice_surface_velocity');
+   ds.hyoga.getvar('surface_altitude', infer=False)
+
 Because `CF standard names`_ for land ice variables are relatively recent,
 older ice sheet models may not include them in output metadata. For PISM, a
 mechanism has been implemented to fill (some of) these missing standard names
