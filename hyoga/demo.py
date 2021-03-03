@@ -9,34 +9,44 @@ series and plotting output from other models.
 """
 
 import os.path
+import urllib.parse
+import warnings
 import requests
 
 
 def _download(url):
     """Download a file from the web, store in cache dir and return path."""
     cachedir = os.path.expanduser(os.path.join('~', '.cache', 'hyoga'))
-    filename = os.path.join(cachedir, url.split('/')[-1])
-    if not os.path.isfile(filename):
+    filepath = urllib.parse.urlparse(url).path
+    filepath = os.path.basename(filepath)
+    filepath = os.path.join(cachedir, filepath.split('/')[-1])
+    if not os.path.isfile(filepath):
         os.makedirs(cachedir, exist_ok=True)
-        with open(filename, 'wb') as binaryfile:
+        with open(filepath, 'wb') as binaryfile:
             print("downloading {}...".format(url))
             binaryfile.write(requests.get(url).content)
-    return filename
+    return filepath
 
 
-def _download_zenodo(record, filename):
-    """Download a file from Zenodo based on record number and filename."""
-    url = 'https://zenodo.org/record/{}/files/{}'.format(record, filename)
+def get(filename='pism.alps.out.2d.nc'):
+    """Download a file from hyoga-data github repository."""
+    repo = 'https://raw.githubusercontent.com/juseg/hyoga-data/main'
+    model = filename.split('.')[0]
+    url = '/'.join((repo, model, filename))
     return _download(url)
 
 
 def pism_gridded():
-    """Download Alps public gridded data from Zenodo, return path."""
-    return _download_zenodo(
-        record='3604142', filename='alpcyc.1km.epic.pp.ex.1ka.nc')
+    """Deprecated alias of get('pism.alps.out.2d.nc')."""
+    warnings.warn(
+        "pism_gridded() is deprecated and will be removed in v0.3.0, use "
+        "get('pism.alps.out.2d.nc') instead", FutureWarning)
+    return get('pism.alps.out.2d.nc')
 
 
 def pism_series():
-    """Download Alps public gridded data from Zenodo, return path."""
-    return _download_zenodo(
-        record='3604142', filename='alpcyc.1km.epic.pp.ts.10a.nc')
+    """Deprecated alias of get('pism.alps.out.1d.nc')."""
+    warnings.warn(
+        "pism_gridded() is deprecated and will be removed in v0.3.0, use "
+        "get('pism.alps.out.1d.nc') instead", FutureWarning)
+    return get('pism.alps.out.1d.nc')
