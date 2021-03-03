@@ -17,8 +17,7 @@ import hyoga.demo
 ax = plt.subplot(projection=ccrs.UTM(32))
 
 # open demo data
-with hyoga.open.dataset(hyoga.demo.pism_gridded()) as ds:
-    ds = ds.sel(age=24)
+with hyoga.open.dataset(hyoga.demo.get('pism.alps.out.2d.nc')) as ds:
     ds = ds.hyoga.where_thicker(1)
 
     # plot model output
