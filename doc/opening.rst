@@ -15,7 +15,7 @@ the next time.
 
    import xarray as xr
    import hyoga.demo
-   ds = xr.open_dataset(hyoga.demo.pism_gridded())
+   ds = xr.open_dataset(hyoga.demo.get('pism.alps.out.2d.nc'))
 
 Alternatively, ``hyoga.open`` provides thin wrappers around xarray functions to
 open a single-file dataset, a multi-file dataset, and a single time slice
@@ -38,14 +38,7 @@ within a multi-file dataset.
 Selecting data
 --------------
 
-The demo data is indexed by age in kiloyears (ka). Thanks to the power of
-xarray, selecting an age-slice of the ice thickness is as easy as:
-
-.. ipython:: python
-
-   ds.sel(age=24).thk  # or ds.thk.sel(age=24)
-
-Please refer to the excellent xarray_ to explore the many other ways of
+Please refer to the excellent xarray_ docs to explore the many other ways of
 indexing and subsetting data. As long as hyoga (or any submodule) has been
 imported, new functionality will be available in a so-called "dataset accessor"
 attribute ``ds.hyoga``:
@@ -54,8 +47,8 @@ attribute ``ds.hyoga``:
 
    ds.hyoga
 
-In particular, hyoga never accesses model variables by their "short names" (e.g.
-``thk``) as was done in the example above. While ``thk`` refers to ice
+In particular, hyoga never accesses model variables by their "short names".
+While ``thk``, for instance refers to ice
 thickness in PISM, it may refer to a different quantity, or to nothing at all,
 in another ice-sheet model. This where `CF standard names`_ come into play. To
 access a variable by standard name you may use:

@@ -14,32 +14,53 @@ Let us open the demo data again:
    import hyoga.demo
    import hyoga.open
 
-   ds = hyoga.open.dataset(hyoga.demo.pism_gridded())
-   ds = ds.sel(age=24)
+   ds = hyoga.open.dataset(hyoga.demo.get('pism.alps.out.2d.nc'))
 
 Plotting is already quite convenient using xarray:
 
 .. ipython:: python
 
-   ds.topg.plot.imshow(add_colorbar=False)
-   (ds.topg+ds.thk).plot.contourf()
-
+   ds.thk.plot.imshow()
    @savefig plot_with_xarray.png
-   plt.gca().set_aspect('equal')
+   plt.gca().set_aspect('equal')  # needed to avoid distortion
 
 Plotting with hyoga
 -------------------
 
 To make things even easier, hyoga provides wrappers around xarray_ and
 matplotlib_ methods to produce oft-used ice sheet model plots with a more
-practical default style:
+practical default style. To begin with thought, let us mask irrelevant model
+output below a thickness threshold of one metre using
+:meth:`hyoga.hyoga.Dataset.where_thicker`:
+
+.. ipython:: python
+
+   ds = ds.hyoga.where_thicker()
+
+Note that the bedrock topography, however, is not affected:
 
 .. ipython:: python
 
    ds.hyoga.plot.bedrock_altitude(vmin=0, vmax=4500)
-   ds.hyoga.plot.surface_altitude_contours()
-   @savefig plot_surface_altitude.png
-   ds.hyoga.plot.ice_margin(facecolor='w')
+   @savefig plot_bedrock_altitude.png
+   plt.gca().set_aspect('equal')
+
+Now let us make our first composite plot. The previously defined ice mask
+allows us to plot an ice margin contour on top of the bedrock topography:
+
+.. ipython:: python
+
+   ds.hyoga.plot.bedrock_altitude(vmin=0, vmax=4500)
+   ds.hyoga.plot.ice_margin(facecolor='tab:blue')
+   @savefig plot_ice_margin.png
+   plt.gca().set_aspect('equal')
+
+.. note::
+
+   Hyoga makes choices regarding style (such as the grey colormap for
+   topography and the half-transparent background above) that do not always
+   correspond to the matplotlib defaults. However, these choices can always be
+   overriden using the matplotlib keyword arguments.
 
 As may be noticed in the above code, hyoga plot methods also do the job to
 look up required variables (by their standard names) and to infer missing
