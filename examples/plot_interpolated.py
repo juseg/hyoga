@@ -18,7 +18,6 @@ ax = plt.subplot(projection=ccrs.UTM(32))
 
 # open demo data
 with hyoga.open.dataset(hyoga.demo.get('pism.alps.out.2d.nc')) as ds:
-    ds['usurf'] = ds.hyoga.getvar('surface_altitude')  # FIXME why needed?
     ds = ds.hyoga.assign_isostasy(hyoga.demo.get('pism.alps.in.boot.nc'))
     ds = ds.hyoga.interp(hyoga.demo.get('pism.alps.vis.refined.nc'))
 

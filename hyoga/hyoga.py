@@ -296,6 +296,14 @@ class HyogaDataset:
             filt = scipy.ndimage.gaussian_filter(topo, sigma=sigma/dx)
             topo += np.clip(filt-topo, -0.5, 0.5)
 
+        # assign surface altitude if missing, needed for a nice mask
+        # NOTE: could also use method to assign by std name here
+        ds = self._ds
+        try:
+            self.getvar('surface_altitude', infer=False)
+        except ValueError:
+            ds['usurf'] = self.getvar('surface_altitude')
+
         # lookup bedrock_topography short name, default to topg
         try:
             name = ds.hyoga.getvar('bedrock_topography').name
@@ -304,7 +312,7 @@ class HyogaDataset:
         name = name or topo.name or 'topg'
 
         # interpolate data variables and assign new topo
-        ds = self._ds.interp(x=x, y=y).assign({name: topo})
+        ds = ds.interp(x=x, y=y).assign({name: topo})
 
         # correct for isostasy if it is present
         try:
