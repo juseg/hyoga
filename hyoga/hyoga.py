@@ -271,7 +271,8 @@ class HyogaDataset:
         dataset : Dataset
             The interpolated dataset, with new horizontal resolution
             corresponding to either the data provided in ``datasource``, or
-            the pixel count of axes provided with ``ax``.
+            the pixel count of axes provided with ``ax``. The ice surface
+            altitude will be assigned if missing, to compute a detailed mask.
         """
 
         # read topography from file if it is not an array

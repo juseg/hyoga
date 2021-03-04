@@ -32,6 +32,10 @@ sphinx_gallery_conf = {
     'examples_dirs': '../examples',  # path to example scripts
     'gallery_dirs': 'examples',     # where to save gallery plots
     }
+extlinks = {
+    "issue": ("https://github.com/pydata/xarray/issues/%s", "#"),
+    "pull": ("https://github.com/pydata/xarray/pull/%s", "PR"),
+}
 intersphinx_mapping = {
     'matplotlib': ('https://matplotlib.org/stable/', None),
     'python': ('https://docs.python.org/3.7/', None),
