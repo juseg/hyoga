@@ -3,6 +3,9 @@
 
 """Sphinx configuration file for hyoga documentation."""
 
+
+import sphinx_autosummary_accessors
+
 # -- Project information -----------------------------------------------------
 
 project = 'hyoga'
@@ -24,6 +27,7 @@ extensions = [
     'sphinx_gallery.gen_gallery',           # plotting examples gallery
     'IPython.sphinxext.ipython_directive',  # run code samples and plots
     'IPython.sphinxext.ipython_console_highlighting',
+    'sphinx_autosummary_accessors', # autosummary Dataset.hyoga.etc
     ]
 
 # options to sphinx extensions
@@ -62,7 +66,7 @@ napoleon_type_aliases = {
 }
 
 # location of additional templates
-# templates_path = ['_templates']
+templates_path = ["_templates", sphinx_autosummary_accessors.templates_path]
 
 # patterns to ignore when looking for source files.
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']

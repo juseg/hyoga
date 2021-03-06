@@ -27,30 +27,33 @@ Postprocessing
 .. NOTE: some method names are too long for the left column but they will look
 .. better after including subsections (or importing them at the top level).
 
-These methods can be accessed under the ``.hyoga`` attribute of any
-xarray datasets after importing hyoga:
-
-.. currentmodule:: hyoga.hyoga
+.. currentmodule:: xarray
 
 .. autosummary::
    :toctree: generated/
-   :nosignatures:
-   :recursive:
+   :template: autosummary/accessor_method.rst
 
-   HyogaDataset
-   HyogaDataset.assign_isostasy
-   HyogaDataset.getvar
-   HyogaDataset.interp
-   HyogaDataset.where
-   HyogaDataset.where_thicker
+   Dataset.hyoga.assign_isostasy
+   Dataset.hyoga.getvar
+   Dataset.hyoga.interp
+   Dataset.hyoga.where
+   Dataset.hyoga.where_thicker
 
 Plotting
 ~~~~~~~~
 
-.. currentmodule:: hyoga.plot
+.. NOTE: this will work in next versions of sphinx_autosummary_accessors.
+   currentmodule:: xarray
+   autosummary::
+   :toctree: generated/
+   :template: subaccessor_method.rst
+
+   Dataset.hyoga.plot.bedrock_altitude
 
 These methods can be accessed under the ``.hyoga.plot`` attribute of xarray
 datasets after importing hyoga:
+
+.. currentmodule:: hyoga.plot
 
 .. autosummary::
    :toctree: generated/
