@@ -45,11 +45,13 @@ def _coords_from_extent(extent, cols, rows):
 class HyogaDataset:
     """Hyoga extension to xarray datasets."""
 
+    # needed for sphinx etc to see plot methods
+    plot = xr.core.utils.UncachedAccessor(hyoga.plot.HyogaPlotMethods)
+
     def __init__(self, dataset):
         # NOTE in the future we will decide here about age dim and units
         self._ds = dataset
         self._ds = self._fill_standard_names()
-        self.plot = hyoga.plot.HyogaPlotMethods(dataset)
 
     def _fill_standard_names(self):
         """Add missing standard names in old PISM files.

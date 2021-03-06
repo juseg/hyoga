@@ -17,8 +17,9 @@ class HyogaPlotMethods:
     A namespace to keep all plot methods in one place.
     """
 
-    def __init__(self, dataset):
-        self._ds = dataset
+    def __init__(self, accessor):
+        # FIXME now that accessor is self method syntax can be simplified
+        self._ds = accessor._ds
 
     def bedrock_altitude(self, sealevel=0, **kwargs):
         """Plot bedrock topography and shoreline.
