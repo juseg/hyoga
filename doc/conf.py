@@ -5,6 +5,7 @@
 
 
 import sphinx_autosummary_accessors
+import sphinx_gallery.sorting
 
 # -- Project information -----------------------------------------------------
 
@@ -35,6 +36,9 @@ autosummary_generate = True         # autogen files for listed entroes
 sphinx_gallery_conf = {
     'examples_dirs': '../examples',  # path to example scripts
     'gallery_dirs': 'examples',     # where to save gallery plots
+    'subsection_order': sphinx_gallery.sorting.ExplicitOrder([
+        '../examples/showcase',
+        '../examples/interp'])
     }
 extlinks = {
     "issue": ("https://github.com/pydata/xarray/issues/%s", "#"),
