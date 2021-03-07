@@ -15,10 +15,10 @@
 What's new
 ==========
 
-v0.1.1
-------
+v0.1.1 (unreleased)
+-------------------
 
-This release includes a minor bug fix and several documentation improvements.
+This release includes bug fixes and several documentation improvements.
 
 
 Deprecations
@@ -32,10 +32,11 @@ Deprecations
 Bug fixes
 ~~~~~~~~~
 
-- Assign surface altitude during :meth:`HyogaDataset.interp` if it is missing,
+- Assign surface altitude during :meth:`xarray.Dataset.hyoga.interp` if it is missing,
   as it is needed to compute the interpolated ice mask.
-- Fix :meth:`HyogaDataset.assign_isostasy` and :meth:`HyogaDataset.interp` for
-  when a dataset (or data array) is used instead of a file.
+- Fix :meth:`xarray.Dataset.hyoga.assign_isostasy` and
+  :meth:`xarray.Dataset.hyoga.interp` in the case when a dataset (or a data
+  array) is used instead of a file.
 - Ensure that :meth:`xarray.Dataset.hyoga.where` and
   :meth:`xarray.Dataset.hyoga.where_thicker` return a copy without affecting
   the original dataset (as :meth:`xarray.Dataset.where`).
@@ -52,7 +53,7 @@ Documentation
   interpolated model output (:doc:`examples/index`, :issue:`11`).
 
 
-v0.1.0 "Akaishi"
-----------------
+v0.1.0 Akaishi (1 Mar 2021)
+---------------------------
 
 Nothing is old, everything is new. This is the first version!

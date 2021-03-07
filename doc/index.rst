@@ -18,6 +18,12 @@ Japanese word for glacier (lit. ice river).
    warranty. I will do my best to develop backward-compatible and document
    pending breaking changes with "future warnings". Still, things may break.
 
+.. note::
+
+   Hyoga is growing fast. This is the documentation for the latest Github_
+   commit, which may include significant changes since the latest Pypi_ release
+   (see :doc:`./whatsnew`).
+
 .. toctree::
    :caption: User guide
    :maxdepth: 1
@@ -42,6 +48,7 @@ report bugs on Github_, and to get in touch with suggestions per email_.
 
 .. _email: https://juseg.github.io
 .. _Github: https://github.com/juseg/hyoga/
+.. _Pypi: https://pypi.org/project/hyoga/
 
 .. note::
 
