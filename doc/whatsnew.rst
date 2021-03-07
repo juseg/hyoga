@@ -34,6 +34,11 @@ Bug fixes
 
 - Assign surface altitude during :meth:`HyogaDataset.interp` if it is missing,
   as it is needed to compute the interpolated ice mask.
+- Fix :meth:`HyogaDataset.assign_isostasy` and :meth:`HyogaDataset.interp` for
+  when a dataset (or data array) is used instead of a file.
+- Ensure that :meth:`xarray.Dataset.hyoga.where` and
+  :meth:`xarray.Dataset.hyoga.where_thicker` return a copy without affecting
+  the original dataset (as :meth:`xarray.Dataset.where`).
 
 
 Documentation

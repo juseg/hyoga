@@ -41,6 +41,16 @@ def _coords_from_extent(extent, cols, rows):
     return x, y
 
 
+def _open_datasource(datasource, standard_name):
+    """Get variable from dataset or file, or return data array."""
+    if isinstance(datasource, xr.DataArray):
+        return datasource
+    if isinstance(datasource, xr.Dataset):
+        return datasource.hyoga.getvar(standard_name)
+    with xr.open_dataset(datasource) as ds:
+        return ds.hyoga.getvar(standard_name)
+
+
 @xr.register_dataset_accessor('hyoga')
 class HyogaDataset:
     """Hyoga extension to xarray datasets."""
@@ -109,11 +119,11 @@ class HyogaDataset:
 
         Parameters
         ----------
-        datasource: DataArray, str, Path, file-like or DataStore
-            Data array or path to file containing the reference bedrock
-            topography (standard name bedrock_altitude) or reference surface
-            topography and ice thickness (standard names surface_altitude and
-            land_ice_thickness) from which it is computed.
+        datasource: DataArray, Dataset, str, Path, file-like or DataStore
+            Data array, or a dataset or path to a file containing the reference
+            bedrock topography (standard name bedrock_altitude) or the
+            reference surface topography and ice thickness (standard names
+            surface_altitude and land_ice_thickness) from which it is computed.
 
         Returns
         -------
@@ -125,9 +135,7 @@ class HyogaDataset:
         """
 
         # read topography from file if it is not an array
-        if not isinstance(datasource, xr.DataArray):
-            with hyoga.open.dataset(datasource) as ds:
-                topo = ds.hyoga.getvar('bedrock_altitude')
+        topo = _open_datasource(datasource, 'bedrock_altitude')
 
         # warn if bedrock isostatic appears to be present in dataset
         # NOTE: in the future we may consider an override switch, and perhaps a
@@ -244,11 +252,11 @@ class HyogaDataset:
 
         Parameters
         ----------
-        datasource: DataArray, str, Path, file-like or DataStore
-            Data array or path to file containing the high-resolution bedrock
-            topography (standard name bedrock_altitude) or reference surface
-            topography and ice thickness (standard names surface_altitude and
-            land_ice_thickness) from which it is computed.
+        datasource: DataArray, Dataset, str, Path, file-like or DataStore
+            Data array, or a dataset or path to a file containing the reference
+            bedrock topography (standard name bedrock_altitude) or the
+            reference surface topography and ice thickness (standard names
+            surface_altitude and land_ice_thickness) from which it is computed.
         ax : Axes, optional
             If axes are provided, "axes coordinates" will be generated so that
             the data are interpolated onto a grid where each point is a pixel
@@ -278,9 +286,7 @@ class HyogaDataset:
         """
 
         # read topography from file if it is not an array
-        if not isinstance(datasource, xr.DataArray):
-            with hyoga.open.dataset(datasource) as ds:
-                topo = ds.hyoga.getvar('bedrock_altitude')
+        topo = _open_datasource(datasource, 'bedrock_altitude')
 
         # get interpolation coordinates
         if ax is not None:
