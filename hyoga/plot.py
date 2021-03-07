@@ -18,7 +18,7 @@ class HyogaPlotMethods:
     """
 
     def __init__(self, accessor):
-        # FIXME now that accessor is self method syntax can be simplified
+        self._hyoga = accessor
         self._ds = accessor._ds
 
     def bedrock_altitude(self, sealevel=0, **kwargs):
@@ -45,7 +45,7 @@ class HyogaPlotMethods:
         """
         style = dict(add_colorbar=False, cmap='Greys', zorder=-1)
         style.update(kwargs)
-        var = self._ds.hyoga.getvar('bedrock_altitude') - sealevel
+        var = self._hyoga.getvar('bedrock_altitude') - sealevel
         return var.plot.imshow(**style)
 
     def bedrock_erosion(self, constant=5.2e-8, exponent=2.34, **kwargs):
@@ -76,7 +76,7 @@ class HyogaPlotMethods:
         # NOTE locator=mpl.ticker.LogLocator() seem to have no effect?
         style = dict(alpha=0.75, cmap='YlOrBr')
         style.update(kwargs)
-        var = self._ds.hyoga.getvar('magnitude_of_land_ice_basal_velocity')
+        var = self._hyoga.getvar('magnitude_of_land_ice_basal_velocity')
         var = (constant*var**exponent).assign_attrs(
             long_name='glacier erosion rate', units='mm a-1')
         return var.plot.contourf(**style)
@@ -97,7 +97,7 @@ class HyogaPlotMethods:
         """
 
         # get bedrock isostasy variable
-        var = self._ds.hyoga.getvar(
+        var = self._hyoga.getvar(
             'bedrock_altitude_change_due_to_isostatic_adjustment')
 
         # locate maximum depression (xarray has no idxmin yet)
@@ -134,7 +134,7 @@ class HyogaPlotMethods:
         """
         style = dict(colors=['0.25'], levels=[0], linewidths=0.25, zorder=0)
         style.update(**kwargs)
-        var = self._ds.hyoga.getvar('bedrock_altitude') - sealevel
+        var = self._hyoga.getvar('bedrock_altitude') - sealevel
         return var.plot.contour(**style)
 
     def ice_margin(self, edgecolor='0.25', facecolor=None, **kwargs):
@@ -159,7 +159,7 @@ class HyogaPlotMethods:
             if both `edgecolor` and `facecolor` were given.
         """
         # NOTE this method may use a mask variable in the future (#9)
-        var = self._ds.hyoga.getvar('land_ice_thickness')
+        var = self._hyoga.getvar('land_ice_thickness')
         contours = []
         if edgecolor is not None:
             style = dict(colors=[edgecolor], levels=[0.5], linewidths=0.25)
@@ -192,7 +192,7 @@ class HyogaPlotMethods:
             The plotted ice margin contour set or a tuple of two contour sets
             if both `major` and `minor` were given (as in the default case).
         """
-        var = self._ds.hyoga.getvar('surface_altitude')
+        var = self._hyoga.getvar('surface_altitude')
         levels = range(0, 5001, minor)
         contours = []
         if major is not None:
@@ -224,7 +224,7 @@ class HyogaPlotMethods:
         """
         style = dict(alpha=0.75, cmap='Blues', norm=mcolors.LogNorm())
         style.update(kwargs)
-        var = self._ds.hyoga.getvar('magnitude_of_land_ice_surface_velocity')
+        var = self._hyoga.getvar('magnitude_of_land_ice_surface_velocity')
         return var.plot.imshow(**style)
 
     def surface_velocity_streamplot(self, **kwargs):
@@ -255,8 +255,8 @@ class HyogaPlotMethods:
         style.update(kwargs)
 
         # get velocity component variables
-        uvar = self._ds.hyoga.getvar('land_ice_surface_x_velocity')
-        vvar = self._ds.hyoga.getvar('land_ice_surface_y_velocity')
+        uvar = self._hyoga.getvar('land_ice_surface_x_velocity')
+        vvar = self._hyoga.getvar('land_ice_surface_y_velocity')
         cvar = (uvar**2+vvar**2)**0.5
 
         # streamplot surface velocity
