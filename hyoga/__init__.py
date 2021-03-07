@@ -3,4 +3,9 @@
 
 """A thin wrapper around xarray to read and plot PISM output files."""
 
-import hyoga.hyoga  # noqa (register hyoga dataset accesor)
+# Only import HyogaDataset here. This registers the accessor. In practice this
+# also triggers importing open (in the future this will change) and plot.
+
+from .hyoga import HyogaDataset
+
+__all__ = ['HyogaDataset']
