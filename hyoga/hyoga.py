@@ -357,7 +357,7 @@ class HyogaDataset:
             Corresponing dataset with variables whose standard name does not
             start with "bedrock_altitude" filtered by the condition.
         """
-        ds = self._ds
+        ds = self._ds.copy()
         for name, var in ds.items():
             if not var.attrs.get(
                     'standard_name', '').startswith('bedrock_altitude'):
