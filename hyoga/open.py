@@ -146,8 +146,9 @@ def visual(filename, bootfile, interpfile, time, ax=None, sigma=None,
            variables=None, **kwargs):
     """Open interpolated output for visualization."""
     warnings.warn(
-        "open.visual() is deprecated, use open.dataset(...).interp(...) or "
-        "open.subdataset(...).interp(...).", FutureWarning)
+        "open.visual() is deprecated and will be removed in v0.2.0, use "
+        "open.dataset(...).interp(...) or open.subdataset(...).interp(...).",
+        FutureWarning)
     ds = subdataset(filename, time, **kwargs)
     ds = ds.ice.visual(bootfile=bootfile, interpfile=interpfile, ax=ax,
                        sigma=sigma, variables=variables)
