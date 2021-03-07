@@ -23,7 +23,7 @@ with hyoga.open.dataset(hyoga.demo.get('pism.alps.out.2d.nc')) as ds:
     # plot model output
     ds.hyoga.plot.bedrock_altitude(ax=ax, vmin=0, vmax=3000)
     ds.hyoga.plot.ice_margin(ax=ax, facecolor='w')
-    ds.hyoga.plot.surface_altitude_contours(ax=ax)
+    ds.hyoga.plot.surface_altitude_contours(ax=ax, colors='tab:blue')
 
 # add coastlines and rivers
 ax.coastlines(edgecolor='0.25', linewidth=0.5)
@@ -31,6 +31,9 @@ ax.add_feature(
     cfeature.NaturalEarthFeature(
         category='physical', name='rivers_lake_centerlines', scale='10m'),
     edgecolor='0.25', facecolor='none', linewidth=0.5, zorder=0)
+
+# set axes properties
+ax.set_title(r'Surface elevation contours')
 
 # show
 plt.show()

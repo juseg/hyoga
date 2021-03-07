@@ -8,6 +8,7 @@ Plot bedrock erosion
 """
 
 import matplotlib.pyplot as plt
+import matplotlib.ticker
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
 import hyoga.open
@@ -15,6 +16,7 @@ import hyoga.demo
 
 # initialize figure
 ax = plt.subplot(projection=ccrs.UTM(32))
+cax = plt.axes([0.15, 0.55, 0.025, 0.25])
 
 # open demo data
 with hyoga.open.dataset(hyoga.demo.get('pism.alps.out.2d.nc')) as ds:
@@ -24,8 +26,10 @@ with hyoga.open.dataset(hyoga.demo.get('pism.alps.out.2d.nc')) as ds:
     ds.hyoga.plot.bedrock_altitude(ax=ax, vmin=0, vmax=4500)
     ds.hyoga.plot.surface_altitude_contours(ax=ax)
     ds.hyoga.plot.bedrock_erosion(
-        ax=ax, levels=[10**i for i in range(-9, 1)],
-        cbar_kwargs=dict(format='%.0e'))
+        ax=ax, cbar_ax=cax, levels=[10**i for i in range(-9, 1)],
+        cbar_kwargs=dict(
+            format=matplotlib.ticker.LogFormatterMathtext(),
+            ticks=[10**i for i in range(-9, 1, 3)]))
     ds.hyoga.plot.ice_margin(ax=ax)
 
 # add coastlines and rivers
@@ -34,6 +38,10 @@ ax.add_feature(
     cfeature.NaturalEarthFeature(
         category='physical', name='rivers_lake_centerlines', scale='10m'),
     edgecolor='0.25', facecolor='none', linewidth=0.5, zorder=0)
+
+# set axes properties
+cax.set_ylabel('')
+ax.set_title(r'Glacier erosion rate (mm$\,$a$^{-1}$)')
 
 # show
 plt.show()

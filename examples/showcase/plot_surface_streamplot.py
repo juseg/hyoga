@@ -15,6 +15,7 @@ import hyoga.demo
 
 # initialize figure
 ax = plt.subplot(projection=ccrs.UTM(32))
+cax = plt.axes([0.15, 0.55, 0.025, 0.25])
 
 # open demo data
 with hyoga.open.dataset(hyoga.demo.get('pism.alps.out.2d.nc')) as ds:
@@ -28,7 +29,9 @@ with hyoga.open.dataset(hyoga.demo.get('pism.alps.out.2d.nc')) as ds:
         ax=ax, cmap='Reds', vmin=1e1, vmax=1e3, density=(6, 4))
 
     # add colorbar manually
-    ax.figure.colorbar(streams.lines, label=r'surface velocity ($m\,a^{-1}$')
+    ax.figure.colorbar(
+        streams.lines, cax=cax, extend='both',
+        label=r'surface velocity ($m\,a^{-1}$')
 
 # add coastlines and rivers
 ax.coastlines(edgecolor='0.25', linewidth=0.5)
@@ -36,6 +39,10 @@ ax.add_feature(
     cfeature.NaturalEarthFeature(
         category='physical', name='rivers_lake_centerlines', scale='10m'),
     edgecolor='0.25', facecolor='none', linewidth=0.5, zorder=0)
+
+# set axes properties
+cax.set_ylabel('')
+ax.set_title(r'Surface velocity (m$\,$a$^{-1}$)')
 
 # show
 plt.show()
