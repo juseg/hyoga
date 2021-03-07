@@ -42,29 +42,15 @@ Postprocessing
 Plotting
 ~~~~~~~~
 
-.. NOTE: this will work in next versions of sphinx_autosummary_accessors.
-   currentmodule:: xarray
-   autosummary::
-   :toctree: generated/
-   :template: subaccessor_method.rst
-
-   Dataset.hyoga.plot.bedrock_altitude
-
-These methods can be accessed under the ``.hyoga.plot`` attribute of xarray
-datasets after importing hyoga:
-
-.. currentmodule:: hyoga.plot
-
 .. autosummary::
    :toctree: generated/
-   :nosignatures:
-   :recursive:
+   :template: autosummary/accessor_method.rst
 
-   HyogaPlotMethods.bedrock_altitude
-   HyogaPlotMethods.bedrock_shoreline
-   HyogaPlotMethods.bedrock_erosion
-   HyogaPlotMethods.bedrock_isostasy
-   HyogaPlotMethods.ice_margin
-   HyogaPlotMethods.surface_altitude_contours
-   HyogaPlotMethods.surface_velocity
-   HyogaPlotMethods.surface_velocity_streamplot
+   Dataset.hyoga.plot.bedrock_altitude
+   Dataset.hyoga.plot.bedrock_shoreline
+   Dataset.hyoga.plot.bedrock_erosion
+   Dataset.hyoga.plot.bedrock_isostasy
+   Dataset.hyoga.plot.ice_margin
+   Dataset.hyoga.plot.surface_altitude_contours
+   Dataset.hyoga.plot.surface_velocity
+   Dataset.hyoga.plot.surface_velocity_streamplot
