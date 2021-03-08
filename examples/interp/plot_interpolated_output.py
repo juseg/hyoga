@@ -10,12 +10,11 @@ Demonstrate interpolating two-dimensional model output onto a higher-resolution
 topography provided in a separate file. Bedrock isostatic adjustment needs to
 be informed in order to correct for the offset between the model and the
 high-resolution bedrock topographies. This is a rather extreme example with a
-iten-fold increase in horizontal resolution.
+ten-fold increase in horizontal resolution.
 """
 
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
-import cartopy.feature as cfeature
 import hyoga.open
 import hyoga.demo
 
@@ -24,11 +23,16 @@ ax = plt.subplot(projection=ccrs.UTM(32))
 
 # open demo data
 with hyoga.open.dataset(hyoga.demo.get('pism.alps.out.2d.nc')) as ds:
+
+    # compute isostatic adjustment from a reference input topography
     ds = ds.hyoga.assign_isostasy(hyoga.demo.get('pism.alps.in.boot.nc'))
+
+    # perform the actual interpolation
     ds = ds.hyoga.interp(hyoga.demo.get('pism.alps.vis.refined.nc'))
 
     # plot model output
-    ds.hyoga.plot.bedrock_altitude(ax=ax, cmap='YlOrBr', vmin=0, vmax=4500)
+    ds.hyoga.plot.bedrock_altitude(
+        ax=ax, cmap='gist_earth', vmin=-3000, vmax=4500)
     ds.hyoga.plot.surface_altitude_contours(ax=ax)
     ds.hyoga.plot.ice_margin(ax=ax, facecolor='w')
 
