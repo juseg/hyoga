@@ -15,7 +15,7 @@
 What's new
 ==========
 
-v0.1.1 (unreleased)
+v0.1.1 (8 Mar 2021)
 -------------------
 
 This release includes bug fixes and several documentation improvements.
