@@ -29,12 +29,10 @@ with hyoga.open.dataset(hyoga.demo.get('pism.alps.out.2d.nc')) as ds:
     ds.hyoga.plot.surface_altitude_contours(ax=ax)
     ds.hyoga.plot.ice_margin(ax=ax, facecolor='w')
     streams = ds.hyoga.plot.surface_velocity_streamplot(
-        ax=ax, cmap='Reds', vmin=1e1, vmax=1e3, density=(6, 4))
+        ax=ax, cmap='Blues', vmin=1e1, vmax=1e3, density=(6, 4))
 
     # add colorbar manually
-    ax.figure.colorbar(
-        streams.lines, cax=cax, extend='both',
-        label=r'surface velocity ($m\,a^{-1}$')
+    ax.figure.colorbar(streams.lines, cax=cax, extend='both')
 
 # add coastlines and rivers
 ax.coastlines(edgecolor='0.25', linewidth=0.5)
