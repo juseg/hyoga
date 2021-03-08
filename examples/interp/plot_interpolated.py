@@ -3,8 +3,14 @@
 # GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
 """
-Plot interpolated output
-========================
+Interpolated output
+===================
+
+Demonstrate interpolating two-dimensional model output onto a higher-resolution
+topography provided in a separate file. Bedrock isostatic adjustment needs to
+be informed in order to correct for the offset between the model and the
+high-resolution bedrock topographies. This is a rather extreme example with a
+iten-fold increase in horizontal resolution.
 """
 
 import matplotlib.pyplot as plt

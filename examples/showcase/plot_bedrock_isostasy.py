@@ -3,8 +3,12 @@
 # GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
 """
-Plot bedrock isostasy
-=====================
+Bedrock isostasy
+================
+
+Plot a composite map including bedrock altitude, surface altitude contours,
+bedroc isostatic adjustment relative to a reference topography in a separate
+model input file, and geographic elements.
 """
 
 import matplotlib.pyplot as plt

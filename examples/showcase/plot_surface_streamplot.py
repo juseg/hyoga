@@ -3,8 +3,11 @@
 # GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
 """
-Plot surface streamplot
-=======================
+Surface streamplot
+==================
+
+Plot a composite map including bedrock altitude, surface altitude contours,
+a color-mapped surface velocity streamplot, and geographic elements.
 """
 
 import matplotlib.pyplot as plt

@@ -3,8 +3,11 @@
 # GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
 """
-Plot surface contours
-=====================
+Surface contours
+================
+
+Plot a composite map including bedrock altitude, a half-transparent ice mask,
+a surface altitude contour, and geographic elements.
 """
 
 import matplotlib.pyplot as plt

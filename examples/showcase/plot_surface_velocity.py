@@ -3,8 +3,11 @@
 # GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
 """
-Plot surface velocity
-=====================
+Surface velocity
+================
+
+Plot a composite map including bedrock altitude, surface topography contours,
+a surface velocity map, and geographic elements.
 """
 
 import matplotlib.pyplot as plt

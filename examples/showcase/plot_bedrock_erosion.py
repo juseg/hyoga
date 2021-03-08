@@ -3,8 +3,11 @@
 # GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
 """
-Plot bedrock erosion
-====================
+Bedrock erosion
+===============
+
+Plot a composite map including bedrock altitude, surface altitude contours,
+bedrock erosion computed from basal ice velocity, and geographic elements.
 """
 
 import matplotlib.pyplot as plt
