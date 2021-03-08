@@ -47,6 +47,13 @@ attribute ``ds.hyoga``:
 
    ds.hyoga
 
+.. note::
+
+   I am thinking about renaming ``ds.hyoga`` to ``ds.ice`` starting from
+   v0.2.0. The name may be used in other projects though, I am not sure. In any
+   case ``ds.hyoga`` would remain backward-compatible for a while. If you
+   have an opinion about that, feel free to share it on Github (:issue:`13`).
+
 In particular, hyoga never accesses model variables by their "short names".
 While ``thk``, for instance refers to ice
 thickness in PISM, it may refer to a different quantity, or to nothing at all,
@@ -90,13 +97,18 @@ Interpolation and masking
 Hyoga already includes a few more tools meant to postprocess data before
 plotting. Please refer to the programming interface for their documentation.
 
-.. autosummary::
-   :nosignatures:
+.. currentmodule:: xarray
 
-   hyoga.hyoga.HyogaDataset.assign_isostasy
-   hyoga.hyoga.HyogaDataset.interp
-   hyoga.hyoga.HyogaDataset.where
-   hyoga.hyoga.HyogaDataset.where_thicker
+.. autosummary::
+   :toctree: generated/
+   :template: autosummary/accessor_method.rst
+
+   Dataset.hyoga.assign_isostasy
+   Dataset.hyoga.getvar
+   Dataset.hyoga.interp
+   Dataset.hyoga.where
+   Dataset.hyoga.where_thicker
+
 
 .. _xarray: https//xarray.pydata.org
 .. _`CF standard names`: http://cfconventions.org/standard-names.html

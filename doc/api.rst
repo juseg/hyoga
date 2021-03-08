@@ -24,9 +24,6 @@ Datasets
 Postprocessing
 ~~~~~~~~~~~~~~
 
-.. NOTE: some method names are too long for the left column but they will look
-.. better after including subsections (or importing them at the top level).
-
 .. currentmodule:: xarray
 
 .. autosummary::
