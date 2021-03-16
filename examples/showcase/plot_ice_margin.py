@@ -13,14 +13,14 @@ a half-transparent filled interior, and geographic elements.
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
-import hyoga.open
+import xarray as xr
 import hyoga.demo
 
 # initialize figure
 ax = plt.subplot(projection=ccrs.UTM(32))
 
 # open demo data
-with hyoga.open.dataset(hyoga.demo.get('pism.alps.out.2d.nc')) as ds:
+with xr.open_dataset(hyoga.demo.get('pism.alps.out.2d.nc')) as ds:
     ds = ds.hyoga.where_thicker(1)
 
     # plot model output

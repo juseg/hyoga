@@ -15,14 +15,14 @@ ten-fold increase in horizontal resolution.
 
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
-import hyoga.open
+import xarray as xr
 import hyoga.demo
 
 # initialize figure
 ax = plt.subplot(projection=ccrs.UTM(32))
 
 # open demo data
-with hyoga.open.dataset(hyoga.demo.get('pism.alps.out.2d.nc')) as ds:
+with xr.open_dataset(hyoga.demo.get('pism.alps.out.2d.nc')) as ds:
 
     # compute isostatic adjustment from a reference input topography
     ds = ds.hyoga.assign_isostasy(hyoga.demo.get('pism.alps.in.boot.nc'))

@@ -11,10 +11,10 @@ Let us open the demo data again:
 
 .. ipython:: python
 
-   import hyoga.demo
+   import xarray as xr
    import hyoga.open
 
-   ds = hyoga.open.dataset(hyoga.demo.get('pism.alps.out.2d.nc'))
+   ds = xr.open_dataset(hyoga.demo.get('pism.alps.out.2d.nc'))
 
 Plotting is already quite convenient using xarray:
 
