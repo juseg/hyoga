@@ -4,6 +4,7 @@ channels:
 dependencies:
   - python=3.7
   - cartopy
+  - cf_xarray
   - ipython
   - matplotlib
   - netcdf4
