@@ -6,14 +6,26 @@
 .. What's new sections, cheated on xarray
    - Breaking changes
    - Deprecations
-   - New Features
+   - New features
    - Bug fixes
    - Documentation
-   - Internal Changes
+   - Internal changes
 
 
 What's new
 ==========
+
+v0.2.0 (unreleased)
+-------------------
+
+Internal changes
+~~~~~~~~~~~~~~~~
+
+- Method :meth:`xarray.Dataset.hyoga.getvar` now uses cf_xarray_ to retrieve
+  data variables by their standard name. Thus cf_xarray_ is now a required
+  dependency (:issue:`12`).
+
+.. _cf_xarray: https://cf-xarray.readthedocs.io
 
 v0.1.1 (8 Mar 2021)
 -------------------
