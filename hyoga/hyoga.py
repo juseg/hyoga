@@ -12,6 +12,7 @@ import warnings
 import numpy as np
 import scipy.ndimage
 import xarray as xr
+import cf_xarray  # noqa pylint: disable=unused-import
 import hyoga.open
 import hyoga.plot
 
@@ -192,26 +193,11 @@ class HyogaDataset:
         array : DataArray
             The data array corresponding to that variable if a unique variable
             with that standard name has been found.
-
-        Raises
-        ------
-        ValueError
-            If either more or less than one variable with the corresponding
-            standard name are found.
         """
 
-        # filter dataset by standard name
-        matching = self._ds.filter_by_attrs(standard_name=standard_name)
-
-        # one variable found, return it
-        if len(matching) == 1:
-            return matching[list(matching.data_vars)[0]]
-
-        # more than one variable, raise an error
-        if len(matching) > 1:
-            raise ValueError(
-                "Several variables ({}) match standard name {}".format(
-                    matching.data_vars, standard_name))
+        # if variable is present, return it
+        if standard_name in self._ds.cf:
+            return self._ds.cf[standard_name]
 
         # no variable found, try to compute it from other variables
         # (infer=False is needed to avoid infinite recursion)
