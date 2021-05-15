@@ -60,8 +60,21 @@ class HyogaDataset:
     plot = xr.core.utils.UncachedAccessor(hyoga.plot.HyogaPlotMethods)
 
     def __init__(self, dataset):
+        """Initialize data accessor.
+
+        The accessed data set is decoded according to CF conventions, then
+        heuristics are used to try and fill missing standard names. This latter
+        step is necessary to inform secondary coordinates referred in the
+        'coordinates' attribute, otherwise `dataset.cf[standard_name]` may have
+        different coordinates than `dataset`, causing a MergeError in variable
+        assignment and masking operations.
+
+        Parameters
+        ----------
+        dataset : Dataset on which the accessor is plugged.
+        """
         # NOTE in the future we will decide here about age dim and units
-        self._ds = dataset
+        self._ds = xr.decode_cf(dataset)
         self._ds = self._fill_standard_names()
 
     def _fill_standard_names(self):
@@ -120,7 +133,7 @@ class HyogaDataset:
 
         Parameters
         ----------
-        datasource: DataArray, Dataset, str, Path, file-like or DataStore
+        datasource : DataArray, Dataset, str, Path, file-like or DataStore
             Data array, or a dataset or path to a file containing the reference
             bedrock topography (standard name bedrock_altitude) or the
             reference surface topography and ice thickness (standard names
