@@ -174,7 +174,7 @@ class HyogaDataset:
 
         # compute bedrock isostatic adjustment
         ds[variable_name] = (
-            ds.hyoga.getvar('bedrock_altitude')-topo).assign_attrs(
+            self.getvar('bedrock_altitude')-topo).assign_attrs(
                 standard_name=standard_name)
         return ds
 
