@@ -18,6 +18,13 @@ What's new
 v0.2.0 (unreleased)
 -------------------
 
+Breaking changes
+~~~~~~~~~~~~~~~~
+
+- Method :meth:`xarray.Dataset.hyoga.assign_isostasy` now returns a copy
+  without affecting the original data. This behaviour is consistent with
+  :meth:`xarray.Dataset.assign`.
+
 Internal changes
 ~~~~~~~~~~~~~~~~
 

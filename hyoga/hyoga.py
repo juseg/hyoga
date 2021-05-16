@@ -151,12 +151,11 @@ class HyogaDataset:
         # read topography from file if it is not an array
         topo = _open_datasource(datasource, 'bedrock_altitude')
 
-        # warn if bedrock isostatic appears to be present in dataset
+        # warn if bedrock isostasy appears to be present in dataset
         # NOTE: in the future we may consider an override switch, and perhaps a
         # separate method to assign variables by standard name
-        ds = self._ds
         standard_name = 'bedrock_altitude_change_due_to_isostatic_adjustment'
-        for name, var in ds.items():
+        for name, var in self._ds.items():
             if var.attrs.get('standard_name', '') == standard_name:
                 warnings.warn(
                     "found existing variable {} with standard name {} while"
@@ -165,7 +164,7 @@ class HyogaDataset:
 
         # add trailing underscores until we find a free variable name
         variable_name = 'isostasy'
-        while variable_name in ds:
+        while variable_name in self._ds:
             warnings.warn(
                 "found existing variable {name} while computing bedrock"
                 "isostatic adjustment, using {name}_ instead".format(
@@ -173,9 +172,9 @@ class HyogaDataset:
             variable_name += '_'
 
         # compute bedrock isostatic adjustment
-        ds[variable_name] = (
-            self.getvar('bedrock_altitude')-topo).assign_attrs(
-                standard_name=standard_name)
+        ds = self._ds.assign({
+            variable_name: (self.getvar('bedrock_altitude')-topo).assign_attrs(
+                    standard_name=standard_name)})
         return ds
 
     def getvar(self, standard_name, infer=True, directions=None):

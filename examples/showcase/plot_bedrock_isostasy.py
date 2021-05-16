@@ -26,7 +26,7 @@ with xr.open_dataset(hyoga.demo.get('pism.alps.out.2d.nc')) as ds:
     ds = ds.hyoga.where_thicker(1)
 
     # compute isostasy using separate boot file
-    ds.hyoga.assign_isostasy(hyoga.demo.get('pism.alps.in.boot.nc'))
+    ds = ds.hyoga.assign_isostasy(hyoga.demo.get('pism.alps.in.boot.nc'))
 
     # plot model output
     ds.hyoga.plot.bedrock_altitude(ax=ax, vmin=0, vmax=4500)
