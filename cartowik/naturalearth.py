@@ -1,4 +1,4 @@
-# Copyright (c) 2018--2019, Julien Seguinot (juseg.github.io)
+# Copyright (c) 2018-2022, Julien Seguinot (juseg.github.io)
 # GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
 """
@@ -108,8 +108,8 @@ def add_cities(ax=None, lang=None, include=None, exclude=None, ranks=None,
     if ranks is not None:
         records = [rec for rec in records if (
             rec.attributes['SCALERANK'] in ranks and
-            rec.attributes['name_en'] not in (exclude or []) or
-            rec.attributes['name_en'] in (include or []))]
+            rec.attributes['NAME_EN'] not in (exclude or []) or
+            rec.attributes['NAME_EN'] in (include or []))]
 
     # filter intersecting geometries (this saves some time when annotating
     # cities of high rank, which are numerous, and also avoids warning-like
@@ -122,7 +122,8 @@ def add_cities(ax=None, lang=None, include=None, exclude=None, ranks=None,
     if lang is not None:
         for rec in records:
             ax.annotate(
-                rec.attributes['name_'+lang], color=kwargs.get('color'),
+                rec.attributes['NAME_'+lang.upper()],
+                color=kwargs.get('color'),
                 xy=(rec.geometry.x, rec.geometry.y), xytext=(3, 3),
                 xycoords=crs._as_mpl_transform(ax), textcoords='offset points')
 
