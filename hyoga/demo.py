@@ -14,12 +14,14 @@ import warnings
 import requests
 
 
-def _download(url):
+def _download(url, filename=None):
     """Download a file from the web, store in cache dir and return path."""
     cachedir = os.path.expanduser(os.path.join('~', '.cache', 'hyoga'))
-    filepath = urllib.parse.urlparse(url).path
-    filepath = os.path.basename(filepath)
-    filepath = os.path.join(cachedir, filepath.split('/')[-1])
+    if filename is None:
+        filename = urllib.parse.urlparse(url).path
+        filename = os.path.basename(filename)
+        filename = filename.split('/')[-1]
+    filepath = os.path.join(cachedir, filename)
     if not os.path.isfile(filepath):
         os.makedirs(cachedir, exist_ok=True)
         with open(filepath, 'wb') as binaryfile:
