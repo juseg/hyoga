@@ -34,6 +34,12 @@ Internal changes
 
 .. _cf_xarray: https://cf-xarray.readthedocs.io
 
+Documentation
+~~~~~~~~~~~~~
+
+- A new example has been added to show that interpolation also works when
+  surface topography is provided instead of bedrock topography.
+
 v0.1.1 (8 Mar 2021)
 -------------------
 
