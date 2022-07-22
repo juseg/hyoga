@@ -41,8 +41,8 @@ sphinx_gallery_conf = {
         '../examples/interp'])
     }
 extlinks = {
-    "issue": ("https://github.com/pydata/xarray/issues/%s", "#"),
-    "pull": ("https://github.com/pydata/xarray/pull/%s", "PR"),
+    "issue": ("https://github.com/pydata/xarray/issues/%s", "#%s"),
+    "pull": ("https://github.com/pydata/xarray/pull/%s", "PR%s"),
 }
 intersphinx_mapping = {
     'matplotlib': ('https://matplotlib.org/stable/', None),
