@@ -107,7 +107,7 @@ class HyogaPlotMethods:
         color = 'w' if maxdep > 50 else 'k'
         ax.plot(var.x[j], var.y[i], 'o', color=color, alpha=0.75)
         ax.annotate(
-            '{:.0f} m'.format(maxdep), color=color, xy=(var.x[j], var.y[i]),
+            f'{maxdep:.0f} m', color=color, xy=(var.x[j], var.y[i]),
             xytext=(3, 3), textcoords='offset points')
 
         # plot bedrock deformation contours

@@ -25,7 +25,7 @@ def _download(url, filename=None):
     if not os.path.isfile(filepath):
         os.makedirs(cachedir, exist_ok=True)
         with open(filepath, 'wb') as binaryfile:
-            print("downloading {}...".format(url))
+            print(f"downloading {url}...")
             binaryfile.write(requests.get(url).content)
     return filepath
 

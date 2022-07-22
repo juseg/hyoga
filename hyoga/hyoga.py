@@ -158,17 +158,17 @@ class HyogaDataset:
         for name, var in self._ds.items():
             if var.attrs.get('standard_name', '') == standard_name:
                 warnings.warn(
-                    "found existing variable {} with standard name {} while"
-                    "computing bedrock isostatic adjustment, will result in"
-                    "a duplicate".format(name, standard_name), UserWarning)
+                    f"found existing variable {name} with standard name"
+                    f"{standard_name} while computing bedrock isostatic"
+                    "adjustment, will result in a duplicate", UserWarning)
 
         # add trailing underscores until we find a free variable name
         variable_name = 'isostasy'
         while variable_name in self._ds:
             warnings.warn(
-                "found existing variable {name} while computing bedrock"
-                "isostatic adjustment, using {name}_ instead".format(
-                    name=variable_name), UserWarning)
+                f"found existing variable {variable_name} while computing"
+                f"bedrock isostatic adjustment, using {variable_name}_"
+                "instead", UserWarning)
             variable_name += '_'
 
         # compute bedrock isostatic adjustment
@@ -242,8 +242,7 @@ class HyogaDataset:
 
         # really nothing worked, give up
         raise ValueError(
-            "No variable found with standard name {}.".format(
-                standard_name))
+            f"No variable found with standard name {standard_name}.")
 
     def interp(self, datasource, ax=None, sigma=None, threshold=1):
         """Interpolate onto higher resolution topography for visualization.

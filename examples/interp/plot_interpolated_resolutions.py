@@ -46,7 +46,7 @@ with xr.open_dataset(hyoga.demo.get('pism.alps.out.2d.nc')) as ds:
             ax=ax, cmap='gist_earth', vmin=-3000, vmax=4500)
         interp.hyoga.plot.surface_altitude_contours(ax=ax)
         interp.hyoga.plot.ice_margin(ax=ax, facecolor='w')
-        ax.set_title('{} m'.format(res))
+        ax.set_title(f'{res} m')
 
     # constrain original data axes limits
     axes[0].set_xlim(axes[1].get_xlim())
