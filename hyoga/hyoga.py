@@ -408,6 +408,27 @@ class HyogaDataset:
                 ds[name] = var.where(cond, **kwargs)
         return ds
 
+    def where_icemask(self, threshold=0.5, **kwargs):
+        """Filter glacier (non-bedrock) variables using existing ice mask.
+
+
+        Parameters
+        ----------
+        threshold : scalar
+            Thickness below which to mask glacier variables.
+        **kwargs : optional
+            Additional keyword arguments are passed to
+            :meth:`xarray.Dataset.where`.
+
+        Returns
+        -------
+        dataset : Dataset
+            Corresponing dataset with variables whose standard name does not
+            start with "bedrock_altitude" masked by ice mask.
+        """
+        return self.where(
+            self.getvar('land_ice_area_fraction') >= threshold, **kwargs)
+
     def where_thicker(self, threshold=1, **kwargs):
         """Filter glacier (non-bedrock) variables using a thickness threshold.
 

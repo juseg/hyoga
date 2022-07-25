@@ -29,6 +29,7 @@ New features
 ~~~~~~~~~~~~
 
 - Add :meth:`xarray.Dataset.hyoga.assign_icemask`.
+- Add :meth:`xarray.Dataset.hyoga.where_icemask`.
 
 Internal changes
 ~~~~~~~~~~~~~~~~
