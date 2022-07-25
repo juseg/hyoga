@@ -259,8 +259,16 @@ class HyogaDataset:
             return self._ds.cf[standard_name]
 
         # no variable found, try to compute it from other variables
-        # (infer=False is needed to avoid infinite recursion)
         if infer is True:
+
+            # try to get ice mask from ice thickness
+            # FIXME make threshold configurable
+            if standard_name == 'land_ice_area_fraction':
+                return (self.getvar('land_ice_thickness') > 0).astype(
+                    float).assign_attrs(standard_name=standard_name)
+
+            # try to compute altitude and thickness variables
+            # (infer=False is needed to avoid infinite recursion)
             if standard_name == 'bedrock_altitude':
                 return self._safe_sub(
                     'surface_altitude', 'land_ice_thickness', infer=False
