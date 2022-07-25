@@ -1,4 +1,4 @@
-.. Copyright (c) 2021, Julien Seguinot (juseg.github.io)
+.. Copyright (c) 2021-2022, Julien Seguinot (juseg.github.io)
 .. GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
 .. currentmodule:: hyoga
@@ -15,7 +15,7 @@
 What's new
 ==========
 
-v0.2.0 (unreleased)
+v0.1.2 (unreleased)
 -------------------
 
 Breaking changes
@@ -24,6 +24,11 @@ Breaking changes
 - Method :meth:`xarray.Dataset.hyoga.assign_isostasy` now returns a copy
   without affecting the original data. This behaviour is consistent with
   :meth:`xarray.Dataset.assign`.
+
+New features
+~~~~~~~~~~~~
+
+- Add :meth:`xarray.Dataset.hyoga.assign_icemask`.
 
 Internal changes
 ~~~~~~~~~~~~~~~~

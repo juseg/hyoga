@@ -1,4 +1,4 @@
-# Copyright (c) 2021, Julien Seguinot (juseg.github.io)
+# Copyright (c) 2021-2022, Julien Seguinot (juseg.github.io)
 # GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
 """
@@ -127,6 +127,53 @@ class HyogaDataset:
     def _safe_sum(self, *args, **kwargs):
         """Compute the sum of two variables if units match."""
         return self._safe_apply(sum, *args, **kwargs)
+
+    def assign_icemask(self, datasource):
+        """Assign an ice mask corresponding to glacierized area.
+
+        Hyoga looks for this variable in most plot methods, and defaults to
+        considering any grid cell with non-zero ice thickness as glacierized.
+
+        Parameters
+        ----------
+        datasource : DataArray, Dataset, str, Path, file-like or DataStore
+            Data array, or a dataset or path to a file containing the ice mask
+            (standard name land_ice_area_fraction).
+
+        Returns
+        -------
+        dataset : Dataset
+            The dataset with added ice mask variable, with variable name
+            "icemask" (warn and add trailing underscores if taken) and standard
+            name "land_ice_area_fraction" (warn and create a duplicate if
+            standard name is taken).
+        """
+
+        # read topography from file if it is not an array
+        mask = _open_datasource(datasource, 'land_ice_area_fraction')
+
+        # warn if bedrock isostasy appears to be present in dataset
+        # FIXME: this code duplicates that in assign_isostasy
+        standard_name = 'land_ice_area_fraction'
+        for name, var in self._ds.items():
+            if var.attrs.get('standard_name', '') == standard_name:
+                warnings.warn(
+                    f"found existing variable {name} with standard name"
+                    f"{standard_name} while computing ice mask, will result"
+                    "in a duplicate", UserWarning)
+
+        # add trailing underscores until we find a free variable name
+        variable_name = 'icemask'
+        while variable_name in self._ds:
+            warnings.warn(
+                f"found existing variable {variable_name} while computing"
+                f"ice mask, using {variable_name}_ instead", UserWarning)
+            variable_name += '_'
+
+        # compute bedrock isostatic adjustment
+        ds = self._ds.assign({variable_name: mask.astype(float).assign_attrs(
+            standard_name=standard_name)})
+        return ds
 
     def assign_isostasy(self, datasource):
         """Compute bedrock isostatic adjustment using a separate file.
