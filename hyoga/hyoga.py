@@ -304,6 +304,7 @@ class HyogaDataset:
             f"No variable found with standard name {standard_name}.")
 
     def interp(self, datasource, ax=None, sigma=None, threshold=1):
+        # FIXME unused argument threshold
         """Interpolate onto higher resolution topography for visualization.
 
         Parameters
@@ -376,6 +377,10 @@ class HyogaDataset:
             name = None
         name = name or topo.name or 'topg'
 
+        # make sure ice mask is present and has numeric type
+        icemask = ds.hyoga.getvar('land_ice_area_fraction')
+        ds = ds.hyoga.assign_icemask(icemask.astype(float))
+
         # interpolate data variables and assign new topo
         ds = ds.interp(x=x, y=y).assign({name: topo})
 
@@ -386,12 +391,10 @@ class HyogaDataset:
         except ValueError:
             pass
 
-        # interp mask and refine based on interpolated surface
-        # NOTE will throw an error if thk or usurf is missing
-        icy = self.getvar('land_ice_thickness') > threshold
-        icy = (1*icy).interp(x=x, y=y)
-        icy = (icy >= 0.5) * (ds.hyoga.getvar('surface_altitude') > ds[name])
-        ds = ds.hyoga.where(icy)
+        # refine ice mask based on interpolated surface
+        icemask = ds.hyoga.getvar('land_ice_area_fraction')
+        icemask *= ds.hyoga.getvar('surface_altitude') > ds[name]
+        ds = ds.hyoga.assign_icemask(icemask)
 
         # return interpolated data
         return ds
