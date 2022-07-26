@@ -129,7 +129,7 @@ class HyogaDataset:
         return self._safe_apply(sum, *args, **kwargs)
 
     def assign(self, datasource, standard_name, variable_name=None):
-        """Assign a new variable with standard_name attribute.
+        """Assign a new variable according to standard_name attribute.
 
         Parameters
         ----------
@@ -141,33 +141,33 @@ class HyogaDataset:
             and resulting dataset, according to netCDF Climate and Forecast
             (CF) conventions (http://cfconventions.org/standard-names.html).
         variable_name : string, optional
-            The variable name in the resulting dataset, defaulting to
-            `standard_name` if `None` provided.
+            The variable name in the resulting dataset, if it is not already
+            present. Defaults to `standard_name` if `None` provided. Warns and
+            add trailing underscores if this name is already associated with a
+            different standard_name.
 
         Returns
         -------
         dataset : Dataset
-            The dataset with the added variable, with variable name
-            `variable_name` (warn and add trailing underscores if taken) and
-            standard name `standard_name` (warn and create a duplicate if
-            standard name is taken).
+            The dataset with the added variable, replacing any existing
+            variable with the same `standard_name`.
         """
 
         # read data from source if it is not already an array
         data = _open_datasource(datasource, standard_name)
         data = data.assign_attrs(standard_name=standard_name)
 
-        # warn if variable with same standard name is present in dataset
-        # NOTE: in the future we may consider an override switch
+        # look for existing variable with given standard name
+        variable_found = False
         for name, var in self._ds.items():
             if var.attrs.get('standard_name', '') == standard_name:
-                warnings.warn(
-                    f"found existing variable {name} with standard name"
-                    f"{standard_name}, will result in a duplicate",
-                    UserWarning)
+                variable_name = name
+                variable_found = True
+                break
 
-        # add trailing underscores until we find a free variable name
-        while variable_name in self._ds:
+        # if variable_name is present, but matches a different standard name,
+        # add trailing underscores until we find a free slot
+        while variable_found is False and variable_name in self._ds:
             warnings.warn(
                 f"found existing variable {variable_name}, using"
                 f"{variable_name}_ instead", UserWarning)
@@ -186,15 +186,14 @@ class HyogaDataset:
         ----------
         datasource : DataArray, Dataset, str, Path, file-like or DataStore
             Data array, or a dataset or path to a file containing the ice mask
-            (standard name land_ice_area_fraction).
+            (standard name "land_ice_area_fraction").
 
         Returns
         -------
         dataset : Dataset
-            The dataset with added ice mask variable, with variable name
-            "icemask" (warn and add trailing underscores if taken) and standard
-            name "land_ice_area_fraction" (warn and create a duplicate if
-            standard name is taken).
+            The dataset with added ice mask variable, with standard name
+            "land_ice_area_fraction" (replacing existing variables) and default
+            variable name "icemask" (in the case of a new variable).
         """
         return self.assign(
             datasource, standard_name='land_ice_area_fraction',
@@ -207,17 +206,18 @@ class HyogaDataset:
         ----------
         datasource : DataArray, Dataset, str, Path, file-like or DataStore
             Data array, or a dataset or path to a file containing the reference
-            bedrock topography (standard name bedrock_altitude) or the
+            bedrock topography (standard name "bedrock_altitude") or the
             reference surface topography and ice thickness (standard names
-            surface_altitude and land_ice_thickness) from which it is computed.
+            "surface_altitude" and "land_ice_thickness") from which it is
+            computed.
 
         Returns
         -------
         dataset : Dataset
-            The dataset with added uplift variable, with variable name
-            "isostasy" (warn and add trailing underscores if taken) and
-            standard name "bedrock_altitude_change_due_to_isostatic_adjustment"
-            (warn and create a duplicate if standard name is taken).
+            The dataset with added uplift variable, with standard name
+            "bedrock_altitude_change_due_to_isostatic_adjustment" (replacing
+            existing variables) and default variable name "isostasy" (in the
+            case of a new variable).
         """
 
         # read topo if not an array and compute bedrock isostatic adjustment

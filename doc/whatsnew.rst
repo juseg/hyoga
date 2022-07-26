@@ -24,6 +24,10 @@ Breaking changes
 - Method :meth:`xarray.Dataset.hyoga.assign_isostasy` now returns a copy
   without affecting the original data. This behaviour is consistent with
   :meth:`xarray.Dataset.assign`.
+- Method :meth:`xarray.Dataset.hyoga.assign_isostasy` overrides any variable
+  with standard name "bedrock_altitude_change_due_to_isostatic_adjustment"
+  instead of creating a new variable with the same standard name. This is
+  again consistent with :meth:`xarray.Dataset.assign`.
 
 New features
 ~~~~~~~~~~~~
