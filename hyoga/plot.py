@@ -1,4 +1,4 @@
-# Copyright (c) 2021, Julien Seguinot (juseg.github.io)
+# Copyright (c) 2021-2022, Julien Seguinot (juseg.github.io)
 # GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
 """
@@ -77,6 +77,7 @@ class HyogaPlotMethods:
         style = dict(alpha=0.75, cmap='YlOrBr')
         style.update(kwargs)
         var = self._hyoga.getvar('magnitude_of_land_ice_basal_velocity')
+        var = var.where(self._hyoga.getvar('land_ice_area_fraction') >= 0.5)
         var = (constant*var**exponent).assign_attrs(
             long_name='glacier erosion rate', units='mm a-1')
         return var.plot.contourf(**style)
@@ -158,18 +159,17 @@ class HyogaPlotMethods:
             The plotted ice margin contour set or a tuple of two contour sets
             if both `edgecolor` and `facecolor` were given.
         """
-        # NOTE this method may use a mask variable in the future (#9)
-        var = self._hyoga.getvar('land_ice_thickness')
+        var = self._hyoga.getvar('land_ice_area_fraction')
         contours = []
         if edgecolor is not None:
             style = dict(colors=[edgecolor], levels=[0.5], linewidths=0.25)
             style.update(kwargs)
-            contours.append(var.notnull().plot.contour(**style))
+            contours.append(var.plot.contour(**style))
         if facecolor is not None:
             style = dict(add_colorbar=False, alpha=0.75, colors=[facecolor],
                          extend='neither', levels=[0.5, 1.5])
             style.update(kwargs)
-            contours.append(var.notnull().plot.contourf(**style))
+            contours.append(var.plot.contourf(**style))
         return contours if len(contours) > 1 else contours[0]
 
     def surface_altitude_contours(self, major=1000, minor=200, **kwargs):
@@ -193,6 +193,7 @@ class HyogaPlotMethods:
             if both `major` and `minor` were given (as in the default case).
         """
         var = self._hyoga.getvar('surface_altitude')
+        var = var.where(self._hyoga.getvar('land_ice_area_fraction') >= 0.5)
         levels = range(0, 5001, minor)
         contours = []
         if major is not None:
@@ -225,6 +226,7 @@ class HyogaPlotMethods:
         style = dict(alpha=0.75, cmap='Blues', norm=mcolors.LogNorm())
         style.update(kwargs)
         var = self._hyoga.getvar('magnitude_of_land_ice_surface_velocity')
+        var = var.where(self._hyoga.getvar('land_ice_area_fraction') >= 0.5)
         return var.plot.imshow(**style)
 
     def surface_velocity_streamplot(self, **kwargs):
@@ -255,8 +257,9 @@ class HyogaPlotMethods:
         style.update(kwargs)
 
         # get velocity component variables
-        uvar = self._hyoga.getvar('land_ice_surface_x_velocity')
-        vvar = self._hyoga.getvar('land_ice_surface_y_velocity')
+        mask = self._hyoga.getvar('land_ice_area_fraction') >= 0.5
+        uvar = self._hyoga.getvar('land_ice_surface_x_velocity').where(mask)
+        vvar = self._hyoga.getvar('land_ice_surface_y_velocity').where(mask)
         cvar = (uvar**2+vvar**2)**0.5
 
         # streamplot surface velocity

@@ -30,6 +30,7 @@ New features
 
 - Add :meth:`xarray.Dataset.hyoga.assign_icemask`.
 - Add :meth:`xarray.Dataset.hyoga.where_icemask`.
+- Plot methods look for variable `land_ice_area_fraction`.
 
 Internal changes
 ~~~~~~~~~~~~~~~~
