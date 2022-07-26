@@ -366,20 +366,11 @@ class HyogaDataset:
             filt = scipy.ndimage.gaussian_filter(topo, sigma=sigma/dx)
             topo += np.clip(filt-topo, -0.5, 0.5)
 
-        # assign surface altitude if missing, needed for a nice mask
-        # NOTE: could also use method to assign by std name here
-        ds = self._ds
-        try:
-            self.getvar('surface_altitude', infer=False)
-        except ValueError:
-            ds['usurf'] = self.getvar('surface_altitude')
-
-        # lookup bedrock_topography short name, default to topg
-        try:
-            name = ds.hyoga.getvar('bedrock_topography').name
-        except ValueError:
-            name = None
-        name = name or topo.name or 'topg'
+        # make sure surface altitude is present, needed for a nice mask
+        # NOTE: add a wrapper something like ensure_var, maybe setvar?
+        ds = self.assign(
+            self.getvar('surface_altitude'), standard_name='surface_altitude',
+            variable_name='usurf')
 
         # if threshold is present, compute an ice mask
         if threshold is not None:
@@ -394,18 +385,21 @@ class HyogaDataset:
         ds = ds.hyoga.assign_icemask(icemask.astype(float))
 
         # interpolate data variables and assign new topo
-        ds = ds.interp(x=x, y=y).assign({name: topo})
+        ds = ds.interp(x=x, y=y)
 
         # correct for isostasy if it is present
         try:
-            ds[name] += ds.hyoga.getvar(
+            topo += ds.hyoga.getvar(
                 'bedrock_altitude_change_due_to_isostatic_adjustment')
         except ValueError:
             pass
 
+        # assign corrected bedrock topography
+        ds = ds.hyoga.assign(topo, 'bedrock_altitude', variable_name='topg')
+
         # refine ice mask based on interpolated surface
         icemask = ds.hyoga.getvar('land_ice_area_fraction')
-        icemask *= ds.hyoga.getvar('surface_altitude') > ds[name]
+        icemask *= ds.hyoga.getvar('surface_altitude') > topo
         ds = ds.hyoga.assign_icemask(icemask)
 
         # return interpolated data
