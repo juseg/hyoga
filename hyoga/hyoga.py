@@ -128,6 +128,54 @@ class HyogaDataset:
         """Compute the sum of two variables if units match."""
         return self._safe_apply(sum, *args, **kwargs)
 
+    def assign(self, datasource, standard_name, variable_name=None):
+        """Assign a new variable with standard_name attribute.
+
+        Parameters
+        ----------
+        datasource : DataArray, Dataset, str, Path, file-like or DataStore
+            Data array, or a dataset or path to a file containing the variable
+            with standard name `standard_name`.
+        standard_name : string
+            The variable's "standard_name" attribute in the input `datasource`
+            and resulting dataset, according to netCDF Climate and Forecast
+            (CF) conventions (http://cfconventions.org/standard-names.html).
+        variable_name : string, optional
+            The variable name in the resulting dataset, defaulting to
+            `standard_name` if `None` provided.
+
+        Returns
+        -------
+        dataset : Dataset
+            The dataset with the added variable, with variable name
+            `variable_name` (warn and add trailing underscores if taken) and
+            standard name `standard_name` (warn and create a duplicate if
+            standard name is taken).
+        """
+
+        # read data from source if it is not already an array
+        data = _open_datasource(datasource, standard_name)
+        data = data.assign_attrs(standard_name=standard_name)
+
+        # warn if variable with same standard name is present in dataset
+        # NOTE: in the future we may consider an override switch
+        for name, var in self._ds.items():
+            if var.attrs.get('standard_name', '') == standard_name:
+                warnings.warn(
+                    f"found existing variable {name} with standard name"
+                    f"{standard_name}, will result in a duplicate",
+                    UserWarning)
+
+        # add trailing underscores until we find a free variable name
+        while variable_name in self._ds:
+            warnings.warn(
+                f"found existing variable {variable_name}, using"
+                f"{variable_name}_ instead", UserWarning)
+            variable_name += '_'
+
+        # assign new variable
+        return self._ds.assign({variable_name or standard_name: data})
+
     def assign_icemask(self, datasource):
         """Assign an ice mask corresponding to glacierized area.
 
@@ -148,32 +196,9 @@ class HyogaDataset:
             name "land_ice_area_fraction" (warn and create a duplicate if
             standard name is taken).
         """
-
-        # read topography from file if it is not an array
-        mask = _open_datasource(datasource, 'land_ice_area_fraction')
-
-        # warn if bedrock isostasy appears to be present in dataset
-        # FIXME: this code duplicates that in assign_isostasy
-        standard_name = 'land_ice_area_fraction'
-        for name, var in self._ds.items():
-            if var.attrs.get('standard_name', '') == standard_name:
-                warnings.warn(
-                    f"found existing variable {name} with standard name"
-                    f"{standard_name} while computing ice mask, will result"
-                    "in a duplicate", UserWarning)
-
-        # add trailing underscores until we find a free variable name
-        variable_name = 'icemask'
-        while variable_name in self._ds:
-            warnings.warn(
-                f"found existing variable {variable_name} while computing"
-                f"ice mask, using {variable_name}_ instead", UserWarning)
-            variable_name += '_'
-
-        # compute bedrock isostatic adjustment
-        ds = self._ds.assign({variable_name: mask.astype(float).assign_attrs(
-            standard_name=standard_name)})
-        return ds
+        return self.assign(
+            datasource, standard_name='land_ice_area_fraction',
+            variable_name='icemask')
 
     def assign_isostasy(self, datasource):
         """Compute bedrock isostatic adjustment using a separate file.
@@ -195,34 +220,13 @@ class HyogaDataset:
             (warn and create a duplicate if standard name is taken).
         """
 
-        # read topography from file if it is not an array
+        # read topo if not an array and compute bedrock isostatic adjustment
         topo = _open_datasource(datasource, 'bedrock_altitude')
+        diff = self.getvar('bedrock_altitude') - topo
 
-        # warn if bedrock isostasy appears to be present in dataset
-        # NOTE: in the future we may consider an override switch, and perhaps a
-        # separate method to assign variables by standard name
-        standard_name = 'bedrock_altitude_change_due_to_isostatic_adjustment'
-        for name, var in self._ds.items():
-            if var.attrs.get('standard_name', '') == standard_name:
-                warnings.warn(
-                    f"found existing variable {name} with standard name"
-                    f"{standard_name} while computing bedrock isostatic"
-                    "adjustment, will result in a duplicate", UserWarning)
-
-        # add trailing underscores until we find a free variable name
-        variable_name = 'isostasy'
-        while variable_name in self._ds:
-            warnings.warn(
-                f"found existing variable {variable_name} while computing"
-                f"bedrock isostatic adjustment, using {variable_name}_"
-                "instead", UserWarning)
-            variable_name += '_'
-
-        # compute bedrock isostatic adjustment
-        ds = self._ds.assign({
-            variable_name: (self.getvar('bedrock_altitude')-topo).assign_attrs(
-                    standard_name=standard_name)})
-        return ds
+        # assign new variable
+        return self.assign(diff, variable_name='isostasy', standard_name=(
+            'bedrock_altitude_change_due_to_isostatic_adjustment'))
 
     def getvar(self, standard_name, infer=True, directions=None):
         """Get a variable by conventional standard name.
