@@ -29,6 +29,12 @@ Breaking changes
   instead of creating a new variable with the same standard name. This is
   again consistent with :meth:`xarray.Dataset.assign`.
 
+Deprecations
+~~~~~~~~~~~~
+
+- The `threshold` argument in :meth:`xarray.Dataset.hyoga.interp` is deprecated
+  and will be removed in v0.3. Use an ice mask instead (see new features).
+
 New features
 ~~~~~~~~~~~~
 

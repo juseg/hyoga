@@ -303,8 +303,8 @@ class HyogaDataset:
         raise ValueError(
             f"No variable found with standard name {standard_name}.")
 
-    def interp(self, datasource, ax=None, sigma=None, threshold=1):
-        # FIXME unused argument threshold
+    def interp(self, datasource, ax=None, sigma=None, threshold=None):
+        # FIXME also hint at set_threshold when it is ready to use.
         """Interpolate onto higher resolution topography for visualization.
 
         Parameters
@@ -332,6 +332,10 @@ class HyogaDataset:
             be refined after interpolation, so that any mountains in the
             high-resolution topography that are higher than the interpolated
             ice surface will appear as nunataks in the visualization.
+            .. deprecated:: 0.1.2
+                will be removed in version 0.3. To apply a thickness mask, use
+                :meth:`xarray.Dataset.hyoga.assign_icemask` before calling
+                `interp`.
 
         Returns
         -------
@@ -376,6 +380,14 @@ class HyogaDataset:
         except ValueError:
             name = None
         name = name or topo.name or 'topg'
+
+        # if threshold is present, compute an ice mask
+        if threshold is not None:
+            warnings.warn(
+                "the threshold argument is deprecated and will be removed in "
+                "v0.3.0, use assign_icemask instead.", FutureWarning)
+            icemask = ds.hyoga.getvar('land_ice_thickness') >= threshold
+            ds = ds.hyoga.assign_icemask(icemask)
 
         # make sure ice mask is present and has numeric type
         icemask = ds.hyoga.getvar('land_ice_area_fraction')
