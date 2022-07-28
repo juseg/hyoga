@@ -1,0 +1,4 @@
+[ basic ]
+good-names = ax, ds, dx, dy, i, j, x, y
+[ similarities ]
+min-similarity-lines = 12
