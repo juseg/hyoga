@@ -21,7 +21,6 @@ ax = plt.subplot(projection=ccrs.UTM(32))
 
 # open demo data
 with xr.open_dataset(hyoga.demo.get('pism.alps.out.2d.nc')) as ds:
-    ds = ds.hyoga.where_thicker(1)
 
     # plot model output
     ds.hyoga.plot.bedrock_altitude(ax=ax, cmap='Greys', vmin=0, vmax=4500)

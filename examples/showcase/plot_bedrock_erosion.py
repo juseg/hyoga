@@ -23,7 +23,6 @@ cax = plt.axes([0.15, 0.55, 0.025, 0.25])
 
 # open demo data
 with xr.open_dataset(hyoga.demo.get('pism.alps.out.2d.nc')) as ds:
-    ds = ds.hyoga.where_thicker(1)
 
     # plot model output
     ds.hyoga.plot.bedrock_altitude(ax=ax, vmin=0, vmax=4500)

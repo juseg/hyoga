@@ -33,7 +33,7 @@ with xr.open_dataset(hyoga.demo.get('pism.alps.out.2d.nc')) as ds:
     interp.hyoga.plot.ice_margin(ax=ax, facecolor='w')
 
     # plot streamplot from non-interpolated data
-    streams = ds.hyoga.where_thicker(1).hyoga.plot.surface_velocity_streamplot(
+    streams = ds.hyoga.plot.surface_velocity_streamplot(
         ax=ax, cmap='Blues', vmin=1e1, vmax=1e3, density=(6, 4))
 
     # add colorbar manually

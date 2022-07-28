@@ -31,11 +31,10 @@ with xr.open_dataset(hyoga.demo.get('pism.alps.out.2d.nc')) as ds:
 
     # plot original data
     ax = axes[0]
-    masked = ds.hyoga.where_thicker(1)
-    masked.hyoga.plot.bedrock_altitude(
+    ds.hyoga.plot.bedrock_altitude(
         ax=ax, cmap='gist_earth', vmin=-3000, vmax=4500)
-    masked.hyoga.plot.surface_altitude_contours(ax=ax)
-    masked.hyoga.plot.ice_margin(ax=ax, facecolor='w')
+    ds.hyoga.plot.surface_altitude_contours(ax=ax)
+    ds.hyoga.plot.ice_margin(ax=ax, facecolor='w')
     ax.set_title('original')
 
     # plot interpolated results
