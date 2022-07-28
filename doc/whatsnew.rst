@@ -50,6 +50,8 @@ Internal changes
 - Method :meth:`xarray.Dataset.hyoga.getvar` now uses cf_xarray_ to retrieve
   data variables by their standard name. Thus cf_xarray_ is now a required
   dependency (:issue:`12`).
+- The new module :mod:`hyoga.conf` implements a `config` object to store
+  additional configuration parameters in the future.
 
 .. _cf_xarray: https://cf-xarray.readthedocs.io
 
