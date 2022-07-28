@@ -32,19 +32,24 @@ Breaking changes
 Deprecations
 ~~~~~~~~~~~~
 
-- The `threshold` argument in :meth:`xarray.Dataset.hyoga.interp` is deprecated
-  and will be removed in v0.3. Use the `glacier_masking_point` config parameter
-  or an ice mask instead (see new features).
+- The ``threshold`` argument in :meth:`xarray.Dataset.hyoga.interp` is deprecated
+  and will be removed in v0.3. Use the ``glacier_masking_point`` parameter in
+  :obj:`hyoga.config` or an ice mask instead (see new features).
 
 New features
 ~~~~~~~~~~~~
 
-- Add :meth:`xarray.Dataset.hyoga.assign`.
-- Add :meth:`xarray.Dataset.hyoga.assign_icemask`.
-- Add :meth:`xarray.Dataset.hyoga.where_icemask`.
-- Method :meth:`xarray.Dataset.hyoga.interp` uses "land_ice_area_fraction".
-- Plot methods look for variable `land_ice_area_fraction`.
-- Add config parametre :attr:`hyoga.config.glacier_masking_point`.
+- Plot methods now look ``land_ice_area_fraction`` (instead of
+  ``land_ice_thickness``) to determine which grid cells are glacierized.
+- Add accessor method :meth:`xarray.Dataset.hyoga.assign` to assign a new
+  variable according to its CF-compliant standard name.
+- Add accessor method :meth:`xarray.Dataset.hyoga.assign_icemask` to assign an
+  ice mask variable with standard name ``land_ice_area_fraction``.
+- Add accessor method :meth:`xarray.Dataset.hyoga.where_icemask` to filter
+  glacier variable according to ``land_ice_area_fraction``.
+- Add :obj:`hyoga.config` with a ``glacier_masking_point`` config parametre, an
+  ice thickness threshold used as a fallback if ``land_ice_area_fraction`` is
+  missing in the dataset.
 
 Internal changes
 ~~~~~~~~~~~~~~~~
@@ -52,8 +57,8 @@ Internal changes
 - Method :meth:`xarray.Dataset.hyoga.getvar` now uses cf_xarray_ to retrieve
   data variables by their standard name. Thus cf_xarray_ is now a required
   dependency (:issue:`12`).
-- The new module :mod:`hyoga.conf` implements a `config` object to store
-  additional configuration parameters in the future.
+- Add module :mod:`hyoga.conf` implementing a ``config`` object to store
+  additional parameters in the future.
 
 .. _cf_xarray: https://cf-xarray.readthedocs.io
 
