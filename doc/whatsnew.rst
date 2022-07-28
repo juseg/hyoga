@@ -33,7 +33,8 @@ Deprecations
 ~~~~~~~~~~~~
 
 - The `threshold` argument in :meth:`xarray.Dataset.hyoga.interp` is deprecated
-  and will be removed in v0.3. Use an ice mask instead (see new features).
+  and will be removed in v0.3. Use the `glacier_masking_point` config parameter
+  or an ice mask instead (see new features).
 
 New features
 ~~~~~~~~~~~~
@@ -43,6 +44,7 @@ New features
 - Add :meth:`xarray.Dataset.hyoga.where_icemask`.
 - Method :meth:`xarray.Dataset.hyoga.interp` uses "land_ice_area_fraction".
 - Plot methods look for variable `land_ice_area_fraction`.
+- Add config parametre :attr:`hyoga.config.glacier_masking_point`.
 
 Internal changes
 ~~~~~~~~~~~~~~~~
