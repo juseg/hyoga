@@ -9,7 +9,7 @@ plot methods. There is currently only one configuration parameter.
 from dataclasses import dataclass
 
 
-@dataclass(slots=True)
+@dataclass
 class HyogaConfig:
     """Hyoga configuration parameters.
 
