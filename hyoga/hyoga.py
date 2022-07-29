@@ -182,7 +182,7 @@ class HyogaDataset:
         # assign new variables and return a new dataset
         return self._ds.assign(variables)
 
-    def assign_icemask(self, datasource):
+    def assign_icemask(self, datasource, name='icemask'):
         """Assign an ice mask corresponding to glacierized area.
 
         Hyoga looks for this variable in most plot methods, and defaults to
@@ -193,17 +193,19 @@ class HyogaDataset:
         datasource : DataArray, Dataset, str, Path, file-like or DataStore
             Data array, or a dataset or path to a file containing the ice mask
             (standard name "land_ice_area_fraction").
+        name : string, optional
+            Default name for the new ice mask variable. Not used if standard
+            name "land_ice_area_fraction" is already present in the dataset.
 
         Returns
         -------
         dataset : Dataset
             The dataset with added ice mask variable, with standard name
-            "land_ice_area_fraction" (replacing existing variables) and default
-            variable name "icemask" (in the case of a new variable).
+            "land_ice_area_fraction" (replacing existing variables).
         """
-        return self.assign(land_ice_area_fraction=datasource.rename('icemask'))
+        return self.assign(land_ice_area_fraction=datasource.rename(name))
 
-    def assign_isostasy(self, datasource):
+    def assign_isostasy(self, datasource, name='isostasy'):
         """Compute bedrock isostatic adjustment using a separate file.
 
         Parameters
@@ -214,14 +216,17 @@ class HyogaDataset:
             reference surface topography and ice thickness (standard names
             "surface_altitude" and "land_ice_thickness") from which it is
             computed.
+        name : string, optional
+            Default name for the new isostasy variable. Not used if standard
+            name "bedrock_altitude_change_due_to_isostatic_adjustment" is
+            already present in the dataset.
 
         Returns
         -------
         dataset : Dataset
             The dataset with added uplift variable, with standard name
             "bedrock_altitude_change_due_to_isostatic_adjustment" (replacing
-            existing variables) and default variable name "isostasy" (in the
-            case of a new variable).
+            existing variables).
         """
 
         # read topo if not an array and compute bedrock isostatic adjustment
@@ -231,7 +236,7 @@ class HyogaDataset:
         # assign new variable
         return self.assign(
             bedrock_altitude_change_due_to_isostatic_adjustment=diff.rename(
-                'isostasy'))
+                name))
 
     def getvar(self, standard_name, infer=True, directions=None):
         """Get a variable by conventional standard name.
