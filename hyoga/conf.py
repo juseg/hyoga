@@ -20,5 +20,12 @@ class HyogaConfig:
     """
     glacier_masking_point: float = 1.0
 
+    def __setattr__(self, name, value):
+        """Check attribute validity before setting value."""
+        if hasattr(self, name):
+            object.__setattr__(self, name, value)
+        else:
+            raise TypeError(f'{name} is not a valid configuration parameter')
+
 
 config = HyogaConfig()
