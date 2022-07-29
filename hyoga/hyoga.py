@@ -128,53 +128,59 @@ class HyogaDataset:
         """Compute the sum of two variables if units match."""
         return self._safe_apply(sum, *args, **kwargs)
 
-    def assign(self, datasource, standard_name, variable_name=None):
-        """Assign a new variable according to standard_name attribute.
+    def assign(self, **standard_variables):
+        """Assign new variables by standard_name.
 
         Parameters
         ----------
-        datasource : DataArray, Dataset, str, Path, file-like or DataStore
-            Data array, or a dataset or path to a file containing the variable
-            with standard name `standard_name`.
-        standard_name : string
-            The variable's "standard_name" attribute in the input `datasource`
-            and resulting dataset, according to netCDF Climate and Forecast
-            (CF) conventions (http://cfconventions.org/standard-names.html).
-        variable_name : string, optional
-            The variable name in the resulting dataset, if it is not already
-            present. Defaults to `standard_name` if `None` provided. Warns and
-            add trailing underscores if this name is already associated with a
-            different standard_name.
+        standard_variables : mapping
+            A mapping from netCDF Climate and Forecast compliant standard names
+            (http://cfconventions.org/standard-names.html), to data arrays, or
+            datasets or paths to files containing variables with the
+            corresponding standard name.
 
         Returns
         -------
         dataset : Dataset
-            The dataset with the added variable, replacing any existing
-            variable with the same `standard_name`.
+            A new dataset with the new variables added, replacing any existing
+            variable with the same standard name. New variables are labelled
+            according to their input (short) names, or standard names if short
+            names are missing, with added trailing underscores in the event of
+            duplicates.
         """
 
+        # create an empty dict to store variables by short name
+        variables = {}
+
         # read data from source if it is not already an array
-        data = _open_datasource(datasource, standard_name)
-        data = data.assign_attrs(standard_name=standard_name)
+        for standard_name, datasource in standard_variables.items():
+            data = _open_datasource(datasource, standard_name)
+            data = data.assign_attrs(standard_name=standard_name)
 
-        # look for existing variable with given standard name
-        variable_found = False
-        for name, var in self._ds.items():
-            if var.attrs.get('standard_name', '') == standard_name:
-                variable_name = name
-                variable_found = True
-                break
+            # default to existing name, else standard name
+            variable_name = data.name or standard_name
 
-        # if variable_name is present, but matches a different standard name,
-        # add trailing underscores until we find a free slot
-        while variable_found is False and variable_name in self._ds:
-            warnings.warn(
-                f"found existing variable {variable_name}, using"
-                f"{variable_name}_ instead", UserWarning)
-            variable_name += '_'
+            # look for existing variable with given standard name
+            variable_found = False
+            for name, var in self._ds.items():
+                if var.attrs.get('standard_name', '') == standard_name:
+                    variable_name = name
+                    variable_found = True
+                    break
 
-        # assign new variable
-        return self._ds.assign({variable_name or standard_name: data})
+            # if variable_name is present, but matches a different standard
+            # name, add trailing underscores until we find a free slot
+            while variable_found is False and variable_name in self._ds:
+                warnings.warn(
+                    f"found existing variable {variable_name}, using "
+                    f"{variable_name}_ instead", UserWarning)
+                variable_name += '_'
+
+            # link variable data to short name
+            variables[variable_name] = data
+
+        # assign new variables and return a new dataset
+        return self._ds.assign(variables)
 
     def assign_icemask(self, datasource):
         """Assign an ice mask corresponding to glacierized area.
@@ -195,9 +201,7 @@ class HyogaDataset:
             "land_ice_area_fraction" (replacing existing variables) and default
             variable name "icemask" (in the case of a new variable).
         """
-        return self.assign(
-            datasource, standard_name='land_ice_area_fraction',
-            variable_name='icemask')
+        return self.assign(land_ice_area_fraction=datasource.rename('icemask'))
 
     def assign_isostasy(self, datasource):
         """Compute bedrock isostatic adjustment using a separate file.
@@ -225,8 +229,9 @@ class HyogaDataset:
         diff = self.getvar('bedrock_altitude') - topo
 
         # assign new variable
-        return self.assign(diff, variable_name='isostasy', standard_name=(
-            'bedrock_altitude_change_due_to_isostatic_adjustment'))
+        return self.assign(
+            bedrock_altitude_change_due_to_isostatic_adjustment=diff.rename(
+                'isostasy'))
 
     def getvar(self, standard_name, infer=True, directions=None):
         """Get a variable by conventional standard name.
@@ -371,8 +376,7 @@ class HyogaDataset:
         # make sure surface altitude is present, needed for a nice mask
         # NOTE: add a wrapper something like ensure_var, maybe setvar?
         ds = self.assign(
-            self.getvar('surface_altitude'), standard_name='surface_altitude',
-            variable_name='usurf')
+            surface_altitude=self.getvar('surface_altitude').rename('usurf'))
 
         # if threshold is present, compute an ice mask
         if threshold is not None:
@@ -397,7 +401,7 @@ class HyogaDataset:
             pass
 
         # assign corrected bedrock topography
-        ds = ds.hyoga.assign(topo, 'bedrock_altitude', variable_name='topg')
+        ds = ds.hyoga.assign(bedrock_altitude=topo.rename('topg'))
 
         # refine ice mask based on interpolated surface
         icemask = ds.hyoga.getvar('land_ice_area_fraction')
