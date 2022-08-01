@@ -30,6 +30,7 @@ Japanese word for glacier (lit. ice river).
 
    opening
    plotting
+   masking
    examples/index
 
 .. toctree::
