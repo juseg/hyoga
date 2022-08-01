@@ -41,8 +41,8 @@ New features
 
 - Plot methods now look ``land_ice_area_fraction`` (instead of
   ``land_ice_thickness``) to determine which grid cells are glacierized.
-- Add accessor method :meth:`xarray.Dataset.hyoga.assign` to assign a new
-  variable according to its CF-compliant standard name.
+- Add accessor method :meth:`xarray.Dataset.hyoga.assign` to assign new
+  variables by CF-compliant standard names.
 - Add accessor method :meth:`xarray.Dataset.hyoga.assign_icemask` to assign an
   ice mask variable with standard name ``land_ice_area_fraction``.
 - Add accessor method :meth:`xarray.Dataset.hyoga.where_icemask` to filter
@@ -65,6 +65,7 @@ Internal changes
 Documentation
 ~~~~~~~~~~~~~
 
+- A new documentation page shortly explains :ref:`masking` features.
 - A new example has been added to show that interpolation also works when
   surface topography is provided instead of bedrock topography.
 

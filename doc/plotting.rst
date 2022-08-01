@@ -1,4 +1,4 @@
-.. Copyright (c) 2021, Julien Seguinot (juseg.github.io)
+.. Copyright (c) 2021-2022, Julien Seguinot (juseg.github.io)
 .. GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
 Plotting glacier data
@@ -12,7 +12,7 @@ Let us open the demo data again:
 .. ipython:: python
 
    import xarray as xr
-   import hyoga.open
+   import hyoga.demo
 
    ds = xr.open_dataset(hyoga.demo.get('pism.alps.out.2d.nc'))
 
@@ -29,15 +29,7 @@ Plotting with hyoga
 
 To make things even easier, hyoga provides wrappers around xarray_ and
 matplotlib_ methods to produce oft-used ice sheet model plots with a more
-practical default style. To begin with thought, let us mask irrelevant model
-output below a thickness threshold of one metre using
-:meth:`hyoga.hyoga.Dataset.where_thicker`:
-
-.. ipython:: python
-
-   ds = ds.hyoga.where_thicker()
-
-Note that the bedrock topography, however, is not affected:
+practical default style.
 
 .. ipython:: python
 
