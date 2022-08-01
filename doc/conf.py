@@ -10,10 +10,10 @@ import sphinx_gallery.sorting
 # -- Project information -----------------------------------------------------
 
 project = 'hyoga'
-copyright = '2021, Julien Seguinot'
+copyright = '2021-2022, Julien Seguinot'
 author = 'Julien Seguinot'
 version = '0.1 Akaishi'
-release = '0.1.1'
+release = '0.1.2'
 
 
 # -- General configuration ---------------------------------------------------

@@ -15,8 +15,10 @@
 What's new
 ==========
 
-v0.1.2 (unreleased)
+v0.1.2 (1 Aug 2022)
 -------------------
+
+This release includes better masks and a dependency on cf_xarray_.
 
 Breaking changes
 ~~~~~~~~~~~~~~~~
@@ -47,7 +49,7 @@ New features
   ice mask variable with standard name ``land_ice_area_fraction``.
 - Add accessor method :meth:`xarray.Dataset.hyoga.where_icemask` to filter
   glacier variable according to ``land_ice_area_fraction``.
-- Add :obj:`hyoga.config` with a ``glacier_masking_point`` config parametre, an
+- Add :obj:`hyoga.config` with a ``glacier_masking_point`` config parameter, an
   ice thickness threshold used as a fallback if ``land_ice_area_fraction`` is
   missing in the dataset.
 
