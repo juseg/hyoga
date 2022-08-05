@@ -14,7 +14,7 @@ import scipy.ndimage
 import xarray as xr
 import cf_xarray  # noqa pylint: disable=unused-import
 import hyoga.open
-import hyoga.plot
+from hyoga.plot.datasets import HyogaPlotMethods
 
 
 def _coords_from_axes(ax):
@@ -57,7 +57,7 @@ class HyogaDataset:
     """Hyoga extension to xarray datasets."""
 
     # needed for sphinx etc to see plot methods
-    plot = xr.core.utils.UncachedAccessor(hyoga.plot.HyogaPlotMethods)
+    plot = xr.core.utils.UncachedAccessor(HyogaPlotMethods)
 
     def __init__(self, dataset):
         """Initialize data accessor.
