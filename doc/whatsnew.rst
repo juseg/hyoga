@@ -19,6 +19,10 @@ v0.1.2 (1 Aug 2022)
 -------------------
 
 This release includes better masks and a dependency on cf_xarray_.
+Plot methods now search for standard variable `land_ice_area_fraction` for
+masking and default to using a configurable ice thickness masking point.
+Masking with `where` remains available and a new documentation page explains
+:ref:`masking` features.
 
 Breaking changes
 ~~~~~~~~~~~~~~~~
@@ -74,8 +78,11 @@ Documentation
 v0.1.1 (8 Mar 2021)
 -------------------
 
-This release includes bug fixes and several documentation improvements.
-
+This release includes bug fixes and documentation improvements, including more
+lightweight demo data. There are new examples in the gallery demonstrating the
+computation of bedrock isostatic adjustment from a reference topography, and
+interpolating model results on higher-resolution topography for enhanced
+visualization.
 
 Deprecations
 ~~~~~~~~~~~~
