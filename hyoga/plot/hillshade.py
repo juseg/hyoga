@@ -183,7 +183,7 @@ def add_topography_contours(datasource, mask=None, offset=0.0,
 
 def add_hillshade(datasource, mask=None, offset=0.0,
                   altitude=30.0, azimuth=315.0, exag=1.0,
-                  cmap='Shines', vmin=-1.0, vmax=1.0, **kwargs):
+                  cmap='Glossy', vmin=-1.0, vmax=1.0, **kwargs):
     """Add hillshades image from raster file."""
 
     # open topographic data and compute hillshades
@@ -196,7 +196,7 @@ def add_hillshade(datasource, mask=None, offset=0.0,
 
 def add_multishade(datasource, mask=None, offset=0.0,
                    altitudes=None, azimuths=None, exag=1.0,
-                   cmap='Shines', vmin=-1.0, vmax=1.0, **kwargs):
+                   cmap='Glossy', vmin=-1.0, vmax=1.0, **kwargs):
     """Add multi-direction hillshade image from raster file."""
 
     # open topographic data and compute hillshades

@@ -68,8 +68,8 @@ COLORMAPS = {cmap.name: cmap for cmap in [
     _from_list('Bathymetric', _bathymetric_colors, N=4096),
     _from_list('Topographic', _topographic_colors, N=4096),
     _from_list('Elevational', _elevational_colors, N=4096),
-    _from_list('Shades',      _matte_colors,       N=4096),
-    _from_list('Shines',      _glossy_colors,      N=4096)]}
+    _from_list('Matte',       _matte_colors,       N=4096),
+    _from_list('Glossy',      _glossy_colors,      N=4096)]}
 
 # topographic depressions
 COLORMAPS['Topographic'].set_under('#A7DFD2')
