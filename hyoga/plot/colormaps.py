@@ -8,7 +8,6 @@ The color definitions are based on Wikipedia's "WikiProject Maps" cartographic
 for topographic maps.
 """
 
-import numpy as np
 import matplotlib.colors as mcolors
 
 # bathymetric levels optimized for [6000, 0] and example rescaling
@@ -46,40 +45,31 @@ _topographic_colors = [(level/9000, color) for (level, color) in [
     (8000,  '#E0DED8'),   # 16000 12000 8000 5333 4000
     (9000,  '#F5F4F2')]]  # 18000 13500 9000 6000 4500 light grey
 
-# topographic colormaps
+# elevational levels with sea level in the middle
+_elevational_colors = (
+    [(0.0+0.5*l, c) for (l, c) in _bathymetric_colors] +
+    [(0.5+0.5*l, c) for (l, c) in _topographic_colors])
 
-BATHYMETRIC = mcolors.LinearSegmentedColormap.from_list(
-    'Bathymetric', _bathymetric_colors, N=4096)
-
-TOPOGRAPHIC = mcolors.LinearSegmentedColormap.from_list(
-    'Topographic', _topographic_colors, N=4096)
-TOPOGRAPHIC.set_under('#A7DFD2')
-
-ELEVATIONAL = mcolors.LinearSegmentedColormap.from_list('Elevational', [
-    *BATHYMETRIC(np.linspace(0, 1, 2048)),
-    *TOPOGRAPHIC(np.linspace(0, 1, 2048)),
-], N=4096)
-
-# relief shading colormaps
-
-SHADES = mcolors.LinearSegmentedColormap.from_list('Shades', [
+# matte hillshading
+_matte_colors = [
     (0.0, '#00000000'),  # transparent black
-    (1.0, '#000000ff'),  # solid black
-])
+    (1.0, '#000000ff')]  # solid black
 
-SHINES = mcolors.LinearSegmentedColormap.from_list('Shines', [
+# glossy hillshading
+_glossy_colors = [
     (0.0, '#ffffffff'),  # solid white
     (0.5, '#ffffff00'),  # transparent white
     (0.5, '#00000000'),  # transparent black
-    (1.0, '#000000ff'),  # solid black
-])
+    (1.0, '#000000ff')]  # solid black
 
-# colormaps dictionary
+# colormaps dictionary (4k colors to avoid striping in plains)
+_from_list = mcolors.LinearSegmentedColormap.from_list
+COLORMAPS = {cmap.name: cmap for cmap in [
+    _from_list('Bathymetric', _bathymetric_colors, N=4096),
+    _from_list('Topographic', _topographic_colors, N=4096),
+    _from_list('Elevational', _elevational_colors, N=4096),
+    _from_list('Shades',      _matte_colors,       N=4096),
+    _from_list('Shines',      _glossy_colors,      N=4096)]}
 
-COLORMAPS = dict(
-    Bathymetric=BATHYMETRIC,
-    Topographic=TOPOGRAPHIC,
-    Elevational=ELEVATIONAL,
-    Shades=SHADES,
-    Shines=SHINES,
-)
+# topographic depressions
+COLORMAPS['Topographic'].set_under('#A7DFD2')
