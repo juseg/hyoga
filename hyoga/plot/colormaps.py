@@ -62,6 +62,14 @@ _glossy_colors = [
     (0.5, '#00000000'),  # transparent black
     (1.0, '#000000ff')]  # solid black
 
+# color sequences dictionary
+SEQUENCES = {
+    'Topographic': _topographic_colors,
+    'Bathymetric': _bathymetric_colors,
+    'Elevational': _elevational_colors,
+    'Matte':       _matte_colors,
+    'Glossy':      _glossy_colors}
+
 # colormaps dictionary (4k colors to avoid striping in plains)
 _from_list = mpl.colors.LinearSegmentedColormap.from_list
 COLORMAPS = {cmap.name: cmap for cmap in [
