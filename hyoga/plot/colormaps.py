@@ -8,7 +8,7 @@ The color definitions are based on Wikipedia's "WikiProject Maps" cartographic
 for topographic maps.
 """
 
-import matplotlib.colors as mcolors
+import matplotlib as mpl
 
 # bathymetric levels optimized for [6000, 0] and example rescaling
 _bathymetric_colors = [(1+level/6000, color) for (level, color) in [
@@ -63,7 +63,7 @@ _glossy_colors = [
     (1.0, '#000000ff')]  # solid black
 
 # colormaps dictionary (4k colors to avoid striping in plains)
-_from_list = mcolors.LinearSegmentedColormap.from_list
+_from_list = mpl.colors.LinearSegmentedColormap.from_list
 COLORMAPS = {cmap.name: cmap for cmap in [
     _from_list('Bathymetric', _bathymetric_colors, N=4096),
     _from_list('Topographic', _topographic_colors, N=4096),
@@ -73,3 +73,11 @@ COLORMAPS = {cmap.name: cmap for cmap in [
 
 # topographic depressions
 COLORMAPS['Topographic'].set_under('#A7DFD2')
+
+# register colormaps with matplotlib
+if mpl.__version__ >= '3.5':
+    for cmap in COLORMAPS.values():
+        mpl.colormaps.register(cmap)
+else:
+    for cmap in COLORMAPS.values():
+        mpl.cm.register_cmap(cmap=cmap)
