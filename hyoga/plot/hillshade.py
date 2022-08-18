@@ -7,7 +7,7 @@ Shaded relief plotting tools.
 
 import numpy as np
 import xarray as xr
-import cartowik.conventions as ccv
+from .colormaps import SEQUENCES
 
 
 # Shaded relief internals
@@ -97,13 +97,14 @@ def _add_contours(darray, add_colorbar=False, add_labels=False, cmap=None,
                   colors=None, levels=None, **kwargs):
     """Wrapper for contourf enabling custom conventions and defaults."""
 
-    # for registed Cartowik colormaps
-    if cmap in ccv.CLISTS and cmap in ccv.LEVELS:
+    # if hyoga altitude colormap was passed
+    if cmap in ['Topographic', 'Bathymetric', 'Elevational']:
 
         # replace colormap by color list and levels
-        colors = colors or ccv.CLISTS.get(cmap, None)
+        tuples = SEQUENCES[cmap]
+        colors = colors or [t[1] for t in tuples]
         colors = colors + [colors[-1]]
-        levels = levels or ccv.LEVELS.get(cmap, None)
+        levels = levels or [t[0] for t in tuples]
         cmap = None
 
         # normalize levels if vmin or vmax are provided
@@ -129,7 +130,7 @@ def _add_contours(darray, add_colorbar=False, add_labels=False, cmap=None,
 def _add_imshow(darray, add_colorbar=False, add_labels=False, cmap=None,
                 interpolation='bilinear', **kwargs):
     """Wrapper for imshow enabling custom conventions and defaults."""
-    cmap = ccv.COLORMAPS.get(cmap, cmap)
+    # cmap = ccv.COLORMAPS.get(cmap, cmap)  # no longer needed
     return darray.plot.imshow(add_colorbar=add_colorbar, add_labels=add_labels,
                               cmap=cmap, interpolation=interpolation, **kwargs)
 
