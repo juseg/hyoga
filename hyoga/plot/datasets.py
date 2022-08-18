@@ -48,6 +48,12 @@ class HyogaPlotMethods:
         var = self._hyoga.getvar('bedrock_altitude') - sealevel
         return var.plot.imshow(**style)
 
+    def bedrock_altitude_contours(self, *args, **kwargs):
+        darray = self._hyoga.getvar('bedrock_altitude')
+        # FIXME move contour code in this module
+        from .hillshade import _add_contours
+        return _add_contours(darray, *args, **kwargs)
+
     def bedrock_erosion(self, constant=5.2e-8, exponent=2.34, **kwargs):
         """Plot erosion rate based on basal velocity.
 
@@ -81,6 +87,12 @@ class HyogaPlotMethods:
         var = (constant*var**exponent).assign_attrs(
             long_name='glacier erosion rate', units='mm a-1')
         return var.plot.contourf(**style)
+
+    def bedrock_hillshade(self, *args, **kwargs):
+        darray = self._hyoga.getvar('bedrock_altitude')
+        # FIXME rename add_multishade to hillshade
+        from .hillshade import add_multishade
+        return add_multishade(darray, *args, **kwargs)
 
     def bedrock_isostasy(self, **kwargs):
         """Plot bedrock deformation contours and locate minumum.
