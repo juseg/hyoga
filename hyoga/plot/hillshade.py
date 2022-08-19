@@ -1,4 +1,4 @@
-# Copyright (c) 2018, Julien Seguinot (juseg.github.io)
+# Copyright (c) 2018-2022, Julien Seguinot (juseg.github.io)
 # GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
 """
@@ -137,50 +137,6 @@ def _add_imshow(darray, add_colorbar=False, add_labels=False, cmap=None,
 
 # Shaded relief plotting
 # ----------------------
-
-def add_bathymetry(datasource, mask=None, offset=0.0,
-                   cmap='Bathymetric', vmin=-6000, vmax=0, **kwargs):
-    """Add bathymetric image from raster file."""
-
-    # open bathymetric data
-    darray = _open_data_source(datasource, mask=mask, offset=offset)
-
-    # plot bathymetry
-    return _add_imshow(darray, cmap=cmap, vmin=vmin, vmax=vmax, **kwargs)
-
-
-def add_bathymetry_contours(datasource, mask=None, offset=0.0,
-                            cmap='Bathymetric', vmin=-6000, vmax=0, **kwargs):
-    """Add bathymetric contours from raster file."""
-
-    # open topographic data
-    darray = _open_data_source(datasource, mask=mask, offset=offset)
-
-    # plot topography
-    return _add_contours(darray, cmap=cmap, vmin=vmin, vmax=vmax, **kwargs)
-
-
-def add_topography(datasource, mask=None, offset=0.0,
-                   cmap='Topographic', vmin=0, vmax=9000, **kwargs):
-    """Add topographic image from raster file."""
-
-    # open topographic data
-    darray = _open_data_source(datasource, mask=mask, offset=offset)
-
-    # plot topography
-    return _add_imshow(darray, cmap=cmap, vmin=vmin, vmax=vmax, **kwargs)
-
-
-def add_topography_contours(datasource, mask=None, offset=0.0,
-                            cmap='Topographic', vmin=0, vmax=9000, **kwargs):
-    """Add topographic contours from raster file."""
-
-    # open topographic data
-    darray = _open_data_source(datasource, mask=mask, offset=offset)
-
-    # plot topography
-    return _add_contours(darray, cmap=cmap, vmin=vmin, vmax=vmax, **kwargs)
-
 
 def add_hillshade(datasource, mask=None, offset=0.0,
                   altitude=30.0, azimuth=315.0, exag=1.0,
