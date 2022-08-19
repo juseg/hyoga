@@ -93,40 +93,6 @@ def _compute_multishade(darray, altitudes=None, azimuths=None, exag=1.0):
     return shades
 
 
-def _add_contours(darray, add_colorbar=False, add_labels=False, cmap=None,
-                  colors=None, levels=None, **kwargs):
-    """Wrapper for contourf enabling custom conventions and defaults."""
-
-    # if hyoga altitude colormap was passed
-    if cmap in ['Topographic', 'Bathymetric', 'Elevational']:
-
-        # replace colormap by color list and levels
-        tuples = SEQUENCES[cmap]
-        colors = colors or [t[1] for t in tuples]
-        colors = colors + [colors[-1]]
-        levels = levels or [t[0] for t in tuples]
-        cmap = None
-
-        # normalize levels if vmin or vmax are provided
-        lmin = levels[0]
-        lmax = levels[-1]
-        vmin = kwargs.pop('vmin', lmin)
-        vmax = kwargs.pop('vmax', lmax)
-        levels = [vmin+(vmax-vmin)*(l-lmin)/(lmax-lmin) for l in levels]
-
-        # providing darray.plot.contourf with a BoundaryNorm results in the
-        # colormap to be reset, so the following code does not work:
-        # import matplotlib as mpl
-        # cmap, norm = mpl.colors.from_levels_and_colors(
-        #     levels, colors, extend='both')
-
-    # so we pass colors and levels directly but we need to enforce
-    # extend='both' for accurate color mapping (esp. depressions)
-    return darray.plot.contourf(
-        add_colorbar=add_colorbar, add_labels=add_labels, colors=colors,
-        levels=levels, extend='both', **kwargs)
-
-
 def _add_imshow(darray, add_colorbar=False, add_labels=False, cmap=None,
                 interpolation='bilinear', **kwargs):
     """Wrapper for imshow enabling custom conventions and defaults."""

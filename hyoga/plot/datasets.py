@@ -10,6 +10,7 @@ shortcuts to oft-used plot methods with sensible defaults.
 
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
+import hyoga.plot
 
 
 class HyogaPlotMethods:
@@ -48,11 +49,42 @@ class HyogaPlotMethods:
         var = self._hyoga.getvar('bedrock_altitude') - sealevel
         return var.plot.imshow(**style)
 
-    def bedrock_altitude_contours(self, *args, **kwargs):
+    def bedrock_altitude_contours(self, cmap=None, **kwargs):
+        # """Wrapper for contourf enabling custom conventions and defaults."""
+        # def _contours(darray, add_colorbar=False, add_labels=False,
+        # cmap=None, colors=None, levels=None, **kwargs):
+
+        # read bedrock altitude
         darray = self._hyoga.getvar('bedrock_altitude')
-        # FIXME move contour code in this module
-        from .hillshade import _add_contours
-        return _add_contours(darray, *args, **kwargs)
+
+        # if hyoga altitude colormap was passed
+        if cmap in ['Topographic', 'Bathymetric', 'Elevational']:
+
+            # replace colormap by color list and levels
+            tuples = hyoga.plot.SEQUENCES[cmap]
+            colors = kwargs.pop('colors', [t[1] for t in tuples])
+            colors = colors + [colors[-1]]
+            levels = kwargs.pop('levels', [t[0] for t in tuples])
+            cmap = None
+
+            # normalize levels if vmin or vmax are provided
+            # FIXME this will norm to [0, 1] if vmin or vmax are missing
+            lmin = levels[0]
+            lmax = levels[-1]
+            vmin = kwargs.pop('vmin', lmin)
+            vmax = kwargs.pop('vmax', lmax)
+            levels = [vmin+(vmax-vmin)*(l-lmin)/(lmax-lmin) for l in levels]
+
+            # providing darray.plot.contourf with a BoundaryNorm results in the
+            # colormap to be reset, so the following code does not work:
+            # import matplotlib as mpl
+            # cmap, norm = mpl.colors.from_levels_and_colors(
+            #     levels, colors, extend='both')
+
+        # so we pass colors and levels directly but we need to enforce
+        # extend='both' for accurate color mapping (esp. depressions)
+        return darray.plot.contourf(
+            cmap=cmap, colors=colors, levels=levels, **kwargs)
 
     def bedrock_erosion(self, constant=5.2e-8, exponent=2.34, **kwargs):
         """Plot erosion rate based on basal velocity.
