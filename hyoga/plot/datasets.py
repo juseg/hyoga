@@ -8,8 +8,8 @@ exhaustive list of all possible visualizations, but rather to provide a few
 shortcuts to oft-used plot methods with sensible defaults.
 """
 
+import matplotlib as mpl
 import matplotlib.pyplot as plt
-import matplotlib.colors as mcolors
 import hyoga.plot
 
 
@@ -60,20 +60,21 @@ class HyogaPlotMethods:
         # if hyoga altitude colormap was passed
         if cmap in ['Topographic', 'Bathymetric', 'Elevational']:
 
-            # replace colormap by color list and levels
+            # replace colormap by color list
             tuples = hyoga.plot.SEQUENCES[cmap]
             colors = kwargs.pop('colors', [t[1] for t in tuples])
             colors = colors + [colors[-1]]
-            levels = kwargs.pop('levels', [t[0] for t in tuples])
             cmap = None
 
-            # normalize levels if vmin or vmax are provided
-            # FIXME this will norm to [0, 1] if vmin or vmax are missing
-            lmin = levels[0]
-            lmax = levels[-1]
-            vmin = kwargs.pop('vmin', lmin)
-            vmax = kwargs.pop('vmax', lmax)
-            levels = [vmin+(vmax-vmin)*(l-lmin)/(lmax-lmin) for l in levels]
+            # get vmin, vmax or rounded data bounds from matplotlib ticker
+            bounds = darray.min(), darray.max()
+            bounds = mpl.ticker.MaxNLocator().tick_values(*bounds)[[0, -1]]
+            vmin = kwargs.pop('vmin', bounds[0])
+            vmax = kwargs.pop('vmax', bounds[1])
+
+            # normalize levels from 0-1 to data bounds
+            levels = [t[0] for t in tuples]
+            levels = [vmin+(vmax-vmin)*lev for lev in levels]
 
             # update keyword arguments
             kwargs.update(colors=colors, levels=levels)
@@ -269,7 +270,7 @@ class HyogaPlotMethods:
         image: AxesImage
             The plotted surface velocity image.
         """
-        style = dict(alpha=0.75, cmap='Blues', norm=mcolors.LogNorm())
+        style = dict(alpha=0.75, cmap='Blues', norm=mpl.colors.LogNorm())
         style.update(kwargs)
         var = self._hyoga.getvar('magnitude_of_land_ice_surface_velocity')
         var = var.where(self._hyoga.getvar('land_ice_area_fraction') >= 0.5)
@@ -298,7 +299,7 @@ class HyogaPlotMethods:
         ax = kwargs.pop('ax', plt.gca())  # not a mpl kwargs
         vmin = kwargs.pop('vmin', None)  # not a streamplot param
         vmax = kwargs.pop('vmax', None)  # not a streamplot param
-        norm = kwargs.get('norm', mcolors.LogNorm(vmin=vmin, vmax=vmax))
+        norm = kwargs.get('norm', mpl.colors.LogNorm(vmin=vmin, vmax=vmax))
         style = dict(arrowsize=0.25, cmap='Blues', linewidth=0.5)
         style.update(kwargs)
 
