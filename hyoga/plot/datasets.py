@@ -59,13 +59,13 @@ class HyogaPlotMethods:
         darray = self._hyoga.getvar('bedrock_altitude')
 
         # if hyoga altitude colormap was passed but no colors or levels
-        # FIXME cmap='Elevational' results in duplicate sea-level contour
         if style['cmap'] in ['Topographic', 'Bathymetric', 'Elevational'] and \
                 not any(('colors' in style, 'levels' in style)):
 
             # replace colormap by color list
             tuples = hyoga.plot.SEQUENCES[style.pop('cmap')]
-            colors = [t[1] for t in tuples]
+            tuples = list(dict(tuples).items())  # remove Elevational dup level
+            colors = [t[1] for t in tuples]  # could use dict.values()
             colors = colors + [colors[-1]]
 
             # get vmin, vmax or rounded data bounds from matplotlib ticker
@@ -75,7 +75,7 @@ class HyogaPlotMethods:
             vmax = style.pop('vmax', bounds[1])
 
             # normalize levels from 0-1 to data bounds
-            levels = [t[0] for t in tuples]
+            levels = [t[0] for t in tuples]  # could use dict.keys()
             levels = [vmin+(vmax-vmin)*lev for lev in levels]
 
             # update plotting style keyword arguments
