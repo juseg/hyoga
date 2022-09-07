@@ -49,46 +49,44 @@ class HyogaPlotMethods:
         var = self._hyoga.getvar('bedrock_altitude') - sealevel
         return var.plot.imshow(**style)
 
-    def bedrock_altitude_contours(self, cmap=None, **kwargs):
-        # """Wrapper for contourf enabling custom conventions and defaults."""
-        # def _contours(darray, add_colorbar=False, add_labels=False,
-        # cmap=None, colors=None, levels=None, **kwargs):
+    def bedrock_altitude_contours(self, **kwargs):
+        """Plot bedrock topography filled countours."""
+        # FIXME docstring
 
-        # read bedrock altitude
+        # get plotting style, read bedrock altitude
+        style = dict(add_colorbar=True, cmap='Greys', zorder=-1)
+        style.update(kwargs)
         darray = self._hyoga.getvar('bedrock_altitude')
 
         # if hyoga altitude colormap was passed but no colors or levels
-        if cmap in ['Topographic', 'Bathymetric', 'Elevational'] and \
-                not any('colors' in kwargs, 'levels' in kwargs):
+        # FIXME cmap='Elevational' results in duplicate sea-level contour
+        if style['cmap'] in ['Topographic', 'Bathymetric', 'Elevational'] and \
+                not any(('colors' in style, 'levels' in style)):
 
             # replace colormap by color list
-            tuples = hyoga.plot.SEQUENCES[cmap]
+            tuples = hyoga.plot.SEQUENCES[style.pop('cmap')]
             colors = [t[1] for t in tuples]
             colors = colors + [colors[-1]]
-            cmap = None
 
             # get vmin, vmax or rounded data bounds from matplotlib ticker
             bounds = darray.min(), darray.max()
             bounds = mpl.ticker.MaxNLocator().tick_values(*bounds)[[0, -1]]
-            vmin = kwargs.pop('vmin', bounds[0])
-            vmax = kwargs.pop('vmax', bounds[1])
+            vmin = style.pop('vmin', bounds[0])
+            vmax = style.pop('vmax', bounds[1])
 
             # normalize levels from 0-1 to data bounds
             levels = [t[0] for t in tuples]
             levels = [vmin+(vmax-vmin)*lev for lev in levels]
 
-            # update keyword arguments
-            kwargs.update(colors=colors, levels=levels)
+            # update plotting style keyword arguments
+            style.update(colors=colors, levels=levels)
 
-            # providing darray.plot.contourf with a BoundaryNorm results in the
-            # colormap to be reset, so the following code does not work:
-            # import matplotlib as mpl
-            # cmap, norm = mpl.colors.from_levels_and_colors(
-            #     levels, colors, extend='both')
+            # passing a BoundaryNorm resets the cmap yielding misplaced colors
+            # style['cmap'], style['norm'] = mpl.colors.from_levels_and_colors(
+            #         levels, colors[:-1], extend='min')
 
-        # so we pass colors and levels directly but we need to enforce
-        # extend='both' for accurate color mapping (esp. depressions)
-        return darray.plot.contourf(cmap=cmap, **kwargs)
+        # plot and return contour set
+        return darray.plot.contourf(**style)
 
     def bedrock_erosion(self, constant=5.2e-8, exponent=2.34, **kwargs):
         """Plot erosion rate based on basal velocity.
