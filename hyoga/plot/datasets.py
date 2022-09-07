@@ -57,12 +57,13 @@ class HyogaPlotMethods:
         # read bedrock altitude
         darray = self._hyoga.getvar('bedrock_altitude')
 
-        # if hyoga altitude colormap was passed
-        if cmap in ['Topographic', 'Bathymetric', 'Elevational']:
+        # if hyoga altitude colormap was passed but no colors or levels
+        if cmap in ['Topographic', 'Bathymetric', 'Elevational'] and \
+                not any('colors' in kwargs, 'levels' in kwargs):
 
             # replace colormap by color list
             tuples = hyoga.plot.SEQUENCES[cmap]
-            colors = kwargs.pop('colors', [t[1] for t in tuples])
+            colors = [t[1] for t in tuples]
             colors = colors + [colors[-1]]
             cmap = None
 
