@@ -75,6 +75,9 @@ class HyogaPlotMethods:
             vmax = kwargs.pop('vmax', lmax)
             levels = [vmin+(vmax-vmin)*(l-lmin)/(lmax-lmin) for l in levels]
 
+            # update keyword arguments
+            kwargs.update(colors=colors, levels=levels)
+
             # providing darray.plot.contourf with a BoundaryNorm results in the
             # colormap to be reset, so the following code does not work:
             # import matplotlib as mpl
@@ -83,8 +86,7 @@ class HyogaPlotMethods:
 
         # so we pass colors and levels directly but we need to enforce
         # extend='both' for accurate color mapping (esp. depressions)
-        return darray.plot.contourf(
-            cmap=cmap, colors=colors, levels=levels, **kwargs)
+        return darray.plot.contourf(cmap=cmap, **kwargs)
 
     def bedrock_erosion(self, constant=5.2e-8, exponent=2.34, **kwargs):
         """Plot erosion rate based on basal velocity.
