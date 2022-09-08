@@ -7,34 +7,10 @@ Shaded relief plotting tools.
 
 import numpy as np
 import xarray as xr
-from .colormaps import SEQUENCES
 
 
 # Shaded relief internals
 # -----------------------
-
-def _open_data_source(datasource, mask=None, offset=0):
-    """
-    Open data source and return data array needed for plotting.
-
-    Parameters
-    ----------
-    datasource: string
-        A data array or the path to a data file to be opened with rasterio.
-    mask: None
-        Not implemented yet.
-    offset: scalar, optional
-        Substract this number to the data. Mostly used to fix data stored as
-        unsigned integers.
-    """
-    if isinstance(datasource, xr.DataArray):
-        darray = datasource
-    else:
-        darray = xr.open_rasterio(datasource)
-        darray = darray.where(~darray.isin(darray.nodatavals))
-        darray = darray.squeeze() - offset
-    return darray
-
 
 def _compute_gradient(darray):
     """Compute gradient along a all dimensions of a data array."""
@@ -104,26 +80,24 @@ def _add_imshow(darray, add_colorbar=False, add_labels=False, cmap=None,
 # Shaded relief plotting
 # ----------------------
 
-def add_hillshade(datasource, mask=None, offset=0.0,
+def add_hillshade(darray,
                   altitude=30.0, azimuth=315.0, exag=1.0,
                   cmap='Glossy', vmin=-1.0, vmax=1.0, **kwargs):
     """Add hillshades image from raster file."""
 
     # open topographic data and compute hillshades
-    darray = _open_data_source(datasource, mask=mask, offset=offset)
     darray = _compute_hillshade(darray, altitude, azimuth, exag)
 
     # plot shading
     return _add_imshow(darray, cmap=cmap, vmin=vmin, vmax=vmax, **kwargs)
 
 
-def add_multishade(datasource, mask=None, offset=0.0,
+def add_multishade(darray,
                    altitudes=None, azimuths=None, exag=1.0,
                    cmap='Glossy', vmin=-1.0, vmax=1.0, **kwargs):
     """Add multi-direction hillshade image from raster file."""
 
     # open topographic data and compute hillshades
-    darray = _open_data_source(datasource, mask=mask, offset=offset)
     darray = _compute_multishade(darray, altitudes, azimuths, exag)
 
     # plot hillshades
