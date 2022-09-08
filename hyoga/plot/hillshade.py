@@ -97,13 +97,9 @@ def add_hillshade(darray,
     return _add_imshow(darray, cmap=cmap, vmin=vmin, vmax=vmax, **kwargs)
 
 
-def add_multishade(darray,
-                   altitude=None, azimuth=None, exag=1.0,
-                   cmap='Glossy', vmin=-1.0, vmax=1.0, **kwargs):
+def hillshade(darray, altitude=None, azimuth=None, exag=1, **kwargs):
     """Add multi-direction hillshade image from raster file."""
-
-    # open topographic data and compute hillshades
     darray = _compute_multishade(darray, altitude, azimuth, exag)
-
-    # plot hillshades
-    return _add_imshow(darray, cmap=cmap, vmin=vmin, vmax=vmax, **kwargs)
+    style = dict(add_colorbar=False, cmap='Glossy', vmin=-1, vmax=1)
+    style.update(**kwargs)
+    return darray.plot.imshow(**style)

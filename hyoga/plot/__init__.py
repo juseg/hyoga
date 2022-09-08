@@ -6,5 +6,6 @@ Hyoga plotting tools to visualize glacier modelling datasets.
 """
 
 from .colormaps import COLORMAPS, SEQUENCES
+from .hillshade import hillshade
 
-__all__ = ['COLORMAPS', 'SEQUENCES']
+__all__ = ['COLORMAPS', 'SEQUENCES', 'hillshade']

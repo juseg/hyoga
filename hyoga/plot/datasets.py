@@ -122,11 +122,10 @@ class HyogaPlotMethods:
             long_name='glacier erosion rate', units='mm a-1')
         return var.plot.contourf(**style)
 
-    def bedrock_hillshade(self, *args, **kwargs):
+    def bedrock_hillshade(self, **kwargs):
+        """Plot bedrock altitude multidirectional hillshade."""
         darray = self._hyoga.getvar('bedrock_altitude')
-        # FIXME rename add_multishade to hillshade
-        from .hillshade import add_multishade
-        return add_multishade(darray, *args, **kwargs)
+        return hyoga.plot.hillshade(darray, **kwargs)
 
     def bedrock_isostasy(self, **kwargs):
         """Plot bedrock deformation contours and locate minumum.

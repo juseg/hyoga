@@ -28,7 +28,7 @@ with xr.open_dataset(hyoga.demo.get('pism.alps.in.boot.nc')) as ds:
     # plot model output
     ds.hyoga.plot.bedrock_altitude_contours(
         ax=ax, cmap='Topographic', vmin=0, vmax=4500)
-    ds.hyoga.plot.bedrock_hillshade(ax=ax, zorder=1)
+    ds.hyoga.plot.bedrock_hillshade(ax=ax)
 
 # add coastlines and rivers
 ax.coastlines(edgecolor='0.25', linewidth=0.5)
