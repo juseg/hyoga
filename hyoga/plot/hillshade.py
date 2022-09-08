@@ -9,9 +9,6 @@ import numpy as np
 import xarray as xr
 
 
-# Shaded relief internals
-# -----------------------
-
 def _compute_gradient(darray):
     """Compute gradient along a all dimensions of a data array."""
 
@@ -56,9 +53,8 @@ def _compute_multishade(darray, altitude=None, azimuth=None, exag=1.0):
     """Compute multi-direction hillshade map from a data array."""
 
     # default light source parameters
-    # FIXME this will also overwrite altitude=0
-    altitude = altitude or [30.0]*4
-    azimuth = azimuth or [300.0, 315.0, 315.0, 330.0]
+    altitude = [30]*4 if altitude is None else altitude
+    azimuth = [300, 315, 315, 330] if azimuth is None else azimuth
 
     # convert scalars to lists
     altitude = altitude if hasattr(altitude, '__iter__') else [altitude]
@@ -69,32 +65,10 @@ def _compute_multishade(darray, altitude=None, azimuth=None, exag=1.0):
         raise ValueError("altitude and azimuth should have equal lengths")
 
     # compute multi-direction hillshade
-    shades = sum([_compute_hillshade(darray, alti, azim, exag)
-                  for alti, azim in zip(altitude, azimuth)])/len(altitude)
+    shades = sum(
+        _compute_hillshade(darray, alti, azim, exag)
+        for alti, azim in zip(altitude, azimuth))/len(altitude)
     return shades
-
-
-def _add_imshow(darray, add_colorbar=False, add_labels=False, cmap=None,
-                interpolation='bilinear', **kwargs):
-    """Wrapper for imshow enabling custom conventions and defaults."""
-    # cmap = ccv.COLORMAPS.get(cmap, cmap)  # no longer needed
-    return darray.plot.imshow(add_colorbar=add_colorbar, add_labels=add_labels,
-                              cmap=cmap, interpolation=interpolation, **kwargs)
-
-
-# Shaded relief plotting
-# ----------------------
-
-def add_hillshade(darray,
-                  altitude=30.0, azimuth=315.0, exag=1.0,
-                  cmap='Glossy', vmin=-1.0, vmax=1.0, **kwargs):
-    """Add hillshades image from raster file."""
-
-    # open topographic data and compute hillshades
-    darray = _compute_hillshade(darray, altitude, azimuth, exag)
-
-    # plot shading
-    return _add_imshow(darray, cmap=cmap, vmin=vmin, vmax=vmax, **kwargs)
 
 
 def hillshade(darray, altitude=None, azimuth=None, exag=1, **kwargs):
