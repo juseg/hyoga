@@ -72,7 +72,28 @@ def _compute_multishade(darray, altitude=None, azimuth=None, exag=1.0):
 
 
 def hillshade(darray, altitude=None, azimuth=None, exag=1, **kwargs):
-    """Add multi-direction hillshade image from raster file."""
+    """Plot multidirectional hillshade image from data array.
+
+    Parameters
+    ----------
+    altitude: float or iterable, optional
+        Altitude angle(s) of illumination in degrees. Defaults to four light
+        sources at 30 degrees. For multidirectional hillshade, ``azimuth`` and
+        ``altitude`` need to have the same lenght.
+    azimuth: float or iterable, optional
+        Azimuth angle(s) of illumination in degrees (clockwise from north).
+        Defaults to four light sources at 300, 315, 315 again and 330 azimuths.
+    exag: float, optional
+        Altitude exageration factor, defaults to 1.
+    **kwargs: optional
+        Keyword arguments passed to :meth:`xarray.DataArray.plot.imshow`.
+        Defaults to a glossy colormap scaled linearly between -1 and 1.
+
+    Returns
+    -------
+    image: AxesImage
+        The plotted hillshade image.
+    """
     darray = _compute_multishade(darray, altitude, azimuth, exag)
     style = dict(add_colorbar=False, cmap='Glossy', vmin=-1, vmax=1)
     style.update(**kwargs)

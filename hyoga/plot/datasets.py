@@ -123,7 +123,19 @@ class HyogaPlotMethods:
         return var.plot.contourf(**style)
 
     def bedrock_hillshade(self, **kwargs):
-        """Plot bedrock altitude multidirectional hillshade."""
+        """Plot bedrock altitude multidirectional hillshade.
+
+        Parameters
+        ----------
+        **kwargs: optional
+            Keyword arguments passed to :meth:`hyoga.plot.hillshade`. Defaults
+            to a glossy, multidirectional hillshade from the northwest.
+
+        Returns
+        -------
+        image: AxesImage
+            The plotted bedrock hillshade image.
+        """
         darray = self._hyoga.getvar('bedrock_altitude')
         return hyoga.plot.hillshade(darray, **kwargs)
 
@@ -252,6 +264,23 @@ class HyogaPlotMethods:
             contours.append(var.plot.contour(
                 levels=[lev for lev in levels if lev % major != 0], **style))
         return contours if len(contours) > 1 else contours[0]
+
+    def surface_hillshade(self, **kwargs):
+        """Plot surface altitude multidirectional hillshade.
+
+        Parameters
+        ----------
+        **kwargs: optional
+            Keyword arguments passed to :meth:`hyoga.plot.hillshade`. Defaults
+            to a glossy, multidirectional hillshade from the northwest.
+
+        Returns
+        -------
+        image: AxesImage
+            The plotted surface hillshade image.
+        """
+        darray = self._hyoga.getvar('surface_altitude')
+        return hyoga.plot.hillshade(darray, **kwargs)
 
     def surface_velocity(self, **kwargs):
         """Plot surface velocity map.
