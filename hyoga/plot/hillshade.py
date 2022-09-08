@@ -52,25 +52,25 @@ def _compute_hillshade(darray, altitude=30.0, azimuth=315.0, exag=1.0):
     return shades
 
 
-def _compute_multishade(darray, altitudes=None, azimuths=None, exag=1.0):
+def _compute_multishade(darray, altitude=None, azimuth=None, exag=1.0):
     """Compute multi-direction hillshade map from a data array."""
 
     # default light source parameters
-    # FIXME this will also overwrite altitudes=0
-    altitudes = altitudes or [30.0]*4
-    azimuths = azimuths or [300.0, 315.0, 315.0, 330.0]
+    # FIXME this will also overwrite altitude=0
+    altitude = altitude or [30.0]*4
+    azimuth = azimuth or [300.0, 315.0, 315.0, 330.0]
 
     # convert scalars to lists
-    altitudes = altitudes if hasattr(altitudes, '__iter__') else [altitudes]
-    azimuths = azimuths if hasattr(azimuths, '__iter__') else [azimuths]
+    altitude = altitude if hasattr(altitude, '__iter__') else [altitude]
+    azimuth = azimuth if hasattr(azimuth, '__iter__') else [azimuth]
 
     # check that the lists have equal lengths
-    if len(altitudes) != len(azimuths):
-        raise ValueError("altitudes and azimuths should have equal lengths")
+    if len(altitude) != len(azimuth):
+        raise ValueError("altitude and azimuth should have equal lengths")
 
     # compute multi-direction hillshade
     shades = sum([_compute_hillshade(darray, alti, azim, exag)
-                  for alti, azim in zip(altitudes, azimuths)])/len(altitudes)
+                  for alti, azim in zip(altitude, azimuth)])/len(altitude)
     return shades
 
 
@@ -98,12 +98,12 @@ def add_hillshade(darray,
 
 
 def add_multishade(darray,
-                   altitudes=None, azimuths=None, exag=1.0,
+                   altitude=None, azimuth=None, exag=1.0,
                    cmap='Glossy', vmin=-1.0, vmax=1.0, **kwargs):
     """Add multi-direction hillshade image from raster file."""
 
     # open topographic data and compute hillshades
-    darray = _compute_multishade(darray, altitudes, azimuths, exag)
+    darray = _compute_multishade(darray, altitude, azimuth, exag)
 
     # plot hillshades
     return _add_imshow(darray, cmap=cmap, vmin=vmin, vmax=vmax, **kwargs)
