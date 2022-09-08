@@ -56,8 +56,13 @@ def _compute_multishade(darray, altitudes=None, azimuths=None, exag=1.0):
     """Compute multi-direction hillshade map from a data array."""
 
     # default light source parameters
+    # FIXME this will also overwrite altitudes=0
     altitudes = altitudes or [30.0]*4
     azimuths = azimuths or [300.0, 315.0, 315.0, 330.0]
+
+    # convert scalars to lists
+    altitudes = altitudes if hasattr(altitudes, '__iter__') else [altitudes]
+    azimuths = azimuths if hasattr(azimuths, '__iter__') else [azimuths]
 
     # check that the lists have equal lengths
     if len(altitudes) != len(azimuths):
