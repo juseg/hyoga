@@ -32,6 +32,11 @@ New features
 - Add plot method :meth:`xarray.Dataset.hyoga.plot.bedrock_altitude_contours`
   for bedrock altitude filled contours, best used in combination with new
   altitude colormaps.
+- Add plot function :func:`hyoga.plot.shapefile` allowing speed improvements
+  over cartopy_, and highlighting a particular subject (:issue: `17`).
+  .. FIXME and ignoring duplicates
+
+.. _cartopy: https://scitools.org.uk/cartopy/
 
 Internal changes
 ~~~~~~~~~~~~~~~~
