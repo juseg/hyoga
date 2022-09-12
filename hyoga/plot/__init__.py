@@ -7,6 +7,13 @@ Hyoga plotting tools to visualize glacier modelling datasets.
 
 from .colormaps import COLORMAPS, SEQUENCES
 from .hillshade import hillshade
+from .naturalearth import feature, \
+    cities, countries, country_borders, states, state_borders, \
+    coastline, glaciers, graticules, lakes, ocean, rivers
 from .shapefile import shapefile
 
-__all__ = ['COLORMAPS', 'SEQUENCES', 'hillshade', 'shapefile']
+__all__ = [
+    'COLORMAPS', 'SEQUENCES', 'hillshade', 'feature',
+    'cities', 'countries', 'country_borders', 'states', 'state_borders',
+    'coastline', 'glaciers', 'graticules', 'lakes', 'ocean', 'rivers',
+    'shapefile']

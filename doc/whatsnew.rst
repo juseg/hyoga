@@ -33,10 +33,21 @@ New features
   for bedrock altitude filled contours, best used in combination with new
   altitude colormaps.
 - Add plot function :func:`hyoga.plot.shapefile` allowing speed improvements
-  over cartopy_, and highlighting a particular subject (:issue: `17`).
-  .. FIXME and ignoring duplicates
+  over cartopy_, and highlighting a particular subject (:issue:`17`).
+
+.. FIXME and ignoring duplicates
+
+- Add plot functions :func:`hyoga.plot.feature`, :func:`hyoga.plot.cities`,
+  :func:`hyoga.plot.countries`, :func:`hyoga.plot.country_borders`,
+  :func:`hyoga.plot.states`, :func:`hyoga.plot.state_borders`,
+  :func:`hyoga.plot.coastline`, :func:`hyoga.plot.glaciers`,
+  :func:`hyoga.plot.graticules`, :func:`hyoga.plot.lakes`,
+  :func:`hyoga.plot.ocean`, and :func:`hyoga.plot.rivers` for `Natural Earth`_
+  data through cartopy_.
+
 
 .. _cartopy: https://scitools.org.uk/cartopy/
+.. _Natural Earth: https://www.naturalearthdata.com/
 
 Internal changes
 ~~~~~~~~~~~~~~~~
