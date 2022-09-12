@@ -15,6 +15,30 @@
 What's new
 ==========
 
+v0.2 (unreleased)
+-----------------
+
+New features
+~~~~~~~~~~~~
+
+- Add three altitude (``Topographic``, ``Bathymetric``, ``Elevational``) and
+  two relief-shading (``Glossy``, ``Matte``) colormaps, and correponding color
+  lists, accessible through the matplotlib colormap register, and listed in
+  :data:`hyoga.plot.COLORMAPS` and :data:`hyoga.plot.SEQUENCES` (:issue:`15`).
+- Add plot function :func:`hyoga.plot.hillshade`, and dataset plot methods
+  :meth:`xarray.Dataset.hyoga.plot.bedrock_hillshade` and
+  :meth:`xarray.Dataset.hyoga.plot.surface_hillshade` for relief shading
+  (:issue:`19`).
+- Add plot method :meth:`xarray.Dataset.hyoga.plot.bedrock_altitude_contours`
+  for bedrock altitude filled contours, best used in combination with new
+  altitude colormaps.
+
+Internal changes
+~~~~~~~~~~~~~~~~
+
+- Move dataset plot methods to :mod:`hyoga.plot.datasets`.
+
+
 v0.1.2 (1 Aug 2022)
 -------------------
 
@@ -45,7 +69,7 @@ Deprecations
 New features
 ~~~~~~~~~~~~
 
-- Plot methods now look ``land_ice_area_fraction`` (instead of
+- Plot methods now look for ``land_ice_area_fraction`` (instead of
   ``land_ice_thickness``) to determine which grid cells are glacierized.
 - Add accessor method :meth:`xarray.Dataset.hyoga.assign` to assign new
   variables by CF-compliant standard names.
