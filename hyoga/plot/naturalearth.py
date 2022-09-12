@@ -17,11 +17,10 @@ import hyoga.plot
 # Natural Earth internals
 # -----------------------
 
-def feature(category=None, name=None, scale='10m', **kwargs):
-    """Plot Natural Earth feature allowing a different color for the
-    subject."""
+def feature(category=None, name=None, scale='10m', zorder=-1, **kwargs):
+    """Plot Natural Earth feature allowing a different color for subject."""
     fname = cshp.natural_earth(resolution=scale, category=category, name=name)
-    return hyoga.plot.shapefile(fname, **kwargs)
+    return hyoga.plot.shapefile(fname, zorder=zorder, **kwargs)
 
 
 # Natural Earth cultural
