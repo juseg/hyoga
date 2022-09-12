@@ -96,16 +96,17 @@ def cities(ax=None, lang=None, include=None, exclude=None, ranks=None,
         transform=crs, **kwargs)
 
 
-def countries(edgecolor='none', facecolor='#e0e0e0', linewidth=1.0,
-              subject=None, subject_facecolor='#fefee9', **kwargs):
+def countries(edgecolor='none', facecolor='0.9', linewidth=1, **kwargs):
+    # IDEA: style='wiki' => facecolor='#e0e0e0', subject_facecolor='#fefee9'
     return feature(
         category='cultural', name='admin_0_countries',
         edgecolor=edgecolor, facecolor=facecolor, linewidth=linewidth,
-        subject=subject, subject_facecolor=subject_facecolor, **kwargs)
+        **kwargs)
 
 
-def country_borders(edgecolor='#646464', facecolor='none', linewidth=2.0,
+def country_borders(edgecolor='0.4', facecolor='none', linewidth=2.5,
                     **kwargs):
+    # wiki linestyle=(0, (5, 2.5, 1.25, 2.5)),
     return (
         feature(
             category='cultural', name='admin_0_boundary_lines_land',
@@ -117,16 +118,15 @@ def country_borders(edgecolor='#646464', facecolor='none', linewidth=2.0,
             **kwargs))
 
 
-def states(edgecolor='none', facecolor='#e0e0e0', linewidth=0.25,
-           subject=None, subject_facecolor='#fefee9', **kwargs):
+def states(edgecolor='none', facecolor='0.9', linewidth=0.25, **kwargs):
     return feature(
         category='cultural', name='admin_1_states_provinces',
         edgecolor=edgecolor, facecolor=facecolor, linewidth=linewidth,
-        subject=subject, subject_facecolor=subject_facecolor, **kwargs)
+        **kwargs)
 
 
-def state_borders(edgecolor='#646464', facecolor='none', linewidth=1,
-                  **kwargs):
+def state_borders(edgecolor='0.4', facecolor='none', linewidth=1, **kwargs):
+    # IDEA: style='wiki' => edgecolor='#646464'
     return feature(
         category='cultural', name='admin_1_states_provinces_lines',
         edgecolor=edgecolor, facecolor=facecolor, linewidth=linewidth,
@@ -136,22 +136,22 @@ def state_borders(edgecolor='#646464', facecolor='none', linewidth=1,
 # Natural Earth physical
 # ----------------------
 
-def coastline(edgecolor='#0978ab', facecolor='none', linewidth=0.25, **kwargs):
+def coastline(edgecolor='0.25', facecolor='none', linewidth=0.25, **kwargs):
     return feature(
         category='physical', name='coastline',
         edgecolor=edgecolor, facecolor=facecolor, linewidth=linewidth,
         **kwargs)
 
 
-def glaciers(edgecolor='#0978ab', facecolor='#ffffff', linewidth=0.25,
-             **kwargs):
+def glaciers(edgecolor='0.25', facecolor='1.0', linewidth=0.25, **kwargs):
     return feature(
         category='physical', name='glaciated_areas',
         edgecolor=edgecolor, facecolor=facecolor, linewidth=linewidth,
         **kwargs)
 
 
-def lakes(edgecolor='#0978ab', facecolor='#d8f2fe', linewidth=0.25, **kwargs):
+def lakes(edgecolor='0.25', facecolor='0.95', linewidth=0.25, **kwargs):
+    # IDEA: style='wiki' => edgecolor='#0978ab', facecolor='#d8f2fe'
     kwargs = dict(category='physical', edgecolor=edgecolor,
                   facecolor=facecolor, linewidth=linewidth, **kwargs)
     features = feature(name='lakes', **kwargs)
@@ -162,14 +162,14 @@ def lakes(edgecolor='#0978ab', facecolor='#d8f2fe', linewidth=0.25, **kwargs):
     return features
 
 
-def ocean(edgecolor='#0978ab', facecolor='#c6ecff', linewidth=0.25, **kwargs):
+def ocean(edgecolor='0.25', facecolor='0.95', linewidth=0.25, **kwargs):
     return feature(
         category='physical', name='ocean',
         edgecolor=edgecolor, facecolor=facecolor, linewidth=linewidth,
         **kwargs)
 
 
-def rivers(edgecolor='#0978ab', facecolor='none', linewidth=0.5, **kwargs):
+def rivers(edgecolor='0.25', facecolor='none', linewidth=0.5, **kwargs):
     kwargs = dict(category='physical', edgecolor=edgecolor,
                   facecolor=facecolor, linewidth=linewidth, **kwargs)
     features = feature(name='rivers_lake_centerlines', **kwargs)
