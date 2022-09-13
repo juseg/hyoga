@@ -36,6 +36,12 @@ def shapefile(filename, ax=None, crs=None, subject=None, **kwargs):
         prefixed with ``subject_`` (e.g. ``subject_facecolor``) will be passed
         to :meth:`cartopy.mpl.geoaxes.GeoAxes.add_geometries` when plotting the
         subject.
+
+    Returns
+    -------
+    geometries : tuple
+        A :class:`cartopy.mpl.feature_artist.FeatureArtist` instance or a tuple
+        of (context, subject) feature artists if the subject is not ``None``.
     """
 
     # get current axes if None provided
@@ -66,7 +72,9 @@ def shapefile(filename, ax=None, crs=None, subject=None, **kwargs):
             elif rec.geometry not in context_geometries:
                 context_geometries.append(rec.geometry)
 
-    # plot interseecting geometries
+    # plot intersecting geometries
+    if subject is None:
+        return ax.add_geometries(context_geometries, crs, **context_kw)
     return (ax.add_geometries(context_geometries, crs, **context_kw),
             ax.add_geometries(subject_geometries, crs, **subject_kw))
 
