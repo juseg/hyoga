@@ -14,7 +14,29 @@ import cartopy
 
 
 def shapefile(filename, ax=None, crs=None, subject=None, **kwargs):
-    """Plot shapefile geometries allowing a different color for the subject."""
+    """Plot shapefile geometries intersecting axes extent.
+
+    Parameters
+    ----------
+    filename : str, Path or file-like
+        Path to a shapefile. Only intersecting geometries will be plotted. This
+        may improve speed when plotting global data on small domains.
+    ax : cartopy GeoAxes or subclass, optional
+        Axes on which to plot, default to the current axes. Plotting will fail
+        on non-:mod:`cartopy` axes.
+    crs : cartopy CRS, optional
+        Coordinate reference system used by shapefile, default to
+        `cartopy.crs.PlateCarree`.
+    subject : str, optional
+        The ``name`` or ``NAME`` attribute of a record to be considered as the
+        primary subject for plotting.
+    **kwargs : optional
+        Keyword arguments passed to
+        :meth:`cartopy.mpl.geoaxes.GeoAxes.add_geometries`. Keyword argument
+        prefixed with ``subject_`` (e.g. ``subject_facecolor``) will be passed
+        to :meth:`cartopy.mpl.geoaxes.GeoAxes.add_geometries` when plotting the
+        subject.
+    """
 
     # get current axes if None provided
     ax = ax or plt.gca()
@@ -26,9 +48,11 @@ def shapefile(filename, ax=None, crs=None, subject=None, **kwargs):
     # open shapefile data
     shp = cartopy.io.shapereader.Reader(filename)
 
-    # separate subject and default kwargs
-    subject_kw = {k[8:]: kwargs[k] for k in kwargs if k.startswith('subject_')}
-    context_kw = {k: kwargs[k] for k in kwargs if not k.startswith('subject_')}
+    # separate context and subject kwargs
+    subject_kw = {
+        k[8:]: v for k, v in kwargs.items() if k.startswith('subject_')}
+    context_kw = {
+        k: v for k, v in kwargs.items() if not k.startswith('subject_')}
 
     # find intersecting geometries
     subject_geometries = []

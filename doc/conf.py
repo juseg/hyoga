@@ -62,6 +62,8 @@ napoleon_type_aliases = {
     # object shortcuts
     'Axes': '~matplotlib.axes.Axes',
     'AxesImage': '~matplotlib.image.AxesImage',
+    'CRS': '~cartopy.crs.CRS',
+    'GeoAxes': '~cartopy.mpl.geoaxes.GeoAxes',
     'QuadContourSet': '~matplotlib.contour.QuadContourSet',
     'StreamplotSet': '~matplotlib.streamplot.StreamplotSet',
     'DataArray': '~xarray.DataArray',
