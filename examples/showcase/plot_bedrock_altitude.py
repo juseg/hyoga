@@ -12,7 +12,6 @@ elements.
 
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
-import cartopy.feature as cfeature
 import xarray as xr
 import hyoga.demo
 
@@ -27,11 +26,9 @@ with xr.open_dataset(hyoga.demo.get('pism.alps.in.boot.nc')) as ds:
     ds.hyoga.plot.bedrock_hillshade(ax=ax)
 
 # add coastlines and rivers
-ax.coastlines(edgecolor='0.25', linewidth=0.5)
-ax.add_feature(
-    cfeature.NaturalEarthFeature(
-        category='physical', name='rivers_lake_centerlines', scale='10m'),
-    edgecolor='0.25', facecolor='none', linewidth=0.5, zorder=0)
+hyoga.plot.coastline(ax=ax)
+hyoga.plot.rivers(ax=ax)
+hyoga.plot.lakes(ax=ax)
 
 # set axes properties
 ax.set_title('Bedrock altitude')
