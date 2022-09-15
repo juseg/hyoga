@@ -38,7 +38,8 @@ sphinx_gallery_conf = {
     'gallery_dirs': 'examples',     # where to save gallery plots
     'subsection_order': sphinx_gallery.sorting.ExplicitOrder([
         '../examples/showcase',
-        '../examples/interp'])
+        '../examples/interp',
+        '../examples/cartography'])
     }
 extlinks = {
     "issue": ("https://github.com/pydata/xarray/issues/%s", "#%s"),
