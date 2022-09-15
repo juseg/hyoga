@@ -55,10 +55,11 @@ def shapefile(filename, ax=None, crs=None, subject=None, **kwargs):
     shp = cartopy.io.shapereader.Reader(filename)
 
     # separate context and subject kwargs
-    subject_kw = {
-        k[8:]: v for k, v in kwargs.items() if k.startswith('subject_')}
     context_kw = {
         k: v for k, v in kwargs.items() if not k.startswith('subject_')}
+    subject_kw = context_kw.copy()
+    subject_kw.update({
+        k[8:]: v for k, v in kwargs.items() if k.startswith('subject_')})
 
     # find intersecting geometries
     subject_geometries = []
