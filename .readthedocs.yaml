@@ -12,6 +12,12 @@ python:
   install:
     - path: .
 
+# use mamba instead of conda
+build:
+  os: "ubuntu-20.04"
+  tools:
+    python: "mambaforge-4.10"
+
 # conda is required by cartopy (proj)
 conda:
   environment: doc/environment.yml
