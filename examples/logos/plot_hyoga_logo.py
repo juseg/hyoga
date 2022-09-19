@@ -5,63 +5,10 @@
 """Plot logo for hyoga."""
 
 
-import os.path
-import zipfile
 import matplotlib.pyplot as plt
 import cartopy
 import hyoga.demo
 import hyoga.plot
-
-
-def add_paleoglaciers(ax, **kwargs):
-    """Add Ehlers et al. (2011) paleoglaciers."""
-    paths = download_paleoglaciers()
-    return tuple(add_broken_shapefile(ax, path, **kwargs) for path in paths)
-
-
-def add_paleoglaciers_bat19(ax, **kwargs):
-    """Add Batchelor et al. (2019) paleoglaciers."""
-    paths = download_paleoglaciers_bat19()
-    return tuple(add_broken_shapefile(ax, path, **kwargs) for path in paths)
-
-
-def add_broken_shapefile(ax, filename, **kwargs):
-    """Ehlers et al. (2011) data has duplicates."""
-    ax = ax or plt.gca()
-    crs = cartopy.crs.PlateCarree()
-    shp = cartopy.io.shapereader.Reader(filename)
-    geometries = []
-    for geom in shp.geometries():
-        if geom not in geometries:
-            geometries.append(geom)
-    return ax.add_geometries(geometries, crs, **kwargs)
-
-
-def download_paleoglaciers():
-    """Download Ehlers et al. (2011) paleoglaciers in cache dir."""
-    url = ('http://static.us.elsevierhealth.com/ehlers_digital_maps/'
-           'digital_maps_02_all_other_files.zip')
-    zipfilename = hyoga.demo._download(url)
-    cachedir = os.path.dirname(zipfilename)
-    basenames = 'lgm', 'lgm_alpen'
-    for basename in basenames:
-        for ext in ('dbf', 'shp', 'shx'):
-            filename = basename + '.' + ext
-            if not os.path.isfile(os.path.join(cachedir, filename)):
-                with zipfile.ZipFile(zipfilename, 'r') as archive:
-                    archive.extract(filename, path=cachedir)
-    return (os.path.join(cachedir, b+'.shp') for b in basenames)
-
-
-def download_paleoglaciers_bat19():
-    """Download Batchelor et al. (2019) paleoglaciers in cache dir."""
-    files = {'https://osf.io/gzkwc/download': 'LGM_best_estimate.dbf',
-             'https://osf.io/xm6tu/download': 'LGM_best_estimate.prj',
-             'https://osf.io/9bjwn/download': 'LGM_best_estimate.shx',
-             'https://osf.io/9yhdv/download': 'LGM_best_estimate.shp'}
-    for url, filename in files.items():
-        filepath = hyoga.demo._download(url, filename=filename)
-    return (filepath, )
 
 
 def draw_map(fig, rect):
@@ -86,7 +33,8 @@ def draw_map(fig, rect):
     # - grey and tab:blue
     # color = 'k'  # 'tab:blue'  #plt.get_cmap('Blues')(192)
     hyoga.plot.countries(ax=ax, alpha=0.25, facecolor='w', scale='110m')
-    add_paleoglaciers_bat19(ax=ax, alpha=0.75, facecolor='w', zorder=1)
+    hyoga.plot.paleoglaciers(ax=ax, alpha=0.75, facecolor='w', source='bat19',
+                             zorder=1)
     hyoga.plot.glaciers(ax=ax, edgecolor='w', facecolor='w', scale='50m',
                         zorder=2)
 
