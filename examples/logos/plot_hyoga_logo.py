@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright (c) 2021, Julien Seguinot (juseg.github.io)
+# Copyright (c) 2021-2022, Julien Seguinot (juseg.github.io)
 # GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
 """Plot logo for hyoga."""
@@ -10,22 +10,7 @@ import zipfile
 import matplotlib.pyplot as plt
 import cartopy
 import hyoga.demo
-
-
-def add_countries(ax, scale=None, **kwargs):
-    """Add Natural Earth Data countries."""
-    return ax.add_feature(
-        cartopy.feature.NaturalEarthFeature(
-            category='cultural', name='admin_0_countries', scale=scale),
-        **kwargs)
-
-
-def add_glaciers(ax, scale=None, **kwargs):
-    """Add Natural Earth Data glaciers."""
-    return ax.add_feature(
-        cartopy.feature.NaturalEarthFeature(
-            category='physical', name='glaciated_areas', scale=scale),
-        **kwargs)
+import hyoga.plot
 
 
 def add_paleoglaciers(ax, **kwargs):
@@ -100,10 +85,10 @@ def draw_map(fig, rect):
     # - grey and cmap 192 blue
     # - grey and tab:blue
     # color = 'k'  # 'tab:blue'  #plt.get_cmap('Blues')(192)
-    add_countries(ax=ax, alpha=0.25, facecolor='w', scale='110m')
+    hyoga.plot.countries(ax=ax, alpha=0.25, facecolor='w', scale='110m')
     add_paleoglaciers_bat19(ax=ax, alpha=0.75, facecolor='w', zorder=1)
-    add_glaciers(ax=ax, edgecolor='w', facecolor='w', scale='50m',
-                 zorder=2)
+    hyoga.plot.glaciers(ax=ax, edgecolor='w', facecolor='w', scale='50m',
+                        zorder=2)
 
 
 def draw_text(fig, rect):
