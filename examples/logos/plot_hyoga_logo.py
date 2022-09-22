@@ -2,124 +2,37 @@
 # Copyright (c) 2021-2022, Julien Seguinot (juseg.github.io)
 # GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
-"""Plot logo for hyoga."""
-
+"""Plot hyoga logo."""
 
 import matplotlib.pyplot as plt
 import cartopy
 import hyoga.demo
 import hyoga.plot
 
-
-def draw_map(fig, rect):
-    """Draw logo glaciers map."""
-
-    # add map axes
-    ax = fig.add_axes(rect, projection=cartopy.crs.Orthographic(
+# initialize figure
+fig = plt.figure(figsize=(9.6, 3.2))
+fig.patch.set_alpha(0)
+ax = fig.add_axes([17/48, 0, 14/48, 7/8], projection=cartopy.crs.Orthographic(
         central_longitude=-45, central_latitude=90))
-    ax.patch.set_facecolor('tab:blue')
-    ax.spines['geo'].set_edgecolor('none')
+ax.patch.set_facecolor('tab:blue')
+ax.spines['geo'].set_edgecolor('none')
 
-    # ax.set_extent does not work well with ortho proj
-    ax.set_xlim((-6.4e6, 6.4e6))
-    ax.set_ylim((-6.4e6, 6.4e6))
+# ax.set_extent does not work well with ortho proj
+ax.set_xlim((-6.4e6, 6.4e6))
+ax.set_ylim((-6.4e6, 6.4e6))
 
-    # add continents and glaciers
-    # tried so far
-    # - red and white
-    # - blue and white
-    # - grey and cmap 256 blue
-    # - grey and cmap 192 blue
-    # - grey and tab:blue
-    # color = 'k'  # 'tab:blue'  #plt.get_cmap('Blues')(192)
-    hyoga.plot.countries(ax=ax, alpha=0.25, facecolor='w', scale='110m')
-    hyoga.plot.paleoglaciers(ax=ax, alpha=0.75, facecolor='w', source='bat19',
-                             zorder=1)
-    hyoga.plot.glaciers(ax=ax, edgecolor='w', facecolor='w', scale='50m',
-                        zorder=2)
+# add continents and glaciers
+hyoga.plot.countries(ax=ax, alpha=0.25, facecolor='w', scale='110m')
+hyoga.plot.paleoglaciers(ax=ax, alpha=0.75, facecolor='w', source='bat19')
+hyoga.plot.glaciers(ax=ax, edgecolor='w', facecolor='w', scale='50m')
 
+# add text and overline
+fontsize = 7/8 * fig.get_window_extent().height / fig.dpi * 72
+kwargs = dict(color='tab:blue', fontsize=fontsize, va='bottom')
+fig.text(1/3, 0, 'hy', ha='right', **kwargs)
+fig.text(2/3, 0, 'ga', ha='left', **kwargs)
+ax.fill_between([5/12, 7/12], 15/16, 1, clip_on=False, facecolor='tab:blue',
+                transform=fig.transFigure)
 
-def draw_text(fig, rect):
-    """Draw logo japanese text."""
-    plt.rc('font', family='TakaoPGothic')
-    ax = fig.add_axes(rect)
-    bbox = ax.get_window_extent()
-    height = bbox.height/fig.dpi*72
-    kwargs = dict(fontsize=0.4*height, va='center')
-    ax.text(0.2, 0.7, '氷', **kwargs)
-    ax.text(0.2, 0.2, '河', **kwargs)
-    kwargs = dict(fontsize=0.05*height, linespacing=1.5, va='center')
-    ax.text(0.05, 0.7, 'ひ\nょ\nう', **kwargs)
-    ax.text(0.05, 0.2, 'が\n', **kwargs)
-    ax.axis('off')
-
-
-def make_logo(figsize, maprect, textrect):
-    """Make logo given fig size and axes positions."""
-    fig = plt.figure(figsize=figsize)
-    if maprect is not None:
-        draw_map(fig, maprect)
-    if textrect is not None:
-        draw_text(fig, textrect)
-    return fig
-
-
-def main():
-    """Main program called during execution."""
-
-#    # 1:1 with big map only (favicon)
-#    fig = make_logo((9.6, 9.6), [0, 0, 1, 1], None)
-#    fig.patch.set_facecolor('none')
-#    fig.savefig(__file__[:-3]+'_favicon')
-
-#    # 1:1 with small text
-#    fig = make_logo((9.6, 9.6), [0.15, 0.15, 0.8, 0.8], [0.05, 0.05, 0.15, 0.3])
-#    fig.savefig(__file__[:-3]+'_1x1')
-
-#    # 1:3 with cropped map and text
-#    fig = make_logo((9.6, 3.2), [1/6, -0.5, 1, 3], [0.1*1/4, 0.1, 1/4, 0.6])
-#    fig.savefig(__file__[:-3]+'_1x3')
-#    fig.savefig(__file__[:-3]+'_1x3.svg')
-
-#    # 2:3 with big map and big text
-#    fig = make_logo((9.6, 6.4), [1/3, 0.1, 2/3, 0.8], [0.1*2/3, 0.1, 1/3, 0.8])
-#    fig.savefig(__file__[:-3]+'_2x3')
-#    fig.savefig(__file__[:-3]+'_2x3.svg')
-#
-#    # 3:4 with big map and big text
-#    fig = make_logo((9.6, 7.2), [1/4, 0.1, 3/4, 0.8], [0.1*3/4, 0.1, 1/4, 1/2])
-#    fig.savefig(__file__[:-3]+'_3x4')
-#
-#    # 4:2 vertical map and text (3:1+1:1)
-#    fig = make_logo((4.8, 9.6), [1/4, 5/8, 2/4, 2/8], [1/4, 1/8, 1/2, 4/8])
-#    fig.savefig(__file__[:-3]+'_4x2')
-
-#
-    fig = make_logo((9.6, 3.2), [0.1, 0.1, 0.8, 0.8], None)
-    ax = fig.add_axes([0, 0, 1, 1])
-    bbox = ax.get_window_extent()
-    height = bbox.height/fig.dpi*72
-    kwargs = dict(fontsize=0.8*height, color='tab:blue')
-    ax.text(0.35, 0.25, 'hy', ha='right', **kwargs)
-    ax.text(0.65, 0.25, 'ga', ha='left', **kwargs)
-    ax.axis('off')
-    fig.savefig(__file__[:-3]+'_1x3')
-
-def draw_text(fig, rect):
-    """Draw logo japanese text."""
-    plt.rc('font', family='TakaoPGothic')
-    ax = fig.add_axes(rect)
-    bbox = ax.get_window_extent()
-    height = bbox.height/fig.dpi*72
-    kwargs = dict(fontsize=0.4*height, va='center')
-    ax.text(0.2, 0.7, '氷', **kwargs)
-    ax.text(0.2, 0.2, '河', **kwargs)
-    kwargs = dict(fontsize=0.05*height, linespacing=1.5, va='center')
-    ax.text(0.05, 0.7, 'ひ\nょ\nう', **kwargs)
-    ax.text(0.05, 0.2, 'が\n', **kwargs)
-    ax.axis('off')
-    fig.savefig(__file__[:-3]+'_1x1')
-
-
-if __name__ == '__main__':
-    main()
+# save static file
+# fig.savefig('../../doc/_static/hyoga_logo.png')
