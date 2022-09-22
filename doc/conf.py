@@ -81,8 +81,12 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 # -- Options for HTML output -------------------------------------------------
 
+# sphinx html logo
+html_logo = '_static/png/hyoga_logo.png'
+
 # sphinx html theme
 html_theme = 'sphinx_rtd_theme'
+html_theme_options = {'logo_only': True}
 
 # static files copied to build (e.g. default.css)
 # html_static_path = ['_static']
