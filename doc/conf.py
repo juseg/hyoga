@@ -35,7 +35,8 @@ extensions = [
 autosummary_generate = True         # autogen files for listed entroes
 sphinx_gallery_conf = {
     'examples_dirs': '../examples',  # path to example scripts
-    'gallery_dirs': 'examples',     # where to save gallery plots
+    'gallery_dirs': 'examples',      # where to save gallery plots
+    'nested_sections' : False,       # fix duplicate sub-headings
     'subsection_order': sphinx_gallery.sorting.ExplicitOrder([
         '../examples/showcase',
         '../examples/interp',
