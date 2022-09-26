@@ -7,6 +7,6 @@
 # also triggers importing open (in the future this will change) and plot.
 
 from .core.accessor import HyogaDataset
-from .conf import config
+from .core.config import config
 
 __all__ = ['config', 'HyogaDataset']
