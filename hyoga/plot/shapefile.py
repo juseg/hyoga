@@ -52,7 +52,7 @@ def shapefile(filename, ax=None, crs=None, subject=None, **kwargs):
     axes_box = _get_extent_geometry(ax=ax, crs=crs)
 
     # open shapefile data
-    shp = cartopy.io.shapereader.Reader(filename)
+    shp = cartopy.io.shapereader.BasicReader(filename)
 
     # separate context and subject kwargs
     context_kw = {
