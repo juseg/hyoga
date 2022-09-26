@@ -52,6 +52,7 @@ New features
 Internal changes
 ~~~~~~~~~~~~~~~~
 
+- Move dataset accessor to :mod:`hyoga.core.accessor`.
 - Move dataset plot methods to :mod:`hyoga.plot.datasets`.
 
 

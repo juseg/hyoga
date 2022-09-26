@@ -5,7 +5,7 @@
 This module extends xarray datasets with methods specific to ice-sheet model
 output, such as finding variables by standard name, computing bedrock uplift,
 masking and interpolation. This functionality is made available through an
-xarray dataset 'ice' accessor. Plotting methods are kept in a separate module.
+xarray dataset accessor. Plotting methods are kept in a separate module.
 """
 
 import warnings

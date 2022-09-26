@@ -6,7 +6,7 @@
 # Only import HyogaDataset here. This registers the accessor. In practice this
 # also triggers importing open (in the future this will change) and plot.
 
+from .core.accessor import HyogaDataset
 from .conf import config
-from .hyoga import HyogaDataset
 
 __all__ = ['config', 'HyogaDataset']
