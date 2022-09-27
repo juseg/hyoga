@@ -49,13 +49,20 @@ New features
 .. _cartopy: https://scitools.org.uk/cartopy/
 .. _Natural Earth: https://www.naturalearthdata.com/
 
+Documentation
+~~~~~~~~~~~~~
+
+- Change to Sphinx book_ theme, rework :ref:`api`.
+
+.. _book: https://sphinx-book-theme.readthedocs.io
+
 Internal changes
 ~~~~~~~~~~~~~~~~
 
 - Move dataset accessor to :mod:`hyoga.core.accessor`.
 - Move hyoga configuration to :mod:`hyoga.core.config`.
-- Move function to open example data to :mod: `hyoga.open.example`.
-- Move functions to open local files to :mod: `hyoga.open.local`.
+- Move function to open example data to :mod:`hyoga.open.example`.
+- Move functions to open local files to :mod:`hyoga.open.local`.
 - Move dataset plot methods to :mod:`hyoga.plot.datasets`.
 
 

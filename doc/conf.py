@@ -36,7 +36,7 @@ autosummary_generate = True         # autogen files for listed entroes
 sphinx_gallery_conf = {
     'examples_dirs': '../examples',  # path to example scripts
     'gallery_dirs': 'examples',      # where to save gallery plots
-    'nested_sections' : False,       # fix duplicate sub-headings
+    # 'nested_sections' : False,     # to fix duplicate sub-headings in rtd
     'subsection_order': sphinx_gallery.sorting.ExplicitOrder([
         '../examples/showcase',
         '../examples/interp',
@@ -86,8 +86,9 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 html_logo = '_static/png/hyoga_logo.png'
 
 # sphinx html theme
-html_theme = 'sphinx_rtd_theme'
+html_theme = 'sphinx_book_theme'
 html_theme_options = {'logo_only': True}
 
-# static files copied to build (e.g. default.css)
-# html_static_path = ['_static']
+# static files copied to build
+html_static_path = ['_static']
+html_css_files = ['css/custom.css']

@@ -2,7 +2,7 @@ name: hyoga-docs
 channels:
   - conda-forge
 dependencies:
-  - python=3.7
+  - python
   - cartopy
   - cf_xarray
   - ipython
@@ -12,6 +12,7 @@ dependencies:
   - pandas
   - scipy
   - sphinx
-  - sphinx-gallery
   - sphinx-autosummary-accessors
+  - sphinx-book-theme
+  - sphinx-gallery
   - xarray
