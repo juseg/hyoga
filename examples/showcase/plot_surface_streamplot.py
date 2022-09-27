@@ -12,7 +12,6 @@ a color-mapped surface velocity streamplot, and geographic elements.
 
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
-import xarray as xr
 import hyoga.demo
 
 # initialize figure
@@ -20,7 +19,7 @@ ax = plt.subplot(projection=ccrs.UTM(32))
 cax = plt.axes([0.15, 0.55, 0.025, 0.25])
 
 # open demo data
-with xr.open_dataset(hyoga.demo.get('pism.alps.out.2d.nc')) as ds:
+with hyoga.open.example('pism.alps.out.2d.nc') as ds:
 
     # plot model output
     ds.hyoga.plot.bedrock_altitude(ax=ax, vmin=0, vmax=4500)

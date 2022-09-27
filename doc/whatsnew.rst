@@ -132,8 +132,8 @@ Deprecations
 ~~~~~~~~~~~~
 
 - Functions :func:`demo.pism_gridded` and :func:`demo.pism_series` are
-  deprecated. Use ``demo.get('pism.alps.out.2d')`` and
-  ``demo.get('pism.alps.out.1d')`` instead.
+  deprecated. Use ``open.example('pism.alps.out.2d')`` and
+  ``open.example('pism.alps.out.1d')`` instead.
 
 
 Bug fixes

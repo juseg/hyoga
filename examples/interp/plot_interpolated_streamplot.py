@@ -14,7 +14,6 @@ advisable to run it on the original rather than the interpolated data.
 
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
-import xarray as xr
 import hyoga.demo
 
 # initialize figure
@@ -22,9 +21,9 @@ ax = plt.subplot(projection=ccrs.UTM(32))
 cax = plt.axes([0.15, 0.55, 0.025, 0.25])
 
 # open demo data
-with xr.open_dataset(hyoga.demo.get('pism.alps.out.2d.nc')) as ds:
-    ds = ds.hyoga.assign_isostasy(hyoga.demo.get('pism.alps.in.boot.nc'))
-    interp = ds.hyoga.interp(hyoga.demo.get('pism.alps.vis.refined.nc'))
+with hyoga.open.example('pism.alps.out.2d.nc') as ds:
+    ds = ds.hyoga.assign_isostasy(hyoga.open.example('pism.alps.in.boot.nc'))
+    interp = ds.hyoga.interp(hyoga.open.example('pism.alps.vis.refined.nc'))
 
     # plot model output
     interp.hyoga.plot.bedrock_altitude(

@@ -12,14 +12,13 @@ elements.
 
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
-import xarray as xr
 import hyoga.demo
 
 # initialize figure
 ax = plt.subplot(projection=ccrs.UTM(32))
 
 # open demo data
-with xr.open_dataset(hyoga.demo.get('pism.alps.in.boot.nc')) as ds:
+with hyoga.open.example('pism.alps.in.boot.nc') as ds:
 
     # plot model output
     ds.hyoga.plot.bedrock_altitude(cmap='Topographic', vmin=0, vmax=4500)

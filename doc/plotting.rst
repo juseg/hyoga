@@ -14,7 +14,7 @@ Let us open the demo data again:
    import xarray as xr
    import hyoga.demo
 
-   ds = xr.open_dataset(hyoga.demo.get('pism.alps.out.2d.nc'))
+   ds = hyoga.open.example('pism.alps.out.2d.nc')
 
 Plotting is already quite convenient using xarray:
 

@@ -15,7 +15,7 @@ the next time.
 
    import xarray as xr
    import hyoga.demo
-   ds = xr.open_dataset(hyoga.demo.get('pism.alps.out.2d.nc'))
+   ds = hyoga.open.example('pism.alps.out.2d.nc')
 
 Alternatively, ``hyoga.open`` provides thin wrappers around xarray functions to
 open a single-file dataset, a multi-file dataset, and a single time slice

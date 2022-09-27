@@ -13,7 +13,6 @@ a spatial resolution of 1 km, and other panels show interpolated results.
 
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
-import xarray as xr
 import hyoga.demo
 
 # initialize figure
@@ -21,13 +20,13 @@ fig, axes = plt.subplots(ncols=4, subplot_kw=dict(projection=ccrs.UTM(32)))
 resolutions = [500, 200, 100]
 
 # open 100m resolution topography for edits
-with xr.open_dataset(hyoga.demo.get('pism.alps.vis.refined.nc')) as ds:
+with hyoga.open.example('pism.alps.vis.refined.nc') as ds:
     topo = ds.hyoga.getvar('bedrock_altitude')
     topo = topo.sel(x=slice(402e3, 427e3))
 
 # open demo data
-with xr.open_dataset(hyoga.demo.get('pism.alps.out.2d.nc')) as ds:
-    ds = ds.hyoga.assign_isostasy(hyoga.demo.get('pism.alps.in.boot.nc'))
+with hyoga.open.example('pism.alps.out.2d.nc') as ds:
+    ds = ds.hyoga.assign_isostasy(hyoga.open.example('pism.alps.in.boot.nc'))
 
     # plot original data
     ax = axes[0]

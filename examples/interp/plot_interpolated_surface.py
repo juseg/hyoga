@@ -13,24 +13,23 @@ the same as in the interpolated output example.
 
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
-import xarray as xr
 import hyoga.demo
 
 # initialize figure
 ax = plt.subplot(projection=ccrs.UTM(32))
 
 # open demo data
-with xr.open_dataset(hyoga.demo.get('pism.alps.out.2d.nc')) as ds:
+with hyoga.open.example('pism.alps.out.2d.nc') as ds:
 
     # compute surface altitude and remove bedrock altitude
     ds['usurf'] = ds.hyoga.getvar('surface_altitude')
     ds = ds.drop('topg')
 
     # compute isostatic adjustment from a reference input topography
-    ds = ds.hyoga.assign_isostasy(hyoga.demo.get('pism.alps.in.boot.nc'))
+    ds = ds.hyoga.assign_isostasy(hyoga.open.example('pism.alps.in.boot.nc'))
 
     # perform the actual interpolation
-    ds = ds.hyoga.interp(hyoga.demo.get('pism.alps.vis.refined.nc'))
+    ds = ds.hyoga.interp(hyoga.open.example('pism.alps.vis.refined.nc'))
 
     # plot model output
     ds.hyoga.plot.bedrock_altitude(

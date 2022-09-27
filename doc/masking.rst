@@ -20,7 +20,7 @@ Let's get started with the usual imports and the demo data.
    import xarray as xr
    import hyoga.demo
 
-   ds = xr.open_dataset(hyoga.demo.get('pism.alps.out.2d.nc'))
+   ds = hyoga.open.example('pism.alps.out.2d.nc')
 
 Hyoga's plot methods use an ice mask to determine which grid cells are
 glacierized and which are not. According to CF conventions, this is defined by
@@ -111,7 +111,7 @@ in the dataset with bedrock altitude in the initial state:
 
 .. ipython:: python
 
-   ds = ds.hyoga.assign_isostasy(hyoga.demo.get('pism.alps.in.boot.nc'))
+   ds = ds.hyoga.assign_isostasy(hyoga.open.example('pism.alps.in.boot.nc'))
 
 The method :meth:`~Dataset.hyoga.assign_isostasy` assigns a new variable
 (standard name ``bedrock_altitude_change_due_to_isostatic_adjustment``). Next
@@ -123,7 +123,7 @@ part of the model domain.
 
 .. ipython:: python
 
-   ds = ds.hyoga.interp(hyoga.demo.get('pism.alps.vis.refined.nc'))
+   ds = ds.hyoga.interp(hyoga.open.example('pism.alps.vis.refined.nc'))
 
 The new dataset can be plotted in the same way as any other hyoga dataset, only
 with a much higher resolution.

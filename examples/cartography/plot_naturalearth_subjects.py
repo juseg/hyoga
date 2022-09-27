@@ -11,7 +11,6 @@ Plot location map and highlight particular subjects.
 
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
-import xarray as xr
 import hyoga.demo
 
 
@@ -20,7 +19,7 @@ fig = plt.figure()
 ax = fig.add_axes([0, 0, 1, 1], projection=ccrs.UTM(32))
 
 # plot demo bedrock altitude
-with xr.open_dataset(hyoga.demo.get('pism.alps.out.2d.nc')) as ds:
+with hyoga.open.example('pism.alps.out.2d.nc') as ds:
     ds.hyoga.plot.bedrock_altitude(ax=ax, vmin=0, vmax=4500)
 
 # add cultural elements
