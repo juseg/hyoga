@@ -2,40 +2,20 @@
 # GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
 """
-This module contains utils to download demonstration data needed to plot
-examples included in the documentation. There is currently only one function
-but in the future more data may be dowloaded to demonstrate plotting time
-series and plotting output from other models.
+This module is deprecated and will be removed in v0.4.0, use ``open.example``
+instead.
 """
 
-import os.path
-import urllib.parse
 import warnings
-import requests
-
-
-def _download(url, filename=None):
-    """Download a file from the web, store in cache dir and return path."""
-    cachedir = os.path.expanduser(os.path.join('~', '.cache', 'hyoga'))
-    if filename is None:
-        filename = urllib.parse.urlparse(url).path
-        filename = os.path.basename(filename)
-        filename = filename.split('/')[-1]
-    filepath = os.path.join(cachedir, filename)
-    if not os.path.isfile(filepath):
-        os.makedirs(cachedir, exist_ok=True)
-        with open(filepath, 'wb') as binaryfile:
-            print(f"downloading {url}...")
-            binaryfile.write(requests.get(url).content)
-    return filepath
+from hyoga.open.example import _download_example
 
 
 def get(filename='pism.alps.out.2d.nc'):
-    """Download a file from hyoga-data github repository."""
-    repo = 'https://raw.githubusercontent.com/juseg/hyoga-data/main'
-    model = filename.split('.')[0]
-    url = '/'.join((repo, model, filename))
-    return _download(url)
+    """Deprecated function to download demo file and return path."""
+    warnings.warn(
+        "demo.get() -> url is deprecated and will be removed in v0.4.0, use "
+        "open.example() -> dataset instead", FutureWarning)
+    return _download_example(filename)
 
 
 def pism_gridded():

@@ -54,7 +54,8 @@ Internal changes
 
 - Move dataset accessor to :mod:`hyoga.core.accessor`.
 - Move hyoga configuration to :mod:`hyoga.core.config`.
-- Move local input methods to :mod: `hyoga.open.local`.
+- Move function to open example data to :mod: `hyoga.open.example`.
+- Move functions to open local files to :mod: `hyoga.open.local`.
 - Move dataset plot methods to :mod:`hyoga.plot.datasets`.
 
 
