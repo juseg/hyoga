@@ -14,7 +14,7 @@ advisable to run it on the original rather than the interpolated data.
 
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
-import hyoga.demo
+import hyoga.open
 
 # initialize figure
 ax = plt.subplot(projection=ccrs.UTM(32))

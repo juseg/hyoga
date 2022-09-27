@@ -13,7 +13,7 @@ a spatial resolution of 1 km, and other panels show interpolated results.
 
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
-import hyoga.demo
+import hyoga.open
 
 # initialize figure
 fig, axes = plt.subplots(ncols=4, subplot_kw=dict(projection=ccrs.UTM(32)))

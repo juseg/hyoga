@@ -11,7 +11,7 @@ Plot default white monochrome logo including glaciers and paleoglaciers.
 
 import matplotlib.pyplot as plt
 import cartopy
-import hyoga.demo
+import hyoga.open
 import hyoga.plot
 
 # initialize figure

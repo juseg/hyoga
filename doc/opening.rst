@@ -14,7 +14,7 @@ the next time.
 .. ipython:: python
 
    import xarray as xr
-   import hyoga.demo
+   import hyoga.open
    ds = hyoga.open.example('pism.alps.out.2d.nc')
 
 Alternatively, ``hyoga.open`` provides thin wrappers around xarray functions to

@@ -14,6 +14,10 @@ import scipy.ndimage
 import xarray as xr
 import cf_xarray  # noqa pylint: disable=unused-import
 import hyoga.open
+# NOTE: this causes 'import hyoga' to always import plot. I don't think this
+# is desirable. I can think of two possible workarounds:
+# - define plot methods here, import them in plot.dataset, or
+# - only plug plot methods when importing hyoga.plot, if possible.
 from hyoga.plot.datasets import HyogaPlotMethods
 
 

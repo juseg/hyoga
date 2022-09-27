@@ -15,7 +15,7 @@ ten-fold increase in horizontal resolution.
 
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
-import hyoga.demo
+import hyoga.open
 
 # initialize figure
 ax = plt.subplot(projection=ccrs.UTM(32))

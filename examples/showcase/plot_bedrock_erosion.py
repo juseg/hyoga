@@ -13,7 +13,8 @@ bedrock erosion computed from basal ice velocity, and geographic elements.
 import matplotlib.pyplot as plt
 import matplotlib.ticker
 import cartopy.crs as ccrs
-import hyoga.demo
+import hyoga.open
+import hyoga.plot
 
 # initialize figure
 ax = plt.subplot(projection=ccrs.UTM(32))

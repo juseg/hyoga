@@ -11,7 +11,8 @@ Plot location map and highlight particular subjects.
 
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
-import hyoga.demo
+import hyoga.open
+import hyoga.plot
 
 
 # initialize figure

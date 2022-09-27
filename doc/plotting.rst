@@ -12,7 +12,7 @@ Let us open the demo data again:
 .. ipython:: python
 
    import xarray as xr
-   import hyoga.demo
+   import hyoga.open
 
    ds = hyoga.open.example('pism.alps.out.2d.nc')
 
