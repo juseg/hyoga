@@ -2,7 +2,9 @@
 # GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
 """
-Open PISM output file as xarray datasets.
+This module contains convenience methods to open local files. This is not used
+in any example and probably not very useful for now so I recommend sticking to
+:func:`xarray.open_dataset` and :func:`xarray.open_mfdataset` instead.
 """
 
 import os
@@ -18,7 +20,7 @@ import xarray as xr
 
 def _preprocess(ds):
     """Prepare a newly opened dataset for convenient plotting."""
-    # NOTE this will be moved to hyoga.hyoga in the future
+    # NOTE this may be moved to the accessor init in the future
     # NOTE code will be more robust if using decode_cf=True
 
     # transpose dimensions to zyx (for older pism files)
