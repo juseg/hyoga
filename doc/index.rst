@@ -37,7 +37,7 @@ Japanese word for glacier (lit. ice river).
    :caption: Reference
    :maxdepth: 1
 
-   api
+   api/index
    whatsnew
 
 Get in touch
