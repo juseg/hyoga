@@ -1,3 +1,3 @@
-img.logo {
-  filter: brightness(0.25)
-}
+img.logo {filter: brightness(0.25)}
+div.admonition {border-width: 1px dashed}
+figure {padding: 0}

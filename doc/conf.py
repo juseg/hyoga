@@ -10,7 +10,7 @@ import sphinx_gallery.sorting
 # -- Project information -----------------------------------------------------
 
 project = 'hyoga'
-copyright = '2021-2022, Julien Seguinot'
+copyright = '2021-2022'
 author = 'Julien Seguinot'
 version = '0.1 Akaishi'
 release = '0.1.2'
@@ -79,6 +79,9 @@ templates_path = ["_templates", sphinx_autosummary_accessors.templates_path]
 # patterns to ignore when looking for source files.
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
+# pygments style overriding theme
+pygments_style = 'sphinx'
+
 
 # -- Options for HTML output -------------------------------------------------
 
@@ -87,7 +90,23 @@ html_logo = '_static/png/hyoga_logo.png'
 
 # sphinx html theme
 html_theme = 'sphinx_book_theme'
-html_theme_options = {'logo_only': True}
+html_theme_options = {
+    'logo_only': True,
+    'repository_url': 'https://github.com/juseg/hyoga',
+    'repository_branch': 'main',
+    'use_download_button': True,
+    'use_edit_page_button': True,
+    'use_fullscreen_button': True,
+    'use_issues_button': False,
+    'use_repository_button': True,
+    'logo_only': True,
+    'extra_navbar': None,
+    'extra_footer': (
+        'Currently developed within a '
+        '<a href="https://mohnfoundation.no/en/">Trond Mohn Foundation</a> '
+        '<a href="https://mountainsinmotion.w.uib.no">project</a> at the '
+        '<a href="https://www.uib.no/en">University of Bergen</a>.'),
+    'toc_title': 'Page contents'}
 
 # static files copied to build
 html_static_path = ['_static']
