@@ -4,25 +4,38 @@
 Hyoga
 =====
 
-Hyoga is a thin wrapper arround xarray_ to read and plot PISM_ output. In the
-future, I hope to find the time and funds to let it grow into a more developed
-library around CF-compliant glacier and ice sheet models. Hyoga (氷河) is the
+Hyoga is a small Python_ library to visualize ice-sheet model datasets.
+It acts as a thin wrapper around cartopy_ and xarray_ for CF_-compliant
+datasets on regular grids used for instance in PISM_. Hyoga (氷河) is the
 Japanese word for glacier (lit. ice river).
 
-.. _PISM: https://pism-docs.org
+.. _cartopy: https://scitools.org.uk/cartopy/
+.. _CF: https://cfconventions.org
+.. _PISM: https://pism.io
+.. _Python: https://python.org
 .. _xarray: https://xarray.pydata.org/en/stable/
 
-.. warning::
+Since April 2022, development has been funded by a Trond Mohn Foundation (TMS_)
+research project_ on alpine biodiversity at the University of Bergen (UiB_).
 
-   The project is still in a very early stage and comes with absolutely no
-   warranty. I will do my best to develop backward-compatible and document
-   pending breaking changes with "future warnings". Still, things may break.
+.. _TMS: https://mohnfoundation.no/en/
+.. _UiB: https://www.uib.no/en
+.. _project: mountainsinmotion.w.uib.no
 
-.. note::
+.. raw:: html
 
-   Hyoga is growing fast. This is the documentation for the latest Github_
-   commit, which may include significant changes since the latest Pypi_ release
-   (see :doc:`./whatsnew`).
+   <figure>
+     <div style="padding:56.25% 0 0 0;position:relative;">
+       <iframe src="https://player.vimeo.com/video/321913054?h=c841d020b5&title=0&byline=0&portrait=0" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+     </div>
+     <script src="https://player.vimeo.com/api/player.js"></script>
+     <figcaption>
+       <p>Example paleoglacier visualization made with hyoga.</p>
+     </figcaption>
+   </figure>
+
+Documentation
+-------------
 
 .. toctree::
    :caption: User guide

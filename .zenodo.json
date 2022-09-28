@@ -1,11 +1,11 @@
 {
-    "title": "Hyoga: a thin wrapper around Xarray to open PISM files.",
+    "title": "Hyoga: a Python library to visualize ice-sheet model datasets",
     "license": "GPL-3.0",
     "creators": [
         {
             "name": "Julien Seguinot",
             "orcid": "0000-0002-5315-0761",
-            "affiliation": ""
+            "affiliation": "University of Bergen"
         }
     ]
 }

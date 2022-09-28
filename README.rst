@@ -11,18 +11,14 @@ Hyoga
 .. image:: https://zenodo.org/badge/227465038.svg
    :target: https://zenodo.org/badge/latestdoi/227465038
 
-Hyoga is a thin wrapper arround xarray_ to read and plot PISM_ output. In the
-future, I hope to find the time and funds to let it grow into a more developed
-library around CF-compliant glacier and ice sheet models. Hyoga (氷河) is the
-Japanese word for glacier (lit. ice river).
+Hyoga_ is a small Python_ library to visualize ice-sheet model datasets.
+It acts as a thin wrapper around cartopy_ and xarray_ for CF_-compliant
+datasets on regular grids used for instance in PISM_. Hyoga (氷河) is the
+Japanese word for glacier (lit. ice river). See the documentation_ for more.
 
-**Install**::
-
-   pip install hyoga
-
-**Warning:**
-Hyoga is at a very early stage of development and things may break.
-Documentation is under construction at https://hyoga.readthedocs.io.
-
-.. _PISM: http://pism-docs.org
-.. _xarray: http://xarray.pydata.org
+.. _cartopy: https://scitools.org.uk/cartopy/
+.. _CF: https://cfconventions.org
+.. _Hyoga: https://hyoga.readthedocs.io.
+.. _PISM: https://pism.io
+.. _Python: https://python.org
+.. _xarray: https://xarray.pydata.org/en/stable/
