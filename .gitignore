@@ -1,8 +1,8 @@
 *.nc
 *.pyc
 /doc/_build
+/doc/api/generated
 /doc/examples
-/doc/generated
 /doc/savefig
 /build
 /dist
