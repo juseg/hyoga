@@ -11,7 +11,9 @@ Let us open demo data. This will download a model output data file from the
 web, and store it into a ``~/.cache/hyoga`` directory so that it can be reused
 the next time.
 
-.. ipython:: python
+.. plot::
+   :context:
+   :nofigs:
 
    import xarray as xr
    import hyoga.open
@@ -43,7 +45,9 @@ indexing and subsetting data. As long as hyoga (or any submodule) has been
 imported, new functionality will be available in a so-called "dataset accessor"
 attribute ``ds.hyoga``:
 
-.. ipython:: python
+.. plot::
+   :context:
+   :nofigs:
 
    ds.hyoga
 
@@ -60,7 +64,9 @@ thickness in PISM, it may refer to a different quantity, or to nothing at all,
 in another ice-sheet model. This where `CF standard names`_ come into play. To
 access a variable by standard name you may use:
 
-.. ipython:: python
+.. plot::
+   :context:
+   :nofigs:
 
    var = ds.hyoga.getvar('land_ice_thickness');
    var.max()
@@ -70,7 +76,9 @@ If a particular variable is missing, hyoga will additionally try to reconstruct
 it from others, such as the sum of bedrock altitude and ice thickness for
 surface altitude, or the norm of velocity components for its magnitude.
 
-.. ipython:: python
+.. plot::
+   :context:
+   :nofigs:
 
    ds.hyoga.getvar('surface_altitude');
    ds.hyoga.getvar('magnitude_of_land_ice_surface_velocity');
@@ -79,7 +87,9 @@ This mechanism can be disabled using ``infer=False``. Because surface altitude
 is not actually present in the demo dataset, the following will raise an
 exception:
 
-.. ipython:: python
+.. plot::
+   :context:
+   :nofigs:
    :okexcept:
 
    ds.hyoga.getvar('surface_altitude', infer=False)
@@ -103,7 +113,9 @@ New variables can be added using using xarray_'s dictionary interface or
 methods such as :meth:`xarray.Dataset.assign`. Besides, hyoga provides a
 dataset method to assign new variables by their standard name.
 
-.. ipython:: python
+.. plot::
+   :context:
+   :nofigs:
 
    bedrock = ds.hyoga.getvar('bedrock_altitude')
    thickness = ds.hyoga.getvar('land_ice_thickness')
@@ -114,7 +126,9 @@ This returns a new dataset including the surface altitude variable. Some
 control on the variable (short) name can be achieved by preceding the
 ``assign`` call with :meth:`xarray.DataArray.rename`.
 
-.. ipython:: python
+.. plot::
+   :context:
+   :nofigs:
 
    ds = ds.hyoga.assign(surface_altitude=surface.rename('usurf'))
    'usurf' in ds
@@ -123,7 +137,9 @@ However, this only works if the data does not already contain a variable with
 the standard name ``surface_altitude``. In that case, that variable's data is
 quietly replaced, and the variable is not renamed.
 
-.. ipython:: python
+.. plot::
+   :context:
+   :nofigs:
 
    ds = ds.hyoga.assign(surface_altitude=surface.rename('newsurf'))
    'newsurf' in ds

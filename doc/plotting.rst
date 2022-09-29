@@ -9,7 +9,9 @@ Plotting with xarray
 
 Let us open the demo data again:
 
-.. ipython:: python
+.. plot::
+   :context:
+   :nofigs:
 
    import xarray as xr
    import hyoga.open
@@ -18,10 +20,10 @@ Let us open the demo data again:
 
 Plotting is already quite convenient using xarray:
 
-.. ipython:: python
+.. plot::
+   :context:
 
    ds.thk.plot.imshow()
-   @savefig plot_with_xarray.png
    plt.gca().set_aspect('equal')  # needed to avoid distortion
 
 Plotting with hyoga
@@ -31,20 +33,22 @@ To make things even easier, hyoga provides wrappers around xarray_ and
 matplotlib_ methods to produce oft-used ice sheet model plots with a more
 practical default style.
 
-.. ipython:: python
+.. plot::
+   :context:
 
+   plt.cla()
    ds.hyoga.plot.bedrock_altitude(vmin=0, vmax=4500)
-   @savefig plot_bedrock_altitude.png
    plt.gca().set_aspect('equal')
 
 Now let us make our first composite plot. The previously defined ice mask
 allows us to plot an ice margin contour on top of the bedrock topography:
 
-.. ipython:: python
+.. plot::
+   :context:
 
+   plt.cla()
    ds.hyoga.plot.bedrock_altitude(vmin=0, vmax=4500)
    ds.hyoga.plot.ice_margin(facecolor='tab:blue')
-   @savefig plot_ice_margin.png
    plt.gca().set_aspect('equal')
 
 .. note::
@@ -61,19 +65,21 @@ variables when that is possible. For instance in the above example, the
 ``'bedrock_altitude'`` and ``'land_ice_thickness'``. Such computations are
 done on-the-fly though, and the results are not stored:
 
-.. ipython:: python
+.. plot::
+   :context:
+   :nofigs:
 
    for name, var in ds.items():
       print(name, var.attrs.get('standard_name', None))
 
 Velocity maps are automatically log-scaled, but the limits can be customized:
 
-.. ipython:: python
+.. plot::
+   :context:
 
    ds.hyoga.plot.bedrock_altitude(vmin=0, vmax=4500)
    ds.hyoga.plot.surface_velocity(vmin=1e1, vmax=1e3)
    ds.hyoga.plot.ice_margin(edgecolor='0.25')
-   @savefig plot_surface_velocity.png
    plt.gca().set_aspect('equal')
 
 
@@ -83,7 +89,8 @@ Plotting with cartopy
 For enhanced visuals, hyoga plots can be georeferenced and combined with
 `Natural Earth`_ vector data shipped with cartopy_.
 
-.. ipython:: python
+.. plot::
+   :context:
 
    import matplotlib.pyplot as plt
    import cartopy.crs as ccrs
@@ -102,7 +109,6 @@ For enhanced visuals, hyoga plots can be georeferenced and combined with
    # plot model output
    ds.hyoga.plot.bedrock_altitude(vmin=0, vmax=4500)
    ds.hyoga.plot.surface_velocity(vmin=1e1, vmax=1e3)
-   @savefig plot_with_cartopy.png
    ds.hyoga.plot.ice_margin()
 
 More plotting methods are available. Please take a look at the

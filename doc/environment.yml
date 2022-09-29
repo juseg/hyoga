@@ -5,7 +5,6 @@ dependencies:
   - python
   - cartopy
   - cf_xarray
-  - ipython
   - matplotlib
   - netcdf4
   - numpy

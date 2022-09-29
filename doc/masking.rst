@@ -13,7 +13,9 @@ Ice thickness threshold
 
 Let's get started with the usual imports and the demo data.
 
-.. ipython:: python
+.. plot::
+   :context:
+   :nofigs:
 
    import matplotlib.pyplot as plt
    import cartopy.crs as ccrs
@@ -28,7 +30,9 @@ the standard variable ``land_ice_area_fraction``. There are several ways to
 affect the ice mask. The easiest way is to use the (currently single) parametre
 in :obj:`hyoga.config`.
 
-.. ipython:: python
+.. plot::
+   :context:
+   :nofigs:
 
    hyoga.config.glacier_masking_point
 
@@ -39,14 +43,14 @@ PISM output files, a non-zero threshold may be advisable in case winter output
 files contain a thin cover of "seasonal ice" outside the glacier margin, as is
 the case in the demo files.
 
-.. ipython:: python
+.. plot::
+   :context:
 
    plt.subplot(projection=ccrs.UTM(32))
    ds.hyoga.plot.bedrock_altitude(vmin=0, vmax=4500)
    for i, value in enumerate([0.1, 1, 500]):
        hyoga.config.glacier_masking_point = value
        ds.hyoga.plot.ice_margin(edgecolor=f'C{i}', linewidths=1)
-   @savefig plot_glacier_masking_point.png
    hyoga.config.glacier_masking_point = 1  # restore default
 
 
@@ -58,14 +62,14 @@ For more control, on can set the ``land_ice_area_fraction`` variable using
 filled with ice at least a metre thick, and moving at least ten metres per
 year:
 
-.. ipython:: python
+.. plot::
+   :context:
 
    plt.subplot(projection=ccrs.UTM(32))
    ds = ds.hyoga.assign_icemask(
        (ds.hyoga.getvar('land_ice_thickness') > 1) &
        (ds.hyoga.getvar('magnitude_of_land_ice_surface_velocity') > 10))
    ds.hyoga.plot.bedrock_altitude(vmin=0, vmax=4500)
-   @savefig plot_assign_icemask.png
    ds.hyoga.plot.ice_margin(facecolor='tab:blue')
 
 Note that the :meth:`~Dataset.hyoga.assign_icemask` method edits (or add) a
@@ -73,7 +77,9 @@ Note that the :meth:`~Dataset.hyoga.assign_icemask` method edits (or add) a
 Such lossless masking is should be enough for internal use within Hyoga. This
 mask looks a bit strange, so let us get rid of it before we move on:
 
-.. ipython:: python
+.. plot::
+   :context:
+   :nofigs:
 
    ds = ds.drop_vars(ds.hyoga.getvar('land_ice_area_fraction').name)
 
@@ -109,7 +115,9 @@ bedrock topography and the new topography onto which data are interpolated.
 In this case, we compute the bedrock deformation by comparing bedrock altitude
 in the dataset with bedrock altitude in the initial state:
 
-.. ipython:: python
+.. plot::
+   :context:
+   :nofigs:
 
    ds = ds.hyoga.assign_isostasy(hyoga.open.example('pism.alps.in.boot.nc'))
 
@@ -121,20 +129,22 @@ topographies, corrected for bedrock depression in this case. This uses yet
 another demo file, which contains high-resolution topographic data over a small
 part of the model domain.
 
-.. ipython:: python
+.. plot::
+   :context:
+   :nofigs:
 
    ds = ds.hyoga.interp(hyoga.open.example('pism.alps.vis.refined.nc'))
 
 The new dataset can be plotted in the same way as any other hyoga dataset, only
 with a much higher resolution.
 
-.. ipython:: python
+.. plot::
+   :context:
 
    plt.subplot(projection=ccrs.UTM(32))
    ds.hyoga.plot.bedrock_altitude(vmin=0, vmax=4500)
    ds.hyoga.plot.surface_velocity(vmin=1e1, vmax=1e3)
    ds.hyoga.plot.surface_altitude_contours()
-   @savefig plot_interp.png
    ds.hyoga.plot.ice_margin(edgecolor='0.25')
 
 .. _xarray: https//xarray.pydata.org

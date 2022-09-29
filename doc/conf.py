@@ -20,16 +20,21 @@ release = '0.1.2'
 
 # sphinx extensions
 extensions = [
+    'matplotlib.sphinxext.plot_directive',  # make plots from code
     'sphinx.ext.autodoc',       # make docs from dosctrings
     'sphinx.ext.autosummary',   # each entry on a different page
     'sphinx.ext.intersphinx',   # link to other projects
     'sphinx.ext.extlinks',      # external links e.g. github
     'sphinx.ext.napoleon',      # numpy-style docstrings
     'sphinx_gallery.gen_gallery',           # plotting examples gallery
-    'IPython.sphinxext.ipython_directive',  # run code samples and plots
-    'IPython.sphinxext.ipython_console_highlighting',
     'sphinx_autosummary_accessors', # autosummary Dataset.hyoga.etc
     ]
+
+# configure matplotlib plot directive
+plot_formats = [('png', 100), ('pdf', 100)]  # no hires.png
+plot_include_source = True          # show source code by default
+plot_html_show_source_link = False  # no link to py script file
+plot_html_show_formats = False      # no link to output images
 
 # options to sphinx extensions
 autosummary_generate = True         # autogen files for listed entroes
