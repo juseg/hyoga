@@ -9,15 +9,15 @@ especially for high-definition data on small domains.
 
 import os.path
 import zipfile
-import hyoga.demo
 import hyoga.plot
+from hyoga.open.example import _download  # FIXME move to core?
 
 
 def _download_paleoglaciers_ehl11():
     """Download Ehlers et al. (2011) paleoglaciers, return cache paths."""
     url = ('http://static.us.elsevierhealth.com/ehlers_digital_maps/'
            'digital_maps_02_all_other_files.zip')
-    zipfilename = hyoga.demo._download(url)  # FIXME W0212 protected-access
+    zipfilename = _download(url)
     cachedir = os.path.dirname(zipfilename)
     basenames = 'lgm', 'lgm_alpen'
     for basename in basenames:
@@ -36,7 +36,7 @@ def _download_paleoglaciers_bat19():
              'https://osf.io/9bjwn/download': 'LGM_best_estimate.shx',
              'https://osf.io/9yhdv/download': 'LGM_best_estimate.shp'}
     for url, filename in files.items():
-        filepath = hyoga.demo._download(url, filename=filename)
+        filepath = _download(url, filename=filename)
     return (filepath, )
 
 
