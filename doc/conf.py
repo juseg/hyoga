@@ -7,6 +7,7 @@
 import sphinx_autosummary_accessors
 import sphinx_gallery.sorting
 
+
 # -- Project information -----------------------------------------------------
 
 project = 'hyoga'
@@ -18,16 +19,23 @@ release = '0.1.2'
 
 # -- General configuration ---------------------------------------------------
 
+templates_path = ["_templates", sphinx_autosummary_accessors.templates_path]
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+pygments_style = 'sphinx'
+
+
+# -- Sphinx extensions -------------------------------------------------------
+
 # sphinx extensions
 extensions = [
     'matplotlib.sphinxext.plot_directive',  # make plots from code
     'sphinx.ext.autodoc',       # make docs from dosctrings
     'sphinx.ext.autosummary',   # each entry on a different page
-    'sphinx.ext.intersphinx',   # link to other projects
     'sphinx.ext.extlinks',      # external links e.g. github
+    'sphinx.ext.intersphinx',   # link to other projects
     'sphinx.ext.napoleon',      # numpy-style docstrings
-    'sphinx_gallery.gen_gallery',           # plotting examples gallery
-    'sphinx_autosummary_accessors', # autosummary Dataset.hyoga.etc
+    'sphinx_autosummary_accessors',  # autosummary Dataset.hyoga.etc
+    'sphinx_gallery.gen_gallery',    # plotting examples gallery
     ]
 
 # configure matplotlib plot directive
@@ -36,26 +44,23 @@ plot_include_source = True          # show source code by default
 plot_html_show_source_link = False  # no link to py script file
 plot_html_show_formats = False      # no link to output images
 
-# options to sphinx extensions
+# configure sphinx.ext.autosummary
 autosummary_generate = True         # autogen files for listed entroes
-sphinx_gallery_conf = {
-    'examples_dirs': '../examples',  # path to example scripts
-    'gallery_dirs': 'examples',      # where to save gallery plots
-    # 'nested_sections' : False,     # to fix duplicate sub-headings in rtd
-    'subsection_order': sphinx_gallery.sorting.ExplicitOrder([
-        '../examples/showcase',
-        '../examples/interp',
-        '../examples/cartography'])
-    }
+
+# configure sphinx.ext.extlinks
 extlinks = {
     "issue": ("https://github.com/pydata/xarray/issues/%s", "#%s"),
     "pull": ("https://github.com/pydata/xarray/pull/%s", "PR%s"),
 }
+
+# configure sphinx.ext.intersphinx
 intersphinx_mapping = {
     'matplotlib': ('https://matplotlib.org/stable/', None),
     'python': ('https://docs.python.org/3.7/', None),
     'xarray': ('http://xarray.pydata.org/en/stable/', None)
 }
+
+# configure sphinx.ext.napoleon
 napoleon_use_param = True           # add :param: roles to parameters
 napoleon_use_rtype = False          # do not show return type
 napoleon_preprocess_types = True    # appears needed by aliases
@@ -78,14 +83,16 @@ napoleon_type_aliases = {
     'Path': '~~pathlib.Path',
 }
 
-# location of additional templates
-templates_path = ["_templates", sphinx_autosummary_accessors.templates_path]
-
-# patterns to ignore when looking for source files.
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
-
-# pygments style overriding theme
-pygments_style = 'sphinx'
+# configure sphinx_gallery.gen_gallery
+sphinx_gallery_conf = {
+    'examples_dirs': '../examples',  # path to example scripts
+    'gallery_dirs': 'examples',      # where to save gallery plots
+    # 'nested_sections' : False,     # fix duplicate sub-headings in rtd theme
+    'subsection_order': sphinx_gallery.sorting.ExplicitOrder([
+        '../examples/showcase',
+        '../examples/interp',
+        '../examples/cartography'])
+    }
 
 
 # -- Options for HTML output -------------------------------------------------
