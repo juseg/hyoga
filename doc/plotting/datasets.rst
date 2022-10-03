@@ -4,73 +4,55 @@
 Plotting glacier data
 =====================
 
-Plotting with xarray
---------------------
-
-Let us open the demo data again:
+Hyoga include several plot methods that make visualizing ice-sheet modelling
+datasets a tiny bit more straightforward than using xarray_ alone. While not
+a strict requirement, these should ideally be used in combination with cartopy_
+geolocated axes. This will allow overlaying geographic information in different
+coordinate systems, for instance coming from global vector datasets (see
+:doc:`/plotting/vectors`). For this reason, we import a couple of modules:
 
 .. plot::
    :context:
    :nofigs:
 
-   import xarray as xr
+   import matplotlib.pyplot as plt
+   import cartopy.crs as ccrs
    import hyoga.open
 
-   ds = hyoga.open.example('pism.alps.out.2d.nc')
+Next, we create new axes with a Universal Transverse Mercator zone 32
+reference system, corresponding to the example data.
 
-Plotting is already quite convenient using xarray:
+.. plot::
+   :context:
+   :nofigs:
+
+   ax = plt.subplot(projection=ccrs.UTM(32))
+
+Next, it is time to add data. Let's open an example dataset and plot the
+bedrock altitude and a simple ice margin contour:
 
 .. plot::
    :context:
 
-   ds.thk.plot.imshow()
-   plt.gca().set_aspect('equal')  # needed to avoid distortion
+   with hyoga.open.example('pism.alps.out.2d.nc') as ds:
+       ds.hyoga.plot.bedrock_altitude(center=False)
+       ds.hyoga.plot.ice_margin(facecolor='tab:blue')
 
-Plotting with hyoga
--------------------
-
-To make things even easier, hyoga provides wrappers around xarray_ and
+Hyoga provides wrappers around xarray_ and
 matplotlib_ methods to produce oft-used ice sheet model plots with a more
 practical default style.
 
 .. plot::
    :context:
 
-   plt.cla()
-   ds.hyoga.plot.bedrock_altitude(vmin=0, vmax=4500)
-   plt.gca().set_aspect('equal')
+   # initialize subplot with UTM projection
+   ax = plt.subplot(projection=ccrs.UTM(32))
+   ds.hyoga.plot.bedrock_altitude(ax=ax, center=False)
+   ds.hyoga.plot.ice_margin(ax=ax)
 
-Now let us make our first composite plot. The previously defined ice mask
-allows us to plot an ice margin contour on top of the bedrock topography:
-
-.. plot::
-   :context:
-
-   plt.cla()
-   ds.hyoga.plot.bedrock_altitude(vmin=0, vmax=4500)
-   ds.hyoga.plot.ice_margin(facecolor='tab:blue')
-   plt.gca().set_aspect('equal')
-
-.. note::
-
-   Hyoga makes choices regarding style (such as the grey colormap for
-   topography and the half-transparent background above) that do not always
-   correspond to the matplotlib defaults. However, these choices can always be
-   overriden using the matplotlib keyword arguments.
-
-As may be noticed in the above code, hyoga plot methods also do the job to
-look up required variables (by their standard names) and to infer missing
-variables when that is possible. For instance in the above example, the
-``'surface_altitude'`` was missing from the data and thus computed from
-``'bedrock_altitude'`` and ``'land_ice_thickness'``. Such computations are
-done on-the-fly though, and the results are not stored:
-
-.. plot::
-   :context:
-   :nofigs:
-
-   for name, var in ds.items():
-      print(name, var.attrs.get('standard_name', None))
+Hyoga tries to infer some missing variables from others present in the dataset.
+Here, the velocity norm was reconstructed from its horizontal components. These
+computations are done on-the-fly and the results are not stored.
 
 Velocity maps are automatically log-scaled, but the limits can be customized:
 
@@ -80,43 +62,7 @@ Velocity maps are automatically log-scaled, but the limits can be customized:
    ds.hyoga.plot.bedrock_altitude(vmin=0, vmax=4500)
    ds.hyoga.plot.surface_velocity(vmin=1e1, vmax=1e3)
    ds.hyoga.plot.ice_margin(edgecolor='0.25')
-   plt.gca().set_aspect('equal')
-
-
-Plotting with cartopy
----------------------
-
-For enhanced visuals, hyoga plots can be georeferenced and combined with
-`Natural Earth`_ vector data shipped with cartopy_.
-
-.. plot::
-   :context:
-
-   import matplotlib.pyplot as plt
-   import cartopy.crs as ccrs
-   import cartopy.feature as cfeature
-
-   # initialize subplot with UTM projection
-   ax = plt.subplot(projection=ccrs.UTM(32))
-
-   # add coastline and rivers
-   ax.coastlines(edgecolor='0.25', linewidth=0.5)
-   ax.add_feature(
-      cfeature.NaturalEarthFeature(
-         category='physical', name='rivers_lake_centerlines', scale='10m'),
-      edgecolor='0.25', facecolor='none', linewidth=0.5, zorder=0)
-
-   # plot model output
-   ds.hyoga.plot.bedrock_altitude(vmin=0, vmax=4500)
-   ds.hyoga.plot.surface_velocity(vmin=1e1, vmax=1e3)
-   ds.hyoga.plot.ice_margin()
-
-More plotting methods are available. Please take a look at the
-:doc:`../examples/index` gallery.
-
 
 .. _cartopy: https://scitools.org.uk/cartopy/
 .. _matplotlib: https://matplotlib.org
 .. _xarray: https//xarray.pydata.org
-.. _`Natural Earth`: https://www.naturalearthdata.com
-.. _`CF standard names`: http://cfconventions.org/standard-names.html
