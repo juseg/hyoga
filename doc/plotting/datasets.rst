@@ -112,7 +112,7 @@ For enhanced visuals, hyoga plots can be georeferenced and combined with
    ds.hyoga.plot.ice_margin()
 
 More plotting methods are available. Please take a look at the
-:doc:`./examples/index` gallery.
+:doc:`../examples/index` gallery.
 
 
 .. _cartopy: https://scitools.org.uk/cartopy/

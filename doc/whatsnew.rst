@@ -73,7 +73,7 @@ This release includes better masks and a dependency on cf_xarray_.
 Plot methods now search for standard variable `land_ice_area_fraction` for
 masking and default to using a configurable ice thickness masking point.
 Masking with `where` remains available and a new documentation page explains
-:ref:`masking` features.
+:doc:`datasets/masking` features.
 
 Breaking changes
 ~~~~~~~~~~~~~~~~
@@ -122,7 +122,7 @@ Internal changes
 Documentation
 ~~~~~~~~~~~~~
 
-- A new documentation page shortly explains :ref:`masking` features.
+- A new documentation page shortly explains :doc:`datasets/masking` features.
 - A new example has been added to show that interpolation also works when
   surface topography is provided instead of bedrock topography.
 
