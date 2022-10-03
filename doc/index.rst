@@ -41,6 +41,7 @@ Documentation
    :caption: User guide
    :maxdepth: 1
 
+   foreword/startup
    datasets/opening
    datasets/masking
    plotting/datasets
