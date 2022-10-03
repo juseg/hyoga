@@ -117,7 +117,7 @@ control on the variable (short) name can be achieved by preceding the
 
    surface = surface.rename('surface')
    ds = ds.hyoga.assign(surface_altitude=surface)
-   assert 'usurf' in ds
+   assert 'surface' in ds
 
 However, this only works if the data does not already contain a variable with
 the standard name ``surface_altitude``. In that case, that variable's data is
@@ -129,7 +129,7 @@ quietly replaced, and the variable is not renamed.
 
    surface = surface.rename('name_to_ignore')
    ds = ds.hyoga.assign(surface_altitude=surface)
-   assert 'newsurf' not in ds
+   assert 'name_to_ignore' not in ds
 
 .. _xarray: https//xarray.pydata.org
 .. _`CF standard names`: http://cfconventions.org/standard-names.html

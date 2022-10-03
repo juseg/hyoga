@@ -25,4 +25,4 @@ help:
 .PHONY: clean
 clean:
 	@$(SPHINXBUILD) -M clean "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
-	rm -rf api/generated examples savefig
+	rm -rf api/generated examples
