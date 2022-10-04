@@ -30,6 +30,7 @@ def _compute_gradient(darray):
 
 def _compute_hillshade(darray, altitude=30.0, azimuth=315.0, exag=1.0):
     """Compute transparent hillshade map from a data array."""
+    # IDEA: try using higher-order differences to smooth the result
 
     # convert to rad
     azimuth *= np.pi / 180.
@@ -51,6 +52,8 @@ def _compute_hillshade(darray, altitude=30.0, azimuth=315.0, exag=1.0):
 
 def _compute_multishade(darray, altitude=None, azimuth=None, exag=1.0):
     """Compute multi-direction hillshade map from a data array."""
+    # FIXME this will look better using weights, I think. All weights should
+    # ideally add up to 1 so that adding sources does not brigten the image.
 
     # default light source parameters
     altitude = [30]*4 if altitude is None else altitude
