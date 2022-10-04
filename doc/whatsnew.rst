@@ -52,6 +52,9 @@ New features
 Documentation
 ~~~~~~~~~~~~~
 
+- Add a documentation page for :doc:`foreword/startup`.
+- Add a documentation page on :doc:`plotting/altitude`, including colormaps
+  (:issue:`15`).
 - Change to Sphinx book_ theme, rework :ref:`api`.
 
 .. _book: https://sphinx-book-theme.readthedocs.io

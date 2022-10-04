@@ -45,6 +45,7 @@ Documentation
    datasets/opening
    datasets/masking
    plotting/datasets
+   plotting/altitude
    examples/index
 
 .. toctree::
