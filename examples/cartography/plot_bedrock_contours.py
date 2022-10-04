@@ -7,7 +7,8 @@ Bedrock altitude contours
 =========================
 
 Plot a composite map including bedrock altitude contours, hillshade, and
-geographic elements.
+geographic elements. In absence of a ``levels`` argument, the altitude levels
+are internally optimized to fit the ``Topographic`` colormap.
 """
 
 import matplotlib.pyplot as plt
@@ -17,16 +18,14 @@ import hyoga.plot
 
 # initialize figure
 ax = plt.subplot(projection=ccrs.UTM(32))
-
-# get contours from colormap
-cmap = plt.colormaps['Topographic']  # mpl >= 3.5
+cax = plt.axes([0.15, 0.55, 0.025, 0.25])
 
 # open demo data
 with hyoga.open.example('pism.alps.in.boot.nc') as ds:
 
     # plot model output
     ds.hyoga.plot.bedrock_altitude_contours(
-        ax=ax, cmap='Topographic', vmin=0, vmax=4500)
+        ax=ax, cbar_ax=cax, cmap='Topographic', vmin=0, vmax=4500)
     ds.hyoga.plot.bedrock_hillshade(ax=ax)
 
 # add coastlines and rivers
@@ -36,6 +35,7 @@ hyoga.plot.lakes(ax=ax)
 
 # set axes properties
 ax.set_title('Bedrock altitude contours')
+cax.set_ylabel('')
 
 # show
 plt.show()
