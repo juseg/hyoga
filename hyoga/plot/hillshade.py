@@ -58,14 +58,19 @@ def _compute_multishade(darray, altitude=None, azimuth=None, weight=None):
     azimuth = [300, 315, 330] if azimuth is None else azimuth
     weight = [0.25, 0.5, 0.25] if weight is None else weight
 
-    # convert scalars to lists
-    altitude = altitude if hasattr(altitude, '__iter__') else [altitude]
-    azimuth = azimuth if hasattr(azimuth, '__iter__') else [azimuth]
-    weight = weight if hasattr(weight, '__iter__') else [weight]
+    # find arguments provided as iterables
+    kwargs = dict(altitude=altitude, azimuth=azimuth, weight=weight)
+    iterargs = {k: v for k, v in kwargs.items() if hasattr(v, '__iter__')}
 
-    # check that the lists have equal lengths
-    if len(altitude) != len(azimuth):
-        raise ValueError("altitude and azimuth should have equal lengths")
+    # ensure they have equal length (default lenght to 1)
+    length = len(list(iterargs.values())[0]) if iterargs else 1
+    if not all(len(arg) == length for arg in iterargs.values()):
+        raise ValueError("iterable arguments should have equal lengths")
+
+    # convert scalars to lists
+    altitude = iterargs.get('altitude', [altitude]*length)
+    azimuth = iterargs.get('azimuth', [azimuth]*length)
+    weight = iterargs.get('weight', [weight]*length)
 
     # compute multi-direction hillshade
     shades = sum(
@@ -81,8 +86,8 @@ def hillshade(darray, altitude=None, azimuth=None, weight=None, **kwargs):
     ----------
     altitude: float or iterable, optional
         Altitude angle(s) of illumination in degrees. Defaults to three light
-        sources at 30 degrees. For multidirectional hillshade, ``azimuth`` and
-        ``altitude`` need to have the same lenght.
+        sources at 30 degrees. Any of ``azimuth``, ``altitude`` and ``weight``
+        provided as iterables need to have equal lengths.
     azimuth: float or iterable, optional
         Azimuth angle(s) of illumination in degrees (clockwise from north).
         Defaults to three light sources at 300, 315 and 330 azimuths.
