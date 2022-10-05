@@ -37,16 +37,25 @@ def _compute_hillshade(darray, altitude=30.0, azimuth=315.0):
     altitude *= np.pi / 180.
 
     # compute cartesian coords of the illumination direction
-    # for transparent shades set horizontal surfaces to zero
     lsx = np.sin(azimuth) * np.cos(altitude)
     lsy = np.cos(azimuth) * np.cos(altitude)
-    lsz = 0.0  # (0.0 if transparent else np.sin(altitude))
+    lsz = np.sin(altitude)
 
     # compute topographic gradient
     grady, gradx = _compute_gradient(darray)
 
     # compute hillshade (minus dot product of normal and light direction)
     shades = (gradx*lsx + grady*lsy - lsz) / (1 + gradx**2 + grady**2)**(0.5)
+
+    # set horizontal surfaces hillshade to zero
+    # NOTE: would it make sense to remap this to (-1, 1)?
+    # - in theory shades go from -1 to +1 (orthogonal surfaces)
+    # - in practice they go from -1 to cos(altitude) (a vertical surface)
+    # - currently we remap [-1; cos(a)] to [sin(a)-1; cos(a)-sin(a)]
+    # - therefore we leave vmin and vmax unspecified in hillshade() below.
+    shades = shades + lsz
+
+    # return hillshade array
     return shades
 
 
@@ -104,6 +113,6 @@ def hillshade(darray, altitude=None, azimuth=None, weight=None, **kwargs):
         The plotted hillshade image.
     """
     darray = _compute_multishade(darray, altitude, azimuth, weight)
-    style = dict(add_colorbar=False, cmap='Glossy', vmin=-1, vmax=1)
+    style = dict(add_colorbar=False, cmap='Glossy')
     style.update(**kwargs)
     return darray.plot.imshow(**style)
