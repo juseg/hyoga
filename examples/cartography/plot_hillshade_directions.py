@@ -14,11 +14,11 @@ import cartopy.crs as ccrs
 import hyoga.open
 
 # initialize figure
-fig, axes = plt.subplots(ncols=4, subplot_kw=dict(projection=ccrs.UTM(32)))
+fig, axes = plt.subplots(ncols=3, subplot_kw=dict(projection=ccrs.UTM(32)))
 
 # open demo data with refined topography
 with hyoga.open.example('pism.alps.vis.refined.nc') as ds:
-    ds = ds.sel(x=slice(402e3, 427e3))
+    ds = ds.sel(x=slice(400e3, 435e3))
 
     # plot bedrock altitude
     for ax in axes:
@@ -26,21 +26,18 @@ with hyoga.open.example('pism.alps.vis.refined.nc') as ds:
 
     # add hillshades
     ds.hyoga.plot.bedrock_hillshade(
-        ax=axes[0])
+        ax=axes[0], altitude=45, azimuth=315)
     ds.hyoga.plot.bedrock_hillshade(
-        ax=axes[1], altitude=30, azimuth=330, weight=1)
+        ax=axes[1], altitude=45, azimuth=[255, 315, 15],
+        weight=[0.25, 0.5, 0.25])
     ds.hyoga.plot.bedrock_hillshade(
-        ax=axes[2], altitude=[60, 0, 60], azimuth=[260, 330, 30],
-        weight=[1/3]*3)
-    ds.hyoga.plot.bedrock_hillshade(
-        ax=axes[3], altitude=[60, 30, 0, 30, 60],
-        azimuth=[210, 260, 330, 30, 90], weight=[1/5]*5)
+        ax=axes[2], altitude=45, azimuth=[15, 75, 135, 195, 255, 315],
+        weight=[0.2, 0.125, 0.1, 0.125, 0.2, 0.25])
 
     # set titles
-    axes[0].set_title('Default')
-    axes[1].set_title('One direction')
-    axes[2].set_title('Three directions')
-    axes[3].set_title('Five directions')
+    axes[0].set_title('One direction')
+    axes[1].set_title('Three directions')
+    axes[2].set_title('Six directions')
 
 # show
 plt.show()
