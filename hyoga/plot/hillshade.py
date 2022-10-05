@@ -50,18 +50,18 @@ def _compute_hillshade(darray, altitude=30.0, azimuth=315.0):
     return shades
 
 
-def _compute_multishade(darray, altitude=None, azimuth=None):
+def _compute_multishade(darray, altitude=None, azimuth=None, weight=None):
     """Compute multi-direction hillshade map from a data array."""
-    # FIXME this will look better using weights, I think. All weights should
-    # ideally add up to 1 so that adding sources does not brigten the image.
 
     # default light source parameters
-    altitude = [30]*4 if altitude is None else altitude
-    azimuth = [300, 315, 315, 330] if azimuth is None else azimuth
+    altitude = [30]*3 if altitude is None else altitude
+    azimuth = [300, 315, 330] if azimuth is None else azimuth
+    weight = [1, 2, 1] if weight is None else weight
 
     # convert scalars to lists
     altitude = altitude if hasattr(altitude, '__iter__') else [altitude]
     azimuth = azimuth if hasattr(azimuth, '__iter__') else [azimuth]
+    weight = weight if hasattr(weight, '__iter__') else [weight]
 
     # check that the lists have equal lengths
     if len(altitude) != len(azimuth):
@@ -69,23 +69,27 @@ def _compute_multishade(darray, altitude=None, azimuth=None):
 
     # compute multi-direction hillshade
     shades = sum(
-        _compute_hillshade(darray, alti, azim)
-        for alti, azim in zip(altitude, azimuth))/len(altitude)
+        _compute_hillshade(darray, alti, azim)*wgt
+        for alti, azim, wgt in zip(altitude, azimuth, weight))/sum(weight)
     return shades
 
 
-def hillshade(darray, altitude=None, azimuth=None, **kwargs):
+def hillshade(darray, altitude=None, azimuth=None, weight=None, **kwargs):
     """Plot multidirectional hillshade image from data array.
 
     Parameters
     ----------
     altitude: float or iterable, optional
-        Altitude angle(s) of illumination in degrees. Defaults to four light
+        Altitude angle(s) of illumination in degrees. Defaults to three light
         sources at 30 degrees. For multidirectional hillshade, ``azimuth`` and
         ``altitude`` need to have the same lenght.
     azimuth: float or iterable, optional
         Azimuth angle(s) of illumination in degrees (clockwise from north).
-        Defaults to four light sources at 300, 315, 315 again and 330 azimuths.
+        Defaults to three light sources at 300, 315 and 330 azimuths.
+    weight: float or iterable, optional
+        Weight coefficients for each unidirectional hillshade array.
+        IDEA: Ideally all weight should add up to 1, but this is not a strict
+        requirement.
     **kwargs: optional
         Keyword arguments passed to :meth:`xarray.DataArray.plot.imshow`.
         Defaults to a glossy colormap scaled linearly between -1 and 1.
@@ -95,7 +99,7 @@ def hillshade(darray, altitude=None, azimuth=None, **kwargs):
     image: AxesImage
         The plotted hillshade image.
     """
-    darray = _compute_multishade(darray, altitude, azimuth)
+    darray = _compute_multishade(darray, altitude, azimuth, weight)
     style = dict(add_colorbar=False, cmap='Glossy', vmin=-1, vmax=1)
     style.update(**kwargs)
     return darray.plot.imshow(**style)

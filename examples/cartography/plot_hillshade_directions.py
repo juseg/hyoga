@@ -14,7 +14,7 @@ import cartopy.crs as ccrs
 import hyoga.open
 
 # initialize figure
-fig, axes = plt.subplots(ncols=3, subplot_kw=dict(projection=ccrs.UTM(32)))
+fig, axes = plt.subplots(ncols=4, subplot_kw=dict(projection=ccrs.UTM(32)))
 
 # open demo data with refined topography
 with hyoga.open.example('pism.alps.vis.refined.nc') as ds:
@@ -26,17 +26,21 @@ with hyoga.open.example('pism.alps.vis.refined.nc') as ds:
 
     # add hillshades
     ds.hyoga.plot.bedrock_hillshade(
-        ax=axes[0], altitude=30, azimuth=330)
+        ax=axes[0])
     ds.hyoga.plot.bedrock_hillshade(
-        ax=axes[1], altitude=[60, 0, 60], azimuth=[260, 330, 30])
+        ax=axes[1], altitude=30, azimuth=330, weight=1)
     ds.hyoga.plot.bedrock_hillshade(
-        ax=axes[2], altitude=[60, 30, 0, 30, 60],
-        azimuth=[210, 260, 330, 30, 90])
+        ax=axes[2], altitude=[60, 0, 60], azimuth=[260, 330, 30],
+        weight=[1, 1, 1])
+    ds.hyoga.plot.bedrock_hillshade(
+        ax=axes[3], altitude=[60, 30, 0, 30, 60],
+        azimuth=[210, 260, 330, 30, 90], weight=[1, 1, 1, 1, 1])
 
     # set titles
-    axes[0].set_title('One direction')
-    axes[1].set_title('Three directions')
-    axes[2].set_title('Five directions')
+    axes[0].set_title('Default')
+    axes[1].set_title('One direction')
+    axes[2].set_title('Three directions')
+    axes[3].set_title('Five directions')
 
 # show
 plt.show()
