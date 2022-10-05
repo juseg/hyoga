@@ -117,11 +117,13 @@ def bedrock_erosion(ds, constant=5.2e-8, exponent=2.34, **kwargs):
     return var.plot.contourf(**style)
 
 
-def bedrock_hillshade(ds, **kwargs):
+def bedrock_hillshade(ds, exag=1, **kwargs):
     """Plot bedrock altitude multidirectional hillshade.
 
     Parameters
     ----------
+    exag: float, optional
+        Altitude exageration factor, defaults to 1.
     **kwargs: optional
         Keyword arguments passed to :meth:`hyoga.plot.hillshade`. Defaults
         to a glossy, multidirectional hillshade from the northwest.
@@ -131,7 +133,7 @@ def bedrock_hillshade(ds, **kwargs):
     image: AxesImage
         The plotted bedrock hillshade image.
     """
-    darray = ds.hyoga.getvar('bedrock_altitude')
+    darray = ds.hyoga.getvar('bedrock_altitude') * exag
     return hyoga.plot.hillshade(darray, **kwargs)
 
 
@@ -265,11 +267,13 @@ def surface_altitude_contours(ds, major=1000, minor=200, **kwargs):
     return contours if len(contours) > 1 else contours[0]
 
 
-def surface_hillshade(ds, **kwargs):
+def surface_hillshade(ds, exag=1, **kwargs):
     """Plot surface altitude multidirectional hillshade.
 
     Parameters
     ----------
+    exag: float, optional
+        Altitude exageration factor, defaults to 1.
     **kwargs: optional
         Keyword arguments passed to :meth:`hyoga.plot.hillshade`. Defaults
         to a glossy, multidirectional hillshade from the northwest.
@@ -279,7 +283,7 @@ def surface_hillshade(ds, **kwargs):
     image: AxesImage
         The plotted surface hillshade image.
     """
-    darray = ds.hyoga.getvar('surface_altitude')
+    darray = ds.hyoga.getvar('surface_altitude') * exag
     return hyoga.plot.hillshade(darray, **kwargs)
 
 

@@ -28,7 +28,7 @@ def _compute_gradient(darray):
     return darray
 
 
-def _compute_hillshade(darray, altitude=30.0, azimuth=315.0, exag=1.0):
+def _compute_hillshade(darray, altitude=30.0, azimuth=315.0):
     """Compute transparent hillshade map from a data array."""
     # IDEA: try using higher-order differences to smooth the result
 
@@ -43,14 +43,14 @@ def _compute_hillshade(darray, altitude=30.0, azimuth=315.0, exag=1.0):
     lsz = 0.0  # (0.0 if transparent else np.sin(altitude))
 
     # compute topographic gradient
-    grady, gradx = _compute_gradient(exag*darray)
+    grady, gradx = _compute_gradient(darray)
 
     # compute hillshade (minus dot product of normal and light direction)
     shades = (gradx*lsx + grady*lsy - lsz) / (1 + gradx**2 + grady**2)**(0.5)
     return shades
 
 
-def _compute_multishade(darray, altitude=None, azimuth=None, exag=1.0):
+def _compute_multishade(darray, altitude=None, azimuth=None):
     """Compute multi-direction hillshade map from a data array."""
     # FIXME this will look better using weights, I think. All weights should
     # ideally add up to 1 so that adding sources does not brigten the image.
@@ -69,12 +69,12 @@ def _compute_multishade(darray, altitude=None, azimuth=None, exag=1.0):
 
     # compute multi-direction hillshade
     shades = sum(
-        _compute_hillshade(darray, alti, azim, exag)
+        _compute_hillshade(darray, alti, azim)
         for alti, azim in zip(altitude, azimuth))/len(altitude)
     return shades
 
 
-def hillshade(darray, altitude=None, azimuth=None, exag=1, **kwargs):
+def hillshade(darray, altitude=None, azimuth=None, **kwargs):
     """Plot multidirectional hillshade image from data array.
 
     Parameters
@@ -86,8 +86,6 @@ def hillshade(darray, altitude=None, azimuth=None, exag=1, **kwargs):
     azimuth: float or iterable, optional
         Azimuth angle(s) of illumination in degrees (clockwise from north).
         Defaults to four light sources at 300, 315, 315 again and 330 azimuths.
-    exag: float, optional
-        Altitude exageration factor, defaults to 1.
     **kwargs: optional
         Keyword arguments passed to :meth:`xarray.DataArray.plot.imshow`.
         Defaults to a glossy colormap scaled linearly between -1 and 1.
@@ -97,7 +95,7 @@ def hillshade(darray, altitude=None, azimuth=None, exag=1, **kwargs):
     image: AxesImage
         The plotted hillshade image.
     """
-    darray = _compute_multishade(darray, altitude, azimuth, exag)
+    darray = _compute_multishade(darray, altitude, azimuth)
     style = dict(add_colorbar=False, cmap='Glossy', vmin=-1, vmax=1)
     style.update(**kwargs)
     return darray.plot.imshow(**style)
