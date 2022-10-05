@@ -56,7 +56,7 @@ def _compute_multishade(darray, altitude=None, azimuth=None, weight=None):
     # default light source parameters
     altitude = [30]*3 if altitude is None else altitude
     azimuth = [300, 315, 330] if azimuth is None else azimuth
-    weight = [1, 2, 1] if weight is None else weight
+    weight = [0.25, 0.5, 0.25] if weight is None else weight
 
     # convert scalars to lists
     altitude = altitude if hasattr(altitude, '__iter__') else [altitude]
@@ -70,7 +70,7 @@ def _compute_multishade(darray, altitude=None, azimuth=None, weight=None):
     # compute multi-direction hillshade
     shades = sum(
         _compute_hillshade(darray, alti, azim)*wgt
-        for alti, azim, wgt in zip(altitude, azimuth, weight))/sum(weight)
+        for alti, azim, wgt in zip(altitude, azimuth, weight))
     return shades
 
 
@@ -87,9 +87,8 @@ def hillshade(darray, altitude=None, azimuth=None, weight=None, **kwargs):
         Azimuth angle(s) of illumination in degrees (clockwise from north).
         Defaults to three light sources at 300, 315 and 330 azimuths.
     weight: float or iterable, optional
-        Weight coefficients for each unidirectional hillshade array.
-        IDEA: Ideally all weight should add up to 1, but this is not a strict
-        requirement.
+        Weight coefficient(s) for each unidirectional hillshade array. It is
+        intended, but not strictly required, that the weights add up to 1.
     **kwargs: optional
         Keyword arguments passed to :meth:`xarray.DataArray.plot.imshow`.
         Defaults to a glossy colormap scaled linearly between -1 and 1.

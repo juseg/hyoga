@@ -31,10 +31,10 @@ with hyoga.open.example('pism.alps.vis.refined.nc') as ds:
         ax=axes[1], altitude=30, azimuth=330, weight=1)
     ds.hyoga.plot.bedrock_hillshade(
         ax=axes[2], altitude=[60, 0, 60], azimuth=[260, 330, 30],
-        weight=[1, 1, 1])
+        weight=[1/3]*3)
     ds.hyoga.plot.bedrock_hillshade(
         ax=axes[3], altitude=[60, 30, 0, 30, 60],
-        azimuth=[210, 260, 330, 30, 90], weight=[1, 1, 1, 1, 1])
+        azimuth=[210, 260, 330, 30, 90], weight=[1/5]*5)
 
     # set titles
     axes[0].set_title('Default')
