@@ -36,7 +36,7 @@ with hyoga.open.example('pism.alps.vis.refined.nc') as ds:
 
     # set titles
     axes[0].set_title('One direction')
-    axes[1].set_title('Three directions')
+    axes[1].set_title('Three directions (default)')
     axes[2].set_title('Six directions')
 
 # show

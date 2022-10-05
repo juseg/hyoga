@@ -63,8 +63,8 @@ def _compute_multishade(darray, altitude=None, azimuth=None, weight=None):
     """Compute multi-direction hillshade map from a data array."""
 
     # default light source parameters
-    altitude = [30]*3 if altitude is None else altitude
-    azimuth = [300, 315, 330] if azimuth is None else azimuth
+    altitude = 45 if altitude is None else altitude
+    azimuth = [255, 315, 15] if azimuth is None else azimuth
     weight = [0.25, 0.5, 0.25] if weight is None else weight
 
     # find arguments provided as iterables
