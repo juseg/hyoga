@@ -95,64 +95,65 @@ def cities(ax=None, lang=None, include=None, exclude=None, ranks=None,
         transform=crs, **kwargs)
 
 
-def countries(edgecolor='none', facecolor='0.9', linewidth=1, **kwargs):
+def countries(**kwargs):
     # IDEA: style='wiki' => facecolor='#e0e0e0', subject_facecolor='#fefee9'
+    style = dict(edgecolor='none', facecolor='0.9', linewidth=1)
+    style.update(**kwargs)  # in Py 3.9 kwargs = defaults | kwargs
     return feature(
-        category='cultural', name='admin_0_countries',
-        edgecolor=edgecolor, facecolor=facecolor, linewidth=linewidth,
-        **kwargs)
+        category='cultural', name='admin_0_countries', **style)
 
 
-def country_borders(edgecolor='0.4', facecolor='none', linewidth=2.5,
-                    **kwargs):
-    # wiki linestyle=(0, (5, 2.5, 1.25, 2.5)),
+def country_borders(**kwargs):
+    # IDEA: style='wiki' => linestyle=(0, (5, 2.5, 1.25, 2.5))
+    style = dict(edgecolor='0.4', facecolor='none', linewidth=2.5)
+    style.update(**kwargs)  # in Py 3.9 kwargs = defaults | kwargs
     return (
         feature(
             category='cultural', name='admin_0_boundary_lines_land',
-            edgecolor=edgecolor, facecolor=facecolor, linewidth=linewidth,
-            **kwargs),
+            **style),
         feature(
             category='cultural', name='admin_0_boundary_lines_map_units',
-            edgecolor=edgecolor, facecolor=facecolor, linewidth=0.75*linewidth,
-            **kwargs))
+            **style))
 
 
-def states(edgecolor='none', facecolor='0.9', linewidth=0.25, **kwargs):
+def states(**kwargs):
+    style = dict(edgecolor='none', facecolor='0.9', linewidth=0.25)
+    style.update(**kwargs)  # in Py 3.9 kwargs = defaults | kwargs
     return feature(
         category='cultural', name='admin_1_states_provinces',
-        edgecolor=edgecolor, facecolor=facecolor, linewidth=linewidth,
-        **kwargs)
+        **style)
 
 
-def state_borders(edgecolor='0.4', facecolor='none', linewidth=1, **kwargs):
+def state_borders(**kwargs):
+    style = dict(edgecolor='0.4', facecolor='none', linewidth=1)
+    style.update(**kwargs)  # in Py 3.9 kwargs = defaults | kwargs
     # IDEA: style='wiki' => edgecolor='#646464'
     return feature(
-        category='cultural', name='admin_1_states_provinces_lines',
-        edgecolor=edgecolor, facecolor=facecolor, linewidth=linewidth,
-        **kwargs)
+        category='cultural', name='admin_1_states_provinces_lines', **style)
 
 
 # Natural Earth physical
 # ----------------------
 
-def coastline(edgecolor='0.25', facecolor='none', linewidth=0.25, **kwargs):
+def coastline(**kwargs):
+    style = dict(edgecolor='0.25', facecolor='none', linewidth=0.25)
+    style.update(**kwargs)  # in Py 3.9 kwargs = defaults | kwargs
     return feature(
-        category='physical', name='coastline',
-        edgecolor=edgecolor, facecolor=facecolor, linewidth=linewidth,
-        **kwargs)
+        category='physical', name='coastline', **style)
 
 
-def glaciers(edgecolor='0.25', facecolor='1.0', linewidth=0.25, **kwargs):
+def glaciers(**kwargs):
+    style = dict(edgecolor='0.25', facecolor='1.0', linewidth=0.25)
+    style.update(**kwargs)  # in Py 3.9 kwargs = defaults | kwargs
     return feature(
-        category='physical', name='glaciated_areas',
-        edgecolor=edgecolor, facecolor=facecolor, linewidth=linewidth,
-        **kwargs)
+        category='physical', name='glaciated_areas', **style)
 
 
-def lakes(edgecolor='0.25', facecolor='0.95', linewidth=0.25, **kwargs):
+def lakes(**kwargs):
+    style = dict(edgecolor='0.25', facecolor='0.95', linewidth=0.25)
+    style.update(**kwargs)  # in Py 3.9 kwargs = defaults | kwargs
     # IDEA: style='wiki' => edgecolor='#0978ab', facecolor='#d8f2fe'
-    kwargs = dict(category='physical', edgecolor=edgecolor,
-                  facecolor=facecolor, linewidth=linewidth, **kwargs)
+    kwargs = dict(category='physical', **style)
     features = feature(name='lakes', **kwargs)
     if 'scale' not in kwargs or kwargs['scale'] == '10m':
         features = (features,
@@ -161,16 +162,16 @@ def lakes(edgecolor='0.25', facecolor='0.95', linewidth=0.25, **kwargs):
     return features
 
 
-def ocean(edgecolor='0.25', facecolor='0.95', linewidth=0.25, **kwargs):
-    return feature(
-        category='physical', name='ocean',
-        edgecolor=edgecolor, facecolor=facecolor, linewidth=linewidth,
-        **kwargs)
+def ocean(**kwargs):
+    style = dict(edgecolor='0.25', facecolor='0.95', linewidth=0.25)
+    style.update(**kwargs)  # in Py 3.9 kwargs = defaults | kwargs
+    return feature(category='physical', name='ocean', **style)
 
 
-def rivers(edgecolor='0.25', facecolor='none', linewidth=0.5, **kwargs):
-    kwargs = dict(category='physical', edgecolor=edgecolor,
-                  facecolor=facecolor, linewidth=linewidth, **kwargs)
+def rivers(**kwargs):
+    style = dict(edgecolor='0.25', facecolor='none', linewidth=0.5)
+    style.update(**kwargs)  # in Py 3.9 kwargs = defaults | kwargs
+    kwargs = dict(category='physical', **style)
     features = feature(name='rivers_lake_centerlines', **kwargs)
     if 'scale' not in kwargs or kwargs['scale'] == '10m':
         features = (features,
@@ -179,9 +180,8 @@ def rivers(edgecolor='0.25', facecolor='none', linewidth=0.5, **kwargs):
     return features
 
 
-def graticules(edgecolor='0.25', facecolor='none', linewidth=0.1, interval=1,
-               **kwargs):
+def graticules(interval=1, **kwargs):
+    style = dict(edgecolor='0.25', facecolor='none', linewidth=0.1)
+    style.update(**kwargs)  # in Py 3.9 kwargs = defaults | kwargs
     return feature(
-        category='physical', name='graticules_{}'.format(interval),
-        edgecolor=edgecolor, facecolor=facecolor, linewidth=linewidth,
-        **kwargs)
+        category='physical', name='graticules_{}'.format(interval), **style)
