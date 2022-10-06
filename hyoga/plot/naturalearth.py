@@ -18,7 +18,35 @@ import hyoga.plot
 # -----------------------
 
 def feature(category=None, name=None, scale='10m', zorder=-1, **kwargs):
-    """Plot Natural Earth feature allowing a different color for subject."""
+    """Plot Natural Earth feature allowing a different color for subject.
+
+    Parameters
+    ----------
+    category : {'cultural', 'physical'}, optional
+        Natural Earth data category (i.e. folder) used for downloads.
+    name : str, optional
+        Natural Earth feature name, such as ``lakes`` or ``admin_0_countries``
+        (used to determine the name of the shapefile to download). Please
+        browse https://www.naturalearthdata.com to see what data is available.
+    scale : {'10m', '50m', '110m'}, optional
+        Natural Earth data scale controlling the level of detail (and plotting
+        speed). Unlike cartopy this defaults to the largest scale of '10m'.
+    zorder : float, optional
+        Set the matplotlib zorder attribute of the resulting feature artist(s).
+        Artists with lower zorder values are drawn first. The default value of
+        -1 ensures that Natural Earth data are drawn early as a background to
+        other plot elements.
+    **kwargs :
+        Additional keyword arguments are passed to
+        :func:`hyoga.plot.shapefile`.
+
+    Returns
+    -------
+    geometries : tuple
+        A :class:`cartopy.mpl.feature_artist.FeatureArtist` instance or a tuple
+        of (context, subject) feature artists if a subject keyword argument
+        was passed to :func:`hyoga.plot.shapefile`.
+    """
     fname = cshp.natural_earth(resolution=scale, category=category, name=name)
     return hyoga.plot.shapefile(fname, zorder=zorder, **kwargs)
 
@@ -28,8 +56,7 @@ def feature(category=None, name=None, scale='10m', zorder=-1, **kwargs):
 
 def cities(ax=None, lang=None, include=None, exclude=None, ranks=None,
            **kwargs):
-    """
-    Plot populated places as an annotated scatter plot.
+    """Plot populated places as an annotated scatter plot.
 
     Parameters
     ----------
