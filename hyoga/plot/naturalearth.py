@@ -11,13 +11,14 @@ which may increase speed especially for high-definition data on small domains.
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
 import cartopy.io.shapereader as cshp
+import geopandas
 import hyoga.plot
 
 
 # Natural Earth internals
 # -----------------------
 
-def feature(category=None, name=None, scale='10m', zorder=-1, **kwargs):
+def feature(category=None, name=None, scale='10m', crs=None, zorder=-1, **kwargs):
     """Plot Natural Earth feature allowing a different color for subject.
 
     Parameters
@@ -31,6 +32,10 @@ def feature(category=None, name=None, scale='10m', zorder=-1, **kwargs):
     scale : {'10m', '50m', '110m'}, optional
         Natural Earth data scale controlling the level of detail (and plotting
         speed). Unlike cartopy this defaults to the largest scale of '10m'.
+    crs : str or pyproj.CRS, optional
+        Cartographic reference system to reproject feature to before plotting.
+        Can be anything supported by :meth:`geopandas.GeoDataFrame.to_crs`
+        such as a proj4 string, "epsg:4326", or a WKT string.
     zorder : float, optional
         Set the matplotlib zorder attribute of the resulting feature artist(s).
         Artists with lower zorder values are drawn first. The default value of
@@ -38,17 +43,24 @@ def feature(category=None, name=None, scale='10m', zorder=-1, **kwargs):
         other plot elements.
     **kwargs :
         Additional keyword arguments are passed to
-        :func:`hyoga.plot.shapefile`.
+        :func:`geopandas.GeoDataFrame.plot`.
 
     Returns
     -------
-    geometries : tuple
-        A :class:`cartopy.mpl.feature_artist.FeatureArtist` instance or a tuple
-        of (context, subject) feature artists if a subject keyword argument
-        was passed to :func:`hyoga.plot.shapefile`.
+    ax : :class:`matplotlib.axes.Axes` (or a subclass)
+        Matplotlib axes used for plotting.
     """
+    # open Natural Earth shapefile
+    # TODO: move this to hyoga.open.naturalearth
     fname = cshp.natural_earth(resolution=scale, category=category, name=name)
-    return hyoga.plot.shapefile(fname, zorder=zorder, **kwargs)
+    gdf = geopandas.read_file(fname)
+
+    # reproject if crs is not None
+    if crs is not None:
+        gdf = gdf.to_crs(crs=crs)
+
+    # plot and return axes
+    return gdf.plot(zorder=zorder, **kwargs)
 
 
 # Natural Earth cultural
