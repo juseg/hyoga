@@ -9,7 +9,8 @@ especially for high-definition data on small domains.
 
 import os.path
 import zipfile
-import hyoga.plot
+import geopandas
+import pandas
 from hyoga.open.example import _download  # FIXME move to core?
 
 
@@ -45,7 +46,7 @@ def _download_paleoglaciers(source):
     return globals()['_download_paleoglaciers_' + source]()
 
 
-def paleoglaciers(source='ehl11', **kwargs):
+def paleoglaciers(source='ehl11', crs=None, **kwargs):
     """Plot Last Glacial Maximum paleoglacier extent.
 
     Parameters
@@ -53,15 +54,32 @@ def paleoglaciers(source='ehl11', **kwargs):
     source : 'ehl11' or 'bat19'
         Source of paleoglacier extent data, either Ehlers et al. (2011) or
         Batchelor et al. (2019).
+    crs : str or pyproj.CRS, optional
+        Cartographic reference system to reproject feature to before plotting.
+        Can be anything supported by :meth:`geopandas.GeoDataFrame.to_crs`
+        such as a proj4 string, "epsg:4326", or a WKT string.
     **kwargs : optional
-        Keyword arguments passed to :func:`hyoga.plot.shapefile`.
+        Additional keyword arguments are passed to
+        :func:`geopandas.GeoDataFrame.plot`.
 
     Returns
     -------
-    geometries : tuple
-        A tuple of :class:`cartopy.mpl.feature_artist.FeatureArtist`, or a
-        nested tuple if a subject is passed to :func:`hyoga.plot.shapefile`.
+    ax : :class:`matplotlib.axes.Axes` (or a subclass)
+        Matplotlib axes used for plotting.
     """
-    # FIXME any way to combine ehl11 geometries to avoid returning a tuple?
+    # open paleoglacier shapefile(s)
+    # TODO: move this to hyoga.open.paleoglaciers
     paths = _download_paleoglaciers(source)
-    return tuple(hyoga.plot.shapefile(path, **kwargs) for path in paths)
+    gdf = pandas.concat(geopandas.read_file(path) for path in paths)
+
+    # Ehlers et al. data need cleanup
+    if source == 'ehl11':
+        gdf = gdf.set_crs('+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
+        gdf = gdf.drop_duplicates()
+
+    # reproject if crs is not None
+    if crs is not None:
+        gdf = gdf.to_crs(crs)
+
+    # plot and return axes
+    return gdf.plot(**kwargs)
