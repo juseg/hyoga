@@ -15,7 +15,6 @@ from .hillshade import hillshade
 from .naturalearth import feature, \
     cities, countries, country_borders, states, state_borders, \
     coastline, glaciers, graticules, lakes, ocean, rivers
-from .paleoglaciers import paleoglaciers
 from .shapefile import shapefile
 
 __all__ = [
@@ -27,4 +26,4 @@ __all__ = [
     'hillshade', 'feature',
     'cities', 'countries', 'country_borders', 'states', 'state_borders',
     'coastline', 'glaciers', 'graticules', 'lakes', 'ocean', 'rivers',
-    'paleoglaciers', 'shapefile']
+    'shapefile']

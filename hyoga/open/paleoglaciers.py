@@ -2,9 +2,9 @@
 # GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
 """
-This module contains functions to plot global or regional paleoglacier extent
-datasets. These use hyoga's internal shapefile plotter which may increase speed
-especially for high-definition data on small domains.
+This module contains a function to open global or regional paleoglacier extent
+datasets. The data are returned as a geopandas GeoDataFrame instance, allowing
+convenient postprocessing and speedy plotting.
 """
 
 import os.path
@@ -46,40 +46,29 @@ def _download_paleoglaciers(source):
     return globals()['_download_paleoglaciers_' + source]()
 
 
-def paleoglaciers(source='ehl11', crs=None, **kwargs):
-    """Plot Last Glacial Maximum paleoglacier extent.
+def paleoglaciers(source='ehl11'):
+    """Open Last Glacial Maximum paleoglacier extent.
 
     Parameters
     ----------
     source : 'ehl11' or 'bat19'
         Source of paleoglacier extent data, either Ehlers et al. (2011) or
         Batchelor et al. (2019).
-    crs : str or pyproj.CRS, optional
-        Cartographic reference system to reproject feature to before plotting.
-        Can be anything supported by :meth:`geopandas.GeoDataFrame.to_crs`
-        such as a proj4 string, "epsg:4326", or a WKT string.
-    **kwargs : optional
-        Additional keyword arguments are passed to
-        :func:`geopandas.GeoDataFrame.plot`.
 
     Returns
     -------
-    ax : :class:`matplotlib.axes.Axes` (or a subclass)
-        Matplotlib axes used for plotting.
+    gdf : GeoDataFrame
+        The geodataframe containing paleoglaciers geometries.
     """
     # open paleoglacier shapefile(s)
-    # TODO: move this to hyoga.open.paleoglaciers
     paths = _download_paleoglaciers(source)
     gdf = pandas.concat(geopandas.read_file(path) for path in paths)
 
     # Ehlers et al. data need cleanup
+    # FIXME move to _paleoglaciers_ehl11
     if source == 'ehl11':
         gdf = gdf.set_crs('+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
         gdf = gdf.drop_duplicates()
 
-    # reproject if crs is not None
-    if crs is not None:
-        gdf = gdf.to_crs(crs)
-
-    # plot and return axes
-    return gdf.plot(**kwargs)
+    # return geodataframe
+    return gdf
