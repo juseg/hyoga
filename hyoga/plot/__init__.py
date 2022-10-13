@@ -12,9 +12,6 @@ from .datasets import \
     surface_altitude_contours, surface_hillshade, surface_velocity, \
     surface_velocity_streamplot
 from .hillshade import hillshade
-from .naturalearth import feature, \
-    cities, countries, country_borders, states, state_borders, \
-    coastline, glaciers, graticules, lakes, ocean, rivers
 from .shapefile import shapefile
 
 __all__ = [
@@ -23,7 +20,5 @@ __all__ = [
     'bedrock_hillshade', 'bedrock_isostasy', 'bedrock_shoreline', 'ice_margin',
     'surface_altitude_contours', 'surface_hillshade', 'surface_velocity',
     'surface_velocity_streamplot',
-    'hillshade', 'feature',
-    'cities', 'countries', 'country_borders', 'states', 'state_borders',
-    'coastline', 'glaciers', 'graticules', 'lakes', 'ocean', 'rivers',
+    'hillshade',
     'shapefile']

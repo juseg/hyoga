@@ -2,21 +2,45 @@
 # GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
 """
-This module contains functions to plot globally-available Natural Earth data
-in order to add cultural (cities, countries, etc) and physical (lakes, rivers,
-glaciers, etc) elements on plots. These use hyoga's internal shapefile plotter
-which may increase speed especially for high-definition data on small domains.
+This module contains a function to open globally-available Natural Earth data,
+including cultural (cities, countries, etc) and physical (lakes, rivers,
+glaciers, etc) elements. The data are returned as a geopandas GeoDataFrame
+instance, allowing convenient postprocessing and speedy plotting.
 """
 
-import matplotlib.pyplot as plt
+import cartopy
 import cartopy.crs as ccrs
 import cartopy.io.shapereader as cshp
 import geopandas
 import hyoga.plot
+import matplotlib.pyplot as plt
 
 
-# Natural Earth internals
-# -----------------------
+def naturalearth(category=None, name=None, scale='10m'):
+    """Open Natural Earth geodataframe
+
+    Parameters
+    ----------
+    category : {'cultural', 'physical'}, optional
+        Natural Earth data category (i.e. folder) used for downloads.
+    name : str, optional
+        Natural Earth feature name, such as ``lakes`` or ``admin_0_countries``
+        (used to determine the name of the shapefile to download). Please
+        browse https://www.naturalearthdata.com to see what data is available.
+    scale : {'10m', '50m', '110m'}, optional
+        Natural Earth data scale controlling the level of detail (and plotting
+        speed). Unlike cartopy this defaults to the largest scale of '10m'.
+
+    Returns
+    -------
+    gdf : GeoDataFrame
+        The geodataframe containing Natural Earth geometries.
+    """
+    # TODO in 0.2.0: replace functions below with alias kwarg
+    # TODO in 0.2.x: replace cartopy.io with internal downloader
+    return geopandas.read_file(cartopy.io.shapereader.natural_earth(
+        category=category, name=name, resolution=scale))
+
 
 def feature(category=None, name=None, scale='10m', crs=None, zorder=-1, **kwargs):
     """Plot Natural Earth feature allowing a different color for subject.
@@ -51,9 +75,7 @@ def feature(category=None, name=None, scale='10m', crs=None, zorder=-1, **kwargs
         Matplotlib axes used for plotting.
     """
     # open Natural Earth shapefile
-    # TODO: move this to hyoga.open.naturalearth
-    fname = cshp.natural_earth(resolution=scale, category=category, name=name)
-    gdf = geopandas.read_file(fname)
+    gdf = naturalearth(category=category, name=name, scale=scale)
 
     # reproject if crs is not None
     if crs is not None:
