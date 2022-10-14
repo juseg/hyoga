@@ -375,6 +375,9 @@ class HyogaPlotMethods:
             to the highest scale of 10m.
         **kwargs: optional
             Keyword arguments passed to :meth:`geopandas.GeoDataFrame.plot`.
+            Defaults to plotting on current axes at ``zorder=-1``, the same
+            level as bedrock altitude maps. If theme is None, also apply a
+            default style to coastline, rivers, and lakes.
 
         Returns
         -------
@@ -399,10 +402,14 @@ class HyogaPlotMethods:
                 linewidth=linewidth/2, **kwargs)
             return ax
 
-        # IDEA: theme=None plots all rivers and lakes
+        # default to plotting on current axes background
+        kwargs.setdefault('ax', plt.gca())
         kwargs.setdefault('zorder', -1)
+
         # prevent autoscaling (this is not ideal)
         # TODO: open geopandas issue to allow gdf.plot(autolim=False)
-        kwargs.get('ax', plt.gca()).set_autoscale_on(False)
+        kwargs['ax'].set_autoscale_on(False)
+
+        # open natural earth data, reproject and plot
         gdf = hyoga.open.naturalearth(theme, category=category, scale=scale)
         return gdf.to_crs(self._ds.proj4).plot(**kwargs)
