@@ -6,19 +6,10 @@ Hyoga plotting tools to visualize glacier modelling datasets.
 """
 
 from .colormaps import COLORMAPS, SEQUENCES
-from .datasets import \
-    bedrock_altitude, bedrock_altitude_contours, bedrock_erosion, \
-    bedrock_hillshade, bedrock_isostasy, bedrock_shoreline, ice_margin, \
-    surface_altitude_contours, surface_hillshade, surface_velocity, \
-    surface_velocity_streamplot
 from .hillshade import hillshade
 from .shapefile import shapefile
 
 __all__ = [
     'COLORMAPS', 'SEQUENCES',
-    'bedrock_altitude', 'bedrock_altitude_contours', 'bedrock_erosion',
-    'bedrock_hillshade', 'bedrock_isostasy', 'bedrock_shoreline', 'ice_margin',
-    'surface_altitude_contours', 'surface_hillshade', 'surface_velocity',
-    'surface_velocity_streamplot',
     'hillshade',
     'shapefile']
