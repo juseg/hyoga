@@ -16,17 +16,17 @@ import hyoga.plot
 import matplotlib.pyplot as plt
 
 
-def naturalearth(category=None, name=None, scale='10m'):
+def naturalearth(category=None, theme=None, scale='10m'):
     """Open Natural Earth geodataframe
 
     Parameters
     ----------
     category : {'cultural', 'physical'}, optional
         Natural Earth data category (i.e. folder) used for downloads.
-    name : str, optional
-        Natural Earth feature name, such as ``lakes`` or ``admin_0_countries``
+    theme : str, optional
+        Natural Earth data "theme", such as ``lakes`` or ``admin_0_countries``
         (used to determine the name of the shapefile to download). Please
-        browse https://www.naturalearthdata.com to see what data is available.
+        browse https://www.naturalearthdata.com for available themes.
     scale : {'10m', '50m', '110m'}, optional
         Natural Earth data scale controlling the level of detail (and plotting
         speed). Unlike cartopy this defaults to the largest scale of '10m'.
@@ -36,10 +36,10 @@ def naturalearth(category=None, name=None, scale='10m'):
     gdf : GeoDataFrame
         The geodataframe containing Natural Earth geometries.
     """
-    # TODO in 0.2.0: replace functions below with alias kwarg
+    # TODO in 0.2.0: allow multiple themes
     # TODO in 0.2.x: replace cartopy.io with internal downloader
     return geopandas.read_file(cartopy.io.shapereader.natural_earth(
-        category=category, name=name, resolution=scale))
+        category=category, name=theme, resolution=scale))
 
 
 def feature(category=None, name=None, scale='10m', crs=None, zorder=-1, **kwargs):
@@ -75,7 +75,7 @@ def feature(category=None, name=None, scale='10m', crs=None, zorder=-1, **kwargs
         Matplotlib axes used for plotting.
     """
     # open Natural Earth shapefile
-    gdf = naturalearth(category=category, name=name, scale=scale)
+    gdf = naturalearth(category=category, theme=name, scale=scale)
 
     # reproject if crs is not None
     if crs is not None:
