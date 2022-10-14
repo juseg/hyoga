@@ -24,7 +24,9 @@ def naturalearth(theme, category='physical', scale='10m'):
     ----------
     theme : str or iterable
         Natural Earth data theme(s), such as ``lakes`` or ``admin_0_countries``
-        (used to determine the name(s) of the shapefile to download). Please
+        (used to determine the name(s) of the shapefile(s) to download), or one
+        of the ``lakes_all`` and ``rivers_all`` aliases to open respecively all
+        lakes and rivers including regional subsets (at 10m scale). Please
         browse https://www.naturalearthdata.com for available themes.
     category : {'cultural', 'physical'}, optional
         Natural Earth data category (i.e. online folder) used for downloads,
@@ -38,6 +40,15 @@ def naturalearth(theme, category='physical', scale='10m'):
     gdf : GeoDataFrame
         The geodataframe containing Natural Earth geometries.
     """
+
+    # process theme aliases
+    aliases = {
+        'lakes_all': (
+            'lakes', 'lakes_australia', 'lakes_europe', 'lakes_north_america'),
+        'rivers_all': (
+            'rivers_lake_centerlines', 'rivers_australia', 'rivers_europe',
+            'rivers_north_america')}
+    theme = aliases.get(theme, theme)
 
     # if theme is iterable, call recursively
     if hasattr(theme, '__iter__') and not isinstance(theme, str):

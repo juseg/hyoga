@@ -362,10 +362,9 @@ class HyogaPlotMethods:
         Parameters
         ----------
         theme : str or iterable
-            Natural Earth data theme(s), such as ``lakes`` or
-            ``admin_0_countries`` (used to determine the name(s) of the
-            shapefile to download). Please browse
-            https://www.naturalearthdata.com for available themes.
+            Natural Earth data theme(s) or theme aliase(s), such as ``rivers``
+            or ``lakes_all`` passed to :func:`hyoga.open.naturalearth`. Please
+            browse https://www.naturalearthdata.com for available themes.
         category : {'cultural', 'physical'}, optional
             Natural Earth data category (i.e. folder) used for downloads,
             defaults to 'physical'.
