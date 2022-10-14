@@ -356,12 +356,13 @@ class HyogaPlotMethods:
     # Vector plot methods
     # -------------------
 
-    def naturalearth(self, theme, category='physical', scale='10m', **kwargs):
+    def naturalearth(
+            self, theme=None, category='physical', scale='10m', **kwargs):
         """Plot Natural Earth data in dataset projection.
 
         Parameters
         ----------
-        theme : str or iterable
+        theme : str or iterable, optional
             Natural Earth data theme(s) or theme aliase(s), such as ``rivers``
             or ``lakes_all`` passed to :func:`hyoga.open.naturalearth`. Please
             browse https://www.naturalearthdata.com for available themes.
@@ -372,6 +373,23 @@ class HyogaPlotMethods:
             Natural Earth data scale controlling the level of detail, defaults
             to the highest scale of 10m.
         """
+
+        # if theme is None plot coastline, rivers and lakes
+        if theme is None:
+            edgecolor = kwargs.pop('edgecolor', '0.25')
+            facecolor = kwargs.pop('facecolor', '0.95')
+            linewidth = kwargs.pop('linewidth', 0.5)
+            ax = self.naturalearth(
+                'coastline', edgecolor=edgecolor, linestyle='dashed',
+                linewidth=linewidth/2, **kwargs)
+            ax = self.naturalearth(
+                'rivers_all', edgecolor=edgecolor, linewidth=linewidth,
+                **kwargs)
+            ax = self.naturalearth(
+                'lakes_all', edgecolor=edgecolor, facecolor=facecolor,
+                linewidth=linewidth/2, **kwargs)
+            return ax
+
         # IDEA: theme=None plots all rivers and lakes
         kwargs.setdefault('zorder', -1)
         # prevent autoscaling (this is not ideal)
