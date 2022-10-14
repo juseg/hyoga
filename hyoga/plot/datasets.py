@@ -22,6 +22,9 @@ class HyogaPlotMethods:
         self._hyoga = accessor
         self._ds = accessor._ds
 
+    # Dataset plot methods
+    # --------------------
+
     def bedrock_altitude(self, sealevel=0, **kwargs):
         """Plot bedrock topography and shoreline.
 
@@ -349,3 +352,31 @@ class HyogaPlotMethods:
         # streamplot colormapping fails on empty arrays (mpl issue #19323)
         except ValueError:
             return None
+
+    # Vector plot methods
+    # -------------------
+
+    def naturalearth(self, theme, category='physical', scale='10m', **kwargs):
+        """Plot Natural Earth data in dataset projection.
+
+        Parameters
+        ----------
+        theme : str or iterable
+            Natural Earth data theme(s), such as ``lakes`` or
+            ``admin_0_countries`` (used to determine the name(s) of the
+            shapefile to download). Please browse
+            https://www.naturalearthdata.com for available themes.
+        category : {'cultural', 'physical'}, optional
+            Natural Earth data category (i.e. folder) used for downloads,
+            defaults to 'physical'.
+        scale : {'10m', '50m', '110m'}, optional
+            Natural Earth data scale controlling the level of detail, defaults
+            to the highest scale of 10m.
+        """
+        # IDEA: theme=None plots all rivers and lakes
+        kwargs.setdefault('zorder', -1)
+        # prevent autoscaling (this is not ideal)
+        # TODO: open geopandas issue to allow gdf.plot(autolim=False)
+        kwargs.get('ax', plt.gca()).set_autoscale_on(False)
+        gdf = hyoga.open.naturalearth(theme, category=category, scale=scale)
+        return gdf.to_crs(self._ds.proj4).plot(**kwargs)

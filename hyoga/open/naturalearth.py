@@ -27,11 +27,11 @@ def naturalearth(theme, category='physical', scale='10m'):
         (used to determine the name(s) of the shapefile to download). Please
         browse https://www.naturalearthdata.com for available themes.
     category : {'cultural', 'physical'}, optional
-        Natural Earth data category (i.e. folder) used for downloads, defaults
-        to 'physical'.
+        Natural Earth data category (i.e. online folder) used for downloads,
+        defaults to 'physical'.
     scale : {'10m', '50m', '110m'}, optional
-        Natural Earth data scale controlling the level of detail (and plotting
-        speed). Unlike cartopy this defaults to the largest scale of '10m'.
+        Natural Earth data scale controlling the level of detail, defaults to
+        the highest scale of 10m.
 
     Returns
     -------
