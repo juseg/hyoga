@@ -12,6 +12,7 @@ import cartopy
 import cartopy.crs as ccrs
 import cartopy.io.shapereader as cshp
 import geopandas
+import pandas
 import hyoga.plot
 import matplotlib.pyplot as plt
 
@@ -21,9 +22,9 @@ def naturalearth(theme, category='physical', scale='10m'):
 
     Parameters
     ----------
-    theme : str
-        Natural Earth data "theme", such as ``lakes`` or ``admin_0_countries``
-        (used to determine the name of the shapefile to download). Please
+    theme : str or iterable
+        Natural Earth data theme(s), such as ``lakes`` or ``admin_0_countries``
+        (used to determine the name(s) of the shapefile to download). Please
         browse https://www.naturalearthdata.com for available themes.
     category : {'cultural', 'physical'}, optional
         Natural Earth data category (i.e. folder) used for downloads, defaults
@@ -37,7 +38,13 @@ def naturalearth(theme, category='physical', scale='10m'):
     gdf : GeoDataFrame
         The geodataframe containing Natural Earth geometries.
     """
-    # TODO in 0.2.0: allow multiple themes
+
+    # if theme is iterable, call recursively
+    if hasattr(theme, '__iter__') and not isinstance(theme, str):
+        return pandas.concat(naturalearth(
+            subtheme, category=category, scale=scale) for subtheme in theme)
+
+    # otherwise, return geodataframe
     # TODO in 0.2.x: replace cartopy.io with internal downloader
     return geopandas.read_file(cartopy.io.shapereader.natural_earth(
         category=category, name=theme, resolution=scale))
