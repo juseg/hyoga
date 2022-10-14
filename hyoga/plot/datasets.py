@@ -364,17 +364,26 @@ class HyogaPlotMethods:
         ----------
         theme : str or iterable, optional
             Natural Earth data theme(s) or theme aliase(s), such as ``rivers``
-            or ``lakes_all`` passed to :func:`hyoga.open.naturalearth`. Please
-            browse https://www.naturalearthdata.com for available themes.
+            or ``lakes_all`` passed to :func:`hyoga.open.naturalearth`. If
+            theme is None, plot coastline, rivers and lakes. Please browse
+            https://www.naturalearthdata.com for available themes.
         category : {'cultural', 'physical'}, optional
             Natural Earth data category (i.e. folder) used for downloads,
             defaults to 'physical'.
         scale : {'10m', '50m', '110m'}, optional
             Natural Earth data scale controlling the level of detail, defaults
             to the highest scale of 10m.
+        **kwargs: optional
+            Keyword arguments passed to :meth:`geopandas.GeoDataFrame.plot`.
+
+        Returns
+        -------
+        ax : :class:`matplotlib.axes.Axes` (or a subclass)
+            Matplotlib axes used for plotting.
         """
 
         # if theme is None plot coastline, rivers and lakes
+        # IDEA: apply default style on any individual theme
         if theme is None:
             edgecolor = kwargs.pop('edgecolor', '0.25')
             facecolor = kwargs.pop('facecolor', '0.95')
