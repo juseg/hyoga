@@ -16,17 +16,18 @@ import hyoga.plot
 import matplotlib.pyplot as plt
 
 
-def naturalearth(category=None, theme=None, scale='10m'):
+def naturalearth(theme, category='physical', scale='10m'):
     """Open Natural Earth geodataframe
 
     Parameters
     ----------
-    category : {'cultural', 'physical'}, optional
-        Natural Earth data category (i.e. folder) used for downloads.
-    theme : str, optional
+    theme : str
         Natural Earth data "theme", such as ``lakes`` or ``admin_0_countries``
         (used to determine the name of the shapefile to download). Please
         browse https://www.naturalearthdata.com for available themes.
+    category : {'cultural', 'physical'}, optional
+        Natural Earth data category (i.e. folder) used for downloads, defaults
+        to 'physical'.
     scale : {'10m', '50m', '110m'}, optional
         Natural Earth data scale controlling the level of detail (and plotting
         speed). Unlike cartopy this defaults to the largest scale of '10m'.
@@ -75,7 +76,7 @@ def feature(category=None, name=None, scale='10m', crs=None, zorder=-1, **kwargs
         Matplotlib axes used for plotting.
     """
     # open Natural Earth shapefile
-    gdf = naturalearth(category=category, theme=name, scale=scale)
+    gdf = naturalearth(name, category=category, scale=scale)
 
     # reproject if crs is not None
     if crs is not None:
