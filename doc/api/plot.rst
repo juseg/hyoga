@@ -15,41 +15,6 @@ Plotting arrays
 
    hillshade
 
-Plotting datasets
------------------
-
-.. autosummary::
-   :toctree: generated/
-
-   bedrock_altitude
-   bedrock_altitude_contours
-   bedrock_hillshade
-   bedrock_shoreline
-   bedrock_erosion
-   bedrock_isostasy
-   ice_margin
-   surface_altitude_contours
-   surface_hillshade
-   surface_velocity
-   surface_velocity_streamplot
-
-Plotting vectors
-----------------
-
-.. autosummary::
-   :toctree: generated/
-
-   feature
-   cities
-   countries
-   country_borders
-   states
-   state_borders
-   ocean
-   rivers
-   graticules
-   shapefile
-
 .. future:
    hyoga.plot.annotate.polar
    hyoga.plot.annotate.scatter

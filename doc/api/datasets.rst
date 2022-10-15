@@ -29,8 +29,8 @@ Postprocessing
    calc.profile.build_profile_coords
    calc.profile.read_shp_coords
 
-Plotting
---------
+Plotting datasets
+-----------------
 
 .. autosummary::
    :toctree: generated/
@@ -47,3 +47,13 @@ Plotting
    plot.surface_hillshade
    plot.surface_velocity
    plot.surface_velocity_streamplot
+
+
+Plotting vectors
+----------------
+
+.. autosummary::
+   :toctree: generated/
+   :template: autosummary/accessor_method.rst
+
+   plot.naturalearth
