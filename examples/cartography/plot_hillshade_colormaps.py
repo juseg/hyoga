@@ -10,11 +10,10 @@ Plot shaded relief map using glossy and matte colormaps.
 """
 
 import matplotlib.pyplot as plt
-import cartopy.crs as ccrs
 import hyoga.open
 
 # initialize figure
-fig, axes = plt.subplots(ncols=2, subplot_kw=dict(projection=ccrs.UTM(32)))
+fig, axes = plt.subplots(ncols=2)
 
 # open demo data with refined topography
 with hyoga.open.example('pism.alps.vis.refined.nc') as ds:
@@ -28,9 +27,12 @@ with hyoga.open.example('pism.alps.vis.refined.nc') as ds:
     ds.hyoga.plot.bedrock_hillshade(ax=axes[0], cmap='Glossy')
     ds.hyoga.plot.bedrock_hillshade(ax=axes[1], cmap='Matte', vmin=0)
 
-    # set titles
-    axes[0].set_title('Glossy')
-    axes[1].set_title('Matte')
+# set axes properties
+axes[0].set_title('Glossy')
+axes[1].set_title('Matte')
+for ax in axes:
+    ax.xaxis.set_visible(False)
+    ax.yaxis.set_visible(False)
 
 # show
 plt.show()

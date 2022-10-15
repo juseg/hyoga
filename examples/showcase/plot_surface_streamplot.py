@@ -11,12 +11,11 @@ a color-mapped surface velocity streamplot, and geographic elements.
 """
 
 import matplotlib.pyplot as plt
-import cartopy.crs as ccrs
 import hyoga.open
 import hyoga.plot
 
 # initialize figure
-ax = plt.subplot(projection=ccrs.UTM(32))
+ax = plt.subplot()
 cax = plt.axes([0.15, 0.55, 0.025, 0.25])
 
 # open demo data
@@ -32,14 +31,14 @@ with hyoga.open.example('pism.alps.out.2d.nc') as ds:
     # add colorbar manually
     ax.figure.colorbar(streams.lines, cax=cax, extend='both')
 
-# add coastlines and rivers
-hyoga.plot.coastline(ax=ax)
-hyoga.plot.rivers(ax=ax)
-hyoga.plot.lakes(ax=ax)
+    # add coastline and rivers
+    ds.hyoga.plot.naturalearth(ax=ax)
 
 # set axes properties
 cax.set_ylabel('')
 ax.set_title(r'Surface velocity (m$\,$a$^{-1}$)')
+ax.xaxis.set_visible(False)
+ax.yaxis.set_visible(False)
 
 # show
 plt.show()

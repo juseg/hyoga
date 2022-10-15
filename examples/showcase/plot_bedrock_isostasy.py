@@ -12,12 +12,11 @@ model input file, and geographic elements.
 """
 
 import matplotlib.pyplot as plt
-import cartopy.crs as ccrs
 import hyoga.open
 import hyoga.plot
 
 # initialize figure
-ax = plt.subplot(projection=ccrs.UTM(32))
+ax = plt.subplot()
 cax = plt.axes([0.15, 0.55, 0.025, 0.25])
 
 # open demo data
@@ -33,14 +32,14 @@ with hyoga.open.example('pism.alps.out.2d.nc') as ds:
         ax=ax, cbar_ax=cax, levels=[-150, -100, -50, 0, 0.5, 1, 1.5])
     ds.hyoga.plot.ice_margin(ax=ax)
 
-# add coastlines and rivers
-hyoga.plot.coastline(ax=ax)
-hyoga.plot.rivers(ax=ax)
-hyoga.plot.lakes(ax=ax)
+    # add coastline and rivers
+    ds.hyoga.plot.naturalearth(ax=ax)
 
 # set axes properties
 cax.set_ylabel('')
 ax.set_title('Bedrock isostatic adjustment (m)')
+ax.xaxis.set_visible(False)
+ax.yaxis.set_visible(False)
 
 # show
 plt.show()

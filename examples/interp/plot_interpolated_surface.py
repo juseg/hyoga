@@ -12,11 +12,10 @@ the same as in the interpolated output example.
 """
 
 import matplotlib.pyplot as plt
-import cartopy.crs as ccrs
 import hyoga.open
 
 # initialize figure
-ax = plt.subplot(projection=ccrs.UTM(32))
+ax = plt.subplot()
 
 # open demo data
 with hyoga.open.example('pism.alps.out.2d.nc') as ds:
@@ -39,6 +38,8 @@ with hyoga.open.example('pism.alps.out.2d.nc') as ds:
 
 # set axes properties
 ax.set_title('Interpolated output')
+ax.xaxis.set_visible(False)
+ax.yaxis.set_visible(False)
 
 # show
 plt.show()

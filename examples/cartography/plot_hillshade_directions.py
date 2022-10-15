@@ -10,11 +10,10 @@ Plot shaded relief map using a single and multiple illumination angles.
 """
 
 import matplotlib.pyplot as plt
-import cartopy.crs as ccrs
 import hyoga.open
 
 # initialize figure
-fig, axes = plt.subplots(ncols=3, subplot_kw=dict(projection=ccrs.UTM(32)))
+fig, axes = plt.subplots(ncols=3)
 
 # open demo data with refined topography
 with hyoga.open.example('pism.alps.vis.refined.nc') as ds:
@@ -34,10 +33,13 @@ with hyoga.open.example('pism.alps.vis.refined.nc') as ds:
         ax=axes[2], altitude=45, azimuth=[15, 75, 135, 195, 255, 315],
         weight=[0.2, 0.125, 0.1, 0.125, 0.2, 0.25])
 
-    # set titles
-    axes[0].set_title('One direction')
-    axes[1].set_title('Three directions (default)')
-    axes[2].set_title('Six directions')
+# set axes properties
+axes[0].set_title('One direction')
+axes[1].set_title('Three directions (default)')
+axes[2].set_title('Six directions')
+for ax in axes:
+    ax.xaxis.set_visible(False)
+    ax.yaxis.set_visible(False)
 
 # show
 plt.show()

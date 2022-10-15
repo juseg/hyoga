@@ -11,12 +11,11 @@ a surface altitude contour, and geographic elements.
 """
 
 import matplotlib.pyplot as plt
-import cartopy.crs as ccrs
 import hyoga.open
 import hyoga.plot
 
 # initialize figure
-ax = plt.subplot(projection=ccrs.UTM(32))
+ax = plt.subplot()
 
 # open demo data
 with hyoga.open.example('pism.alps.out.2d.nc') as ds:
@@ -26,13 +25,13 @@ with hyoga.open.example('pism.alps.out.2d.nc') as ds:
     ds.hyoga.plot.ice_margin(ax=ax, facecolor='w')
     ds.hyoga.plot.surface_altitude_contours(ax=ax, colors='tab:blue')
 
-# add coastlines and rivers
-hyoga.plot.coastline(ax=ax)
-hyoga.plot.rivers(ax=ax)
-hyoga.plot.lakes(ax=ax)
+    # add coastline and rivers
+    ds.hyoga.plot.naturalearth(ax=ax)
 
 # set axes properties
 ax.set_title(r'Surface elevation contours')
+ax.xaxis.set_visible(False)
+ax.yaxis.set_visible(False)
 
 # show
 plt.show()
