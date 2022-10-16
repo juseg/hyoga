@@ -49,8 +49,8 @@ autosummary_generate = True         # autogen files for listed entroes
 
 # configure sphinx.ext.extlinks
 extlinks = {
-    "issue": ("https://github.com/pydata/xarray/issues/%s", "#%s"),
-    "pull": ("https://github.com/pydata/xarray/pull/%s", "PR%s"),
+    "issue": ("https://github.com/juseg/hyoga/issues/%s", "#%s"),
+    "pull": ("https://github.com/juseg/hyoga/pull/%s", "PR%s"),
 }
 
 # configure sphinx.ext.intersphinx
