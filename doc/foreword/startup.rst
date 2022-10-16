@@ -7,46 +7,46 @@ Getting started
 Installing hyoga
 ----------------
 
-Assuming xarray_ and cartopy_ are already installed, I recommend installing
-hyoga using pip::
+Assuming xarray_, geopandas_ and cartopy_ are already installed, I recommend
+installing hyoga using pip::
 
    pip install hyoga
 
 .. _cartopy: https://scitools.org.uk/cartopy/
+.. _geopandas: https://geopandas.org
 .. _xarray: https://xarray.pydata.org/en/stable/
 
-Plotting datasets
------------------
+A first plot
+------------
 
-To make a first plot, let's import some modules:
+Here is a minimal example that demonstrate hyoga's core plotting functionality.
+We open example data and plot the bedrock altitude, an ice margin contour, and
+hydrologic features to facilitate orientation.
 
 .. plot::
    :context:
-   :nofigs:
 
    import matplotlib.pyplot as plt
-   import cartopy.crs as ccrs
    import hyoga.open
 
-
-Hyoga plots work best in combination with cartopy_ geo-located axes. Here, we
-create new axes with a Universal Transverse Mercator zone 32 projection:
-
-.. plot::
-   :context:
-   :nofigs:
-
-   ax = plt.subplot(projection=ccrs.UTM(32))
-
-It is time to add data. Let's open an example dataset and plot the bedrock
-altitude and a simple ice margin contour:
-
-.. plot::
-   :context:
-
+   # plot example data
    with hyoga.open.example('pism.alps.out.2d.nc') as ds:
        ds.hyoga.plot.bedrock_altitude(center=False)
        ds.hyoga.plot.ice_margin(facecolor='tab:blue')
+       ds.hyoga.plot.naturalearth()
+
+   # set title
+   plt.title('A first plot with hyoga')
+
+.. tip::
+
+   Hyoga alters matplotlib_ defaults with its own style choices. However, these
+   choices can always be overriden using matplotlib keyword arguments.
+
+.. _matplotlib: https://matplotlib.org
+
+Then what
+---------
 
 Hyoga implements several other methods for :doc:`/plotting/datasets` on any
 CF_-compliant xarray_ dataset. Assuming you have own results to explore, try
@@ -57,29 +57,8 @@ replacing the example line with::
 
 .. _CF: https://cfconventions.org
 
-.. _matplotlib: https://matplotlib.org
+.. FIXME: rethink docs structure following move to geopandas?
 
-.. tip::
-
-   Hyoga alters matplotlib default with its own style choices. However, these
-   choices can always be overriden using matplotlib keyword arguments.
-
-Adding map elements
--------------------
-
-The map background looks a bit plain. Let us add a few geographic elements to
-facilitate orientation, and a better title:
-
-.. plot::
-   :context:
-
-   # add coastlines and rivers
-   hyoga.plot.coastline(ax=ax)
-   hyoga.plot.rivers(ax=ax)
-   hyoga.plot.lakes(ax=ax)
-
-   # set title
-   ax.set_title('A first plot with hyoga')
-
-Hyoga has several other functions for :doc:`/plotting/altitude`, such as country
-borders and paleoglacier extents from global datasets.
+To make your maps pop, check out hyoga's features for :doc:`/datasets/masking`,
+:doc:`/plotting/altitude`, and :doc:`/plotting/vectors`. For a visual overview
+of the package capabilities, head directly to the :doc:`/examples/index`.
