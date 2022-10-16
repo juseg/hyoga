@@ -26,12 +26,7 @@ the example data using the ``Topographic`` colormap for altitude and the
 .. plot::
    :context:
 
-   import matplotlib.pyplot as plt
-   import cartopy.crs as ccrs
-   import hyoga.open
-
-   # initialize figure
-   ax = plt.subplot(projection=ccrs.UTM(32))
+   import hyoga
 
    # open example data
    with hyoga.open.example('pism.alps.in.boot.nc') as ds:

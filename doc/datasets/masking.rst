@@ -16,7 +16,6 @@ Let's get started with the usual imports and the demo data.
    :nofigs:
 
    import matplotlib.pyplot as plt
-   import cartopy.crs as ccrs
    import xarray as xr
    import hyoga.open
 
@@ -44,7 +43,6 @@ the case in the demo files.
 .. plot::
    :context:
 
-   plt.subplot(projection=ccrs.UTM(32))
    ds.hyoga.plot.bedrock_altitude(vmin=0, vmax=4500)
    for i, value in enumerate([0.1, 1, 500]):
        hyoga.config.glacier_masking_point = value
@@ -63,7 +61,6 @@ year:
 .. plot::
    :context:
 
-   plt.subplot(projection=ccrs.UTM(32))
    ds = ds.hyoga.assign_icemask(
        (ds.hyoga.getvar('land_ice_thickness') > 1) &
        (ds.hyoga.getvar('magnitude_of_land_ice_surface_velocity') > 10))
@@ -139,7 +136,6 @@ with a much higher resolution.
 .. plot::
    :context:
 
-   plt.subplot(projection=ccrs.UTM(32))
    ds.hyoga.plot.bedrock_altitude(vmin=0, vmax=4500)
    ds.hyoga.plot.surface_velocity(vmin=1e1, vmax=1e3)
    ds.hyoga.plot.surface_altitude_contours()
