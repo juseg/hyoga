@@ -346,10 +346,11 @@ class HyogaPlotMethods:
         # streamplot surface velocity
         try:
             return ax.streamplot(
-                uvar.x, uvar.y, uvar.to_masked_array(), vvar.to_masked_array(),
+                uvar.x.data, uvar.y.data, uvar.data, vvar.data,
                 color=cvar.to_masked_array(), norm=norm, **style)
 
         # streamplot colormapping fails on empty arrays (mpl issue #19323)
+        # (this is fixed in matplotlib 3.6.0, released Sep. 2022)
         except ValueError:
             return None
 
