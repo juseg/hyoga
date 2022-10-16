@@ -10,27 +10,27 @@ Plot default white monochrome logo including glaciers and paleoglaciers.
 """
 
 import matplotlib.pyplot as plt
-import cartopy
 import hyoga.open
 import hyoga.plot
 
 # initialize figure
 fig = plt.figure(figsize=(9.6, 3.2))
 fig.patch.set_facecolor('0.25')  # ignored by transparent=True
-ax = fig.add_axes(
-    [17/48, 1/32, 14/48, 13/16], projection=cartopy.crs.Orthographic(
-        central_longitude=-45, central_latitude=90))
+ax = fig.add_axes([17/48, 1/32, 14/48, 13/16])
 ax.patch.set_facecolor('none')
-ax.spines['geo'].set(capstyle='round', edgecolor='w', linewidth=16)
-
-# ax.set_extent does not work well with ortho proj
 ax.set_xlim((-6.4e6, 6.4e6))
 ax.set_ylim((-6.4e6, 6.4e6))
+ax.axis('off')
 
 # add continents and glaciers
-hyoga.plot.countries(ax=ax, alpha=0.25, facecolor='w', scale='110m')
-hyoga.plot.paleoglaciers(ax=ax, alpha=0.75, facecolor='w', source='bat19')
-hyoga.plot.glaciers(ax=ax, edgecolor='w', facecolor='w', scale='50m')
+crs = '+a=6378137 +proj=ortho +lon_0=-45 +lat_0=90'
+hyoga.open.naturalearth(
+    'admin_0_countries', category='cultural', scale='110m').to_crs(crs).plot(
+        ax=ax, alpha=0.25, facecolor='w')
+hyoga.open.paleoglaciers('bat19').to_crs(crs).plot(
+    ax=ax, alpha=0.75, facecolor='w')
+hyoga.open.naturalearth('glaciated_areas', scale='50m').to_crs(crs).plot(
+    ax=ax, edgecolor='w', facecolor='w')
 
 # add text and overline
 fig.text(
@@ -39,6 +39,11 @@ fig.text(
 ax.fill_between(
     [5/12, 7/12], 15/16, 1, clip_on=False, facecolor='w',
     transform=fig.transFigure)
+
+# add circle for the o
+ax.add_patch(plt.Circle(
+    (0, 0), 6.4e6, capstyle='round', clip_on=False, edgecolor='w',
+    facecolor='none', linewidth=16))
 
 # save static file
 # fig.savefig('../../doc/_static/png/hyoga_logo.png', transparent=True)
