@@ -55,6 +55,7 @@ extlinks = {
 
 # configure sphinx.ext.intersphinx
 intersphinx_mapping = {
+    'geopandas': ('https://geopandas.org/en/stable/', None),
     'matplotlib': ('https://matplotlib.org/stable/', None),
     'python': ('https://docs.python.org/3.7/', None),
     'xarray': ('http://xarray.pydata.org/en/stable/', None)
@@ -76,6 +77,7 @@ napoleon_type_aliases = {
     'AxesImage': '~matplotlib.image.AxesImage',
     'CRS': '~cartopy.crs.CRS',
     'GeoAxes': '~cartopy.mpl.geoaxes.GeoAxes',
+    'GeoDataFrame': '~geopandas.GeoDataFrame',
     'QuadContourSet': '~matplotlib.contour.QuadContourSet',
     'StreamplotSet': '~matplotlib.streamplot.StreamplotSet',
     'DataArray': '~xarray.DataArray',

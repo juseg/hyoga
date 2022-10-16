@@ -18,8 +18,23 @@ What's new
 v0.2 (unreleased)
 -----------------
 
+Breaking changes
+~~~~~~~~~~~~~~~~
+
+- Add new required dependencies on cartopy_ and geopandas_. Cartopy is only
+  used to download `Natural Earth`_ data, and may no longer be required in
+  future versions (:issue:`25`).
+
+.. _cartopy: https://scitools.org.uk/cartopy/
+.. _geopandas: https://geopandas.org
+.. _Natural Earth: https://www.naturalearthdata.com/
+
 New features
 ~~~~~~~~~~~~
+
+.. FIXME: following geopandas move things will change:
+   - Move hyoga.plot.COLORMAPS to hyoga.COLORMAPS?
+   - Privatise hyoga.plot.hillshade
 
 - Add three altitude (``Topographic``, ``Bathymetric``, ``Elevational``) and
   two relief-shading (``Glossy``, ``Matte``) colormaps, and correponding color
@@ -32,17 +47,12 @@ New features
 - Add plot method :meth:`xarray.Dataset.hyoga.plot.bedrock_altitude_contours`
   for bedrock altitude filled contours, best used in combination with new
   altitude colormaps.
-- Add plot functions :func:`hyoga.plot.feature`, :func:`hyoga.plot.cities`,
-  :func:`hyoga.plot.countries`, :func:`hyoga.plot.country_borders`,
-  :func:`hyoga.plot.states`, :func:`hyoga.plot.state_borders`,
-  :func:`hyoga.plot.coastline`, :func:`hyoga.plot.glaciers`,
-  :func:`hyoga.plot.graticules`, :func:`hyoga.plot.lakes`,
-  :func:`hyoga.plot.ocean`, and :func:`hyoga.plot.rivers` for `Natural Earth`_
-  data through cartopy_.
-
-
-.. _cartopy: https://scitools.org.uk/cartopy/
-.. _Natural Earth: https://www.naturalearthdata.com/
+- Add plot method :meth:`xarray.Dataset.hyoga.plot.naturalearth` to add global
+  `Natural Earth`_ data through geopandas_ (:issue:`17`).
+- Add functions :func:`hyoga.open.naturalearth` and
+  :func:`hyoga.open.paleoglaciers` to open global `Natural Earth`_ data and
+  Last Glacial Maximum paleoglacier extents as :class:`geopandas.GeoDataFrame`
+  (:issue:`24`).
 
 Documentation
 ~~~~~~~~~~~~~
