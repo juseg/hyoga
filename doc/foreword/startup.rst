@@ -24,7 +24,6 @@ We open example data and plot the bedrock altitude, an ice margin contour, and
 hydrologic features to facilitate orientation.
 
 .. plot::
-   :context:
 
    import matplotlib.pyplot as plt
    import hyoga

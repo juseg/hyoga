@@ -24,7 +24,6 @@ the example data using the ``Topographic`` colormap for altitude and the
 ``Glossy`` colormap for hillshades.
 
 .. plot::
-   :context:
 
    import hyoga
 
