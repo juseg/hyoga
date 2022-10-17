@@ -440,3 +440,34 @@ class HyogaPlotMethods:
         # open natural earth data, reproject and plot
         gdf = hyoga.open.naturalearth(theme, category=category, scale=scale)
         return gdf.to_crs(self._ds.proj4).plot(**kwargs)
+
+    def paleoglaciers(self, source='ehl11', **kwargs):
+        """Plot Last Glacial Maximum paleoglacier extent.
+
+        Parameters
+        ----------
+        source : 'ehl11' or 'bat19'
+            Source of paleoglacier extent data, either Ehlers et al. (2011) or
+            Batchelor et al. (2019).
+        **kwargs: optional
+            Keyword arguments passed to :meth:`geopandas.GeoDataFrame.plot`.
+            Defaults to plotting on current axes at ``zorder=-1``, the same
+            level as bedrock altitude maps.
+
+        Returns
+        -------
+        ax : :class:`matplotlib.axes.Axes` (or a subclass)
+            Matplotlib axes used for plotting.
+        """
+
+        # default to plotting on current axes background
+        kwargs.setdefault('ax', plt.gca())
+        kwargs.setdefault('zorder', -1)
+
+        # prevent autoscaling (this is not ideal)
+        # TODO: open geopandas issue to allow gdf.plot(autolim=False)
+        kwargs['ax'].set_autoscale_on(False)
+
+        # open paleoglaciers data, reproject and plot
+        gdf = hyoga.open.paleoglaciers(source=source)
+        return gdf.to_crs(self._ds.proj4).plot(**kwargs)

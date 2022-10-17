@@ -48,6 +48,8 @@ New features
   altitude colormaps.
 - Add plot method :meth:`xarray.Dataset.hyoga.plot.naturalearth` to add global
   `Natural Earth`_ data through geopandas_ (:issue:`17`).
+- Add plot method :meth:`xarray.Dataset.hyoga.plot.paleoglaciers` to add Last
+  Glacial Maximum paleoglacier extents through geopandas_ (:issue:`21`).
 - Add functions :func:`hyoga.open.naturalearth` and
   :func:`hyoga.open.paleoglaciers` to open global `Natural Earth`_ data and
   Last Glacial Maximum paleoglacier extents as :class:`geopandas.GeoDataFrame`

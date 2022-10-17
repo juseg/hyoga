@@ -57,3 +57,4 @@ Plotting vectors
    :template: autosummary/accessor_method.rst
 
    plot.naturalearth
+   plot.paleoglaciers
