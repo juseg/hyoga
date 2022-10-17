@@ -59,6 +59,6 @@ replacing the example line with::
 
 .. FIXME: rethink docs structure following move to geopandas?
 
-To make your maps pop, check out hyoga's features for :doc:`/datasets/masking`,
-:doc:`/plotting/altitude`, and :doc:`/plotting/vectors`. For a visual overview
+To make your maps pop, check out pages on :doc:`/datasets/altitude`,
+:doc:`/datasets/vectors`, and :doc:`/datasets/masking`. For a visual overview
 of the package capabilities, head directly to the :doc:`/examples/index`.
