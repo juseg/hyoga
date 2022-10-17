@@ -12,8 +12,7 @@ are internally optimized to fit the ``Topographic`` colormap.
 """
 
 import matplotlib.pyplot as plt
-import hyoga.open
-import hyoga.plot
+import hyoga
 
 # initialize figure
 ax = plt.subplot()

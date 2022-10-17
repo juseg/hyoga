@@ -12,7 +12,7 @@ a spatial resolution of 1 km, and other panels show interpolated results.
 """
 
 import matplotlib.pyplot as plt
-import hyoga.open
+import hyoga
 
 # initialize figure
 fig, axes = plt.subplots(ncols=4)

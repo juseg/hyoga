@@ -10,7 +10,7 @@ Plot shaded relief map using a single and multiple illumination angles.
 """
 
 import matplotlib.pyplot as plt
-import hyoga.open
+import hyoga
 
 # initialize figure
 fig, axes = plt.subplots(ncols=3)

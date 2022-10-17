@@ -10,8 +10,7 @@ Demonstrate use of GeoPandas to highlight particular Natural Earth features.
 """
 
 import matplotlib.pyplot as plt
-import hyoga.open
-import hyoga.plot
+import hyoga
 
 
 # initialize figure

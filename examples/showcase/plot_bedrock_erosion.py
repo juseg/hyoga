@@ -12,8 +12,7 @@ bedrock erosion computed from basal ice velocity, and geographic elements.
 
 import matplotlib.pyplot as plt
 import matplotlib.ticker
-import hyoga.open
-import hyoga.plot
+import hyoga
 
 # initialize figure
 ax = plt.subplot()

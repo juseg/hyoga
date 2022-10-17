@@ -17,7 +17,7 @@ Let's get started with the usual imports and the demo data.
 
    import matplotlib.pyplot as plt
    import xarray as xr
-   import hyoga.open
+   import hyoga
 
    ds = hyoga.open.example('pism.alps.out.2d.nc')
 

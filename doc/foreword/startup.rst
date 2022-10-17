@@ -27,7 +27,7 @@ hydrologic features to facilitate orientation.
    :context:
 
    import matplotlib.pyplot as plt
-   import hyoga.open
+   import hyoga
 
    # plot example data
    with hyoga.open.example('pism.alps.out.2d.nc') as ds:

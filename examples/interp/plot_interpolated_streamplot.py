@@ -13,7 +13,7 @@ advisable to run it on the original rather than the interpolated data.
 """
 
 import matplotlib.pyplot as plt
-import hyoga.open
+import hyoga
 
 # initialize figure
 ax = plt.subplot()

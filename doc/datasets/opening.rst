@@ -25,7 +25,7 @@ will download a PISM output file from an online repository, and store it into a
    :context:
    :nofigs:
 
-   import hyoga.open
+   import hyoga
    ds = hyoga.open.example('pism.alps.out.2d.nc')
 
 .. note::

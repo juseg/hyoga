@@ -10,7 +10,7 @@ Plot shaded relief map using glossy and matte colormaps.
 """
 
 import matplotlib.pyplot as plt
-import hyoga.open
+import hyoga
 
 # initialize figure
 fig, axes = plt.subplots(ncols=2)

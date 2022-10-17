@@ -11,7 +11,7 @@ Plot hyoga altitude and relief colormaps.
 
 import numpy as np
 import matplotlib.pyplot as plt
-import hyoga.plot
+import hyoga
 
 # initialize figure
 fig, axes = plt.subplots(nrows=5)

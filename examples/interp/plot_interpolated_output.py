@@ -14,7 +14,7 @@ ten-fold increase in horizontal resolution.
 """
 
 import matplotlib.pyplot as plt
-import hyoga.open
+import hyoga
 
 # initialize figure
 ax = plt.subplot()

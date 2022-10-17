@@ -12,8 +12,7 @@ model input file, and geographic elements.
 """
 
 import matplotlib.pyplot as plt
-import hyoga.open
-import hyoga.plot
+import hyoga
 
 # initialize figure
 ax = plt.subplot()

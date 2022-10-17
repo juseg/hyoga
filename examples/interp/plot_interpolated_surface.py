@@ -12,7 +12,7 @@ the same as in the interpolated output example.
 """
 
 import matplotlib.pyplot as plt
-import hyoga.open
+import hyoga
 
 # initialize figure
 ax = plt.subplot()
