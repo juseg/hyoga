@@ -22,7 +22,7 @@ gradient = np.linspace(0, 1, 256)
 gradient = np.vstack((gradient, gradient))
 
 # plot background pattern and color gradients
-for ax, name in zip(axes, hyoga.plot.COLORMAPS):
+for ax, name in zip(axes, hyoga.COLORMAPS):
     ax.patch.set(hatch='..', edgecolor='0.5')
     ax.imshow(gradient, aspect='auto', cmap=name)
     ax.text(-8, .5, name, va='center', ha='right', fontsize=10)

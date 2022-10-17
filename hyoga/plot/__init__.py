@@ -7,9 +7,7 @@ Hyoga plotting tools to visualize glacier modelling datasets.
 
 # FIXME following geopandas move this module will disappear
 
-from .colormaps import COLORMAPS, SEQUENCES
 from .hillshade import hillshade
 
 __all__ = [
-    'COLORMAPS', 'SEQUENCES',
     'hillshade']

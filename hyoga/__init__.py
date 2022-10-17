@@ -8,5 +8,6 @@
 
 from .core.accessor import HyogaDataset
 from .core.config import config
+from .plot.colormaps import COLORMAPS, SEQUENCES
 
-__all__ = ['config', 'HyogaDataset']
+__all__ = ['config', 'HyogaDataset', 'COLORMAPS', 'SEQUENCES']
