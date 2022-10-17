@@ -11,8 +11,8 @@ Programming interface
 .. note::
 
    All functions and methods documented here are considered **public** API.
-   This includes accessor methods, and the ``open`` and ``plot`` modules. The
-   submodule level (e.g. ``plot.naturalearth``) as well as the ``core`` module,
+   This includes accessor methods and the ``open`` modules. The
+   submodule level (e.g. ``open.local``) as well as the ``core`` module,
    are considered **private** implementation detail and may change at anytime.
 
 .. toctree::
@@ -21,4 +21,3 @@ Programming interface
    config
    datasets
    open
-   plot

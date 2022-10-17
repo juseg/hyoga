@@ -10,7 +10,7 @@ shortcuts to oft-used plot methods with sensible defaults.
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-import hyoga.plot
+import hyoga.plot.hillshade
 
 
 class HyogaPlotMethods:
@@ -125,16 +125,27 @@ class HyogaPlotMethods:
             long_name='glacier erosion rate', units='mm a-1')
         return var.plot.contourf(**style)
 
-    def bedrock_hillshade(self, exag=1, **kwargs):
+    def bedrock_hillshade(self, altitude=None, azimuth=None, weight=None,
+                          exag=1, **kwargs):
         """Plot bedrock altitude multidirectional hillshade.
 
         Parameters
         ----------
+        altitude: float or iterable, optional
+            Altitude angle(s) of illumination in degrees. Defaults to three
+            light sources at 30 degrees. Any of ``azimuth``, ``altitude`` and
+            ``weight`` provided as iterables need to have equal lengths.
+        azimuth: float or iterable, optional
+            Azimuth angle(s) of illumination in degrees (clockwise from north).
+            Defaults to three light sources at 300, 315 and 330 azimuths.
+        weight: float or iterable, optional
+            Weight coefficient(s) for each unidirectional hillshade array. It
+            is intended, but not required, that the weights add up to 1.
         exag: float, optional
             Altitude exageration factor, defaults to 1.
         **kwargs: optional
-            Keyword arguments passed to :meth:`hyoga.plot.hillshade`. Defaults
-            to a glossy, multidirectional hillshade from the northwest.
+            Keyword arguments passed to :meth:`xarray.DataArray.plot.imshow`.
+            Defaults to a glossy colormap.
 
         Returns
         -------
@@ -142,7 +153,9 @@ class HyogaPlotMethods:
             The plotted bedrock hillshade image.
         """
         darray = self._hyoga.getvar('bedrock_altitude') * exag
-        return hyoga.plot.hillshade(darray, **kwargs)
+        return hyoga.plot.hillshade.hillshade(
+            darray, altitude=altitude, azimuth=azimuth, weight=weight,
+            **kwargs)
 
     def bedrock_isostasy(self, **kwargs):
         """Plot bedrock deformation contours and locate minumum.
@@ -270,16 +283,27 @@ class HyogaPlotMethods:
                 levels=[lev for lev in levels if lev % major != 0], **style))
         return contours if len(contours) > 1 else contours[0]
 
-    def surface_hillshade(self, exag=1, **kwargs):
+    def surface_hillshade(self, altitude=None, azimuth=None, weight=None,
+                          exag=1, **kwargs):
         """Plot surface altitude multidirectional hillshade.
 
         Parameters
         ----------
+        altitude: float or iterable, optional
+            Altitude angle(s) of illumination in degrees. Defaults to three
+            light sources at 30 degrees. Any of ``azimuth``, ``altitude`` and
+            ``weight`` provided as iterables need to have equal lengths.
+        azimuth: float or iterable, optional
+            Azimuth angle(s) of illumination in degrees (clockwise from north).
+            Defaults to three light sources at 300, 315 and 330 azimuths.
+        weight: float or iterable, optional
+            Weight coefficient(s) for each unidirectional hillshade array. It
+            is intended, but not required, that the weights add up to 1.
         exag: float, optional
             Altitude exageration factor, defaults to 1.
         **kwargs: optional
-            Keyword arguments passed to :meth:`hyoga.plot.hillshade`. Defaults
-            to a glossy, multidirectional hillshade from the northwest.
+            Keyword arguments passed to :meth:`xarray.DataArray.plot.imshow`.
+            Defaults to a glossy colormap.
 
         Returns
         -------
@@ -287,7 +311,9 @@ class HyogaPlotMethods:
             The plotted surface hillshade image.
         """
         darray = self._hyoga.getvar('surface_altitude') * exag
-        return hyoga.plot.hillshade(darray, **kwargs)
+        return hyoga.plot.hillshade.hillshade(
+            darray, altitude=altitude, azimuth=azimuth, weight=weight,
+            **kwargs)
 
     def surface_velocity(self, **kwargs):
         """Plot surface velocity map.

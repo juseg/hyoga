@@ -4,10 +4,3 @@
 """
 Hyoga plotting tools to visualize glacier modelling datasets.
 """
-
-# FIXME following geopandas move this module will disappear
-
-from .hillshade import hillshade
-
-__all__ = [
-    'hillshade']
