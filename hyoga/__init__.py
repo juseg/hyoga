@@ -3,11 +3,14 @@
 
 """A thin wrapper around xarray to read and plot PISM output files."""
 
-# Only import HyogaDataset here. This registers the accessor. In practice this
-# also triggers importing open (in the future this will change) and plot.
+# module imports
+from . import open
 
+# object imports
 from .core.accessor import HyogaDataset
 from .core.config import config
 from .plot.colormaps import COLORMAPS, SEQUENCES
 
-__all__ = ['config', 'HyogaDataset', 'COLORMAPS', 'SEQUENCES']
+__all__ = [
+    'open',
+    'config', 'HyogaDataset', 'COLORMAPS', 'SEQUENCES']
