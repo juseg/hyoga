@@ -39,19 +39,15 @@ Documentation
 
 .. toctree::
    :caption: User guide
-   :maxdepth: 1
+   :maxdepth: 2
 
    foreword/startup
-   datasets/opening
-   datasets/plotting
-   datasets/altitude
-   datasets/vectors
-   datasets/masking
+   datasets/index
    examples/index
 
 .. toctree::
    :caption: Reference
-   :maxdepth: 1
+   :maxdepth: 2
 
    api/index
    whatsnew

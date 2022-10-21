@@ -16,7 +16,6 @@ Programming interface
    are considered **private** implementation detail and may change at anytime.
 
 .. toctree::
-   :caption: Reference
 
    config
    datasets

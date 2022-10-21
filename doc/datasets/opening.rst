@@ -1,10 +1,10 @@
 .. Copyright (c) 2021-2022, Julien Seguinot (juseg.github.io)
 .. GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
-Reading model output
-====================
+Opening datasets
+================
 
-Opening output files
+Reading output files
 --------------------
 
 Hyoga acts as a thin wrapper around a much more powerful Python library called

@@ -47,7 +47,7 @@ hydrologic features to facilitate orientation.
 Then what
 ---------
 
-Hyoga implements several other methods for :doc:`/plotting/datasets` on any
+Hyoga implements several other methods for :doc:`/datasets/plotting` from any
 CF_-compliant xarray_ dataset. Assuming you have own results to explore, try
 replacing the example line with::
 
@@ -58,6 +58,6 @@ replacing the example line with::
 
 .. FIXME: rethink docs structure following move to geopandas?
 
-To make your maps pop, check out pages on :doc:`/datasets/altitude`,
+To make your maps pop, check out pages on :doc:`/datasets/shading`,
 :doc:`/datasets/vectors`, and :doc:`/datasets/masking`. For a visual overview
 of the package capabilities, head directly to the :doc:`/examples/index`.

@@ -59,7 +59,7 @@ Documentation
 ~~~~~~~~~~~~~
 
 - Add a documentation page for :doc:`foreword/startup`.
-- Add a documentation page on :doc:`plotting/altitude`, including colormaps
+- Add a documentation page on :doc:`datasets/shading`, including colormaps
   (:issue:`15`).
 - Change to Sphinx book_ theme, rework :ref:`api`.
 
