@@ -32,16 +32,12 @@ Breaking changes
 New features
 ~~~~~~~~~~~~
 
-.. FIXME: following geopandas move things will change:
-   - Privatise hyoga.plot.hillshade
-
 - Add three altitude (``Topographic``, ``Bathymetric``, ``Elevational``) and
   two relief-shading (``Glossy``, ``Matte``) colormaps, and correponding color
   lists, accessible through the matplotlib colormap register, and listed in
   :data:`hyoga.COLORMAPS` and :data:`hyoga.SEQUENCES` (:issue:`15`).
-- Add plot function :func:`hyoga.plot.hillshade`, and dataset plot methods
-  :meth:`xarray.Dataset.hyoga.plot.bedrock_hillshade` and
-  :meth:`xarray.Dataset.hyoga.plot.surface_hillshade` for relief shading
+- Add dataset plot methods :meth:`xarray.Dataset.hyoga.plot.bedrock_hillshade`
+  and :meth:`xarray.Dataset.hyoga.plot.surface_hillshade` for relief shading
   (:issue:`19`).
 - Add plot method :meth:`xarray.Dataset.hyoga.plot.bedrock_altitude_contours`
   for bedrock altitude filled contours, best used in combination with new
