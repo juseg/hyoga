@@ -7,6 +7,14 @@ Input - ``hyoga.open``
 .. automodule:: hyoga.open
 .. currentmodule:: hyoga.open
 
+Opening example data
+--------------------
+
+.. autosummary::
+   :toctree: generated/
+
+   example
+
 Opening local datasets
 ----------------------
 
@@ -17,6 +25,11 @@ Opening local datasets
    mfdataset
    subdataset
 
-.. future:
-   hyoga.open.demo
-   hyoga.open.visual?
+Opening vector data
+-------------------
+
+.. autosummary::
+   :toctree: generated/
+
+   naturalearth
+   paleoglaciers
