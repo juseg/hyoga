@@ -6,10 +6,11 @@
 Interpolated streamplot
 =======================
 
-Demonstrate combining two-dimensional model output spatial interpolation with a
-surface velocity streamplot. The streamplot method does an interpolation on its
-own. When applied to larger domains it may be advisable to run it on the
-original rather than interpolated data.
+Demonstrate interpolating two-dimensional model output onto a higher-resolution
+topography provided in a separate file. Bedrock isostatic adjustment needs to
+be informed in order to correct for the offset between the model and the
+high-resolution bedrock topographies. This is a rather extreme example with a
+ten-fold increase in horizontal resolution.
 """
 
 import matplotlib.pyplot as plt
@@ -21,7 +22,11 @@ cax = plt.axes([0.15, 0.55, 0.025, 0.25])
 
 # open demo data
 with hyoga.open.example('pism.alps.out.2d.nc') as ds:
+
+    # compute isostatic adjustment from a reference input topography
     ds = ds.hyoga.assign_isostasy(hyoga.open.example('pism.alps.in.boot.nc'))
+
+    # perform the actual interpolation
     ds = ds.hyoga.interp(hyoga.open.example('pism.alps.vis.refined.nc'))
 
     # plot model output
@@ -38,7 +43,7 @@ with hyoga.open.example('pism.alps.out.2d.nc') as ds:
     ax.figure.colorbar(streams.lines, cax=cax, extend='both')
 
 # set axes properties
-ax.set_title(r'Interpolated output (m$\,$a$^{-1}$)')
+ax.set_title(r'Ice surface velocity (m$\,$a$^{-1}$)')
 ax.xaxis.set_visible(False)
 ax.yaxis.set_visible(False)
 ax.set_aspect('equal')
