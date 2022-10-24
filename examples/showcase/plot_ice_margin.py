@@ -13,19 +13,16 @@ a half-transparent filled interior, and geographic elements.
 import matplotlib.pyplot as plt
 import hyoga
 
-# initialize figure
-ax = plt.subplot()
-
 # open demo data
 with hyoga.open.example('pism.alps.out.2d.nc') as ds:
 
     # plot model output
-    ds.hyoga.plot.bedrock_altitude(ax=ax, cmap='Greys', vmin=0, vmax=4500)
-    ds.hyoga.plot.ice_margin(ax=ax, edgecolor='tab:blue', linewidths=1)
-    ds.hyoga.plot.ice_margin(ax=ax, facecolor='tab:blue')
+    ds.hyoga.plot.bedrock_altitude(cmap='Greys', vmin=0, vmax=4500)
+    ds.hyoga.plot.ice_margin(edgecolor='tab:blue', linewidths=1)
+    ds.hyoga.plot.ice_margin(facecolor='tab:blue')
 
     # add coastline and rivers
-    ds.hyoga.plot.naturalearth(ax=ax)
+    ax = ds.hyoga.plot.naturalearth()
 
 # set axes properties
 ax.set_title('Ice margin')

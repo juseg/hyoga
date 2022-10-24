@@ -13,18 +13,15 @@ elements.
 import matplotlib.pyplot as plt
 import hyoga
 
-# initialize figure
-ax = plt.subplot()
-
 # open demo data
 with hyoga.open.example('pism.alps.in.boot.nc') as ds:
 
     # plot model output
     ds.hyoga.plot.bedrock_altitude(cmap='Topographic', vmin=0, vmax=4500)
-    ds.hyoga.plot.bedrock_hillshade(ax=ax)
+    ds.hyoga.plot.bedrock_hillshade()
 
     # add coastline and rivers
-    ds.hyoga.plot.naturalearth(ax=ax)
+    ax = ds.hyoga.plot.naturalearth()
 
 # set axes properties
 ax.set_title('Bedrock altitude')

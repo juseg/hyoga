@@ -13,19 +13,16 @@ a surface altitude contour, and geographic elements.
 import matplotlib.pyplot as plt
 import hyoga
 
-# initialize figure
-ax = plt.subplot()
-
 # open demo data
 with hyoga.open.example('pism.alps.out.2d.nc') as ds:
 
     # plot model output
-    ds.hyoga.plot.bedrock_altitude(ax=ax, vmin=0, vmax=3000)
-    ds.hyoga.plot.ice_margin(ax=ax, facecolor='w')
-    ds.hyoga.plot.surface_altitude_contours(ax=ax, colors='tab:blue')
+    ds.hyoga.plot.bedrock_altitude(vmin=0, vmax=3000)
+    ds.hyoga.plot.ice_margin(facecolor='w')
+    ds.hyoga.plot.surface_altitude_contours(colors='tab:blue')
 
     # add coastline and rivers
-    ds.hyoga.plot.naturalearth(ax=ax)
+    ax = ds.hyoga.plot.naturalearth()
 
 # set axes properties
 ax.set_title(r'Surface elevation contours')
