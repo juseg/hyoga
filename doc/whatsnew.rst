@@ -1,7 +1,7 @@
 .. Copyright (c) 2021-2022, Julien Seguinot (juseg.github.io)
 .. GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
-.. currentmodule:: xarray
+.. currentmodule:: hyoga
 
 .. What's new sections, cheated on xarray
    - Breaking changes
@@ -28,6 +28,12 @@ Breaking changes
 .. _cartopy: https://scitools.org.uk/cartopy/
 .. _geopandas: https://geopandas.org
 .. _Natural Earth: https://www.naturalearthdata.com/
+
+Deprecations
+~~~~~~~~~~~~
+
+- Function :func:`hyoga.demo.get` (returning an url) is deprecated, use
+  :func:`hyoga.open.example` (returning a dataset) instead.
 
 New features
 ~~~~~~~~~~~~
