@@ -42,15 +42,15 @@ New features
   two relief-shading (``Glossy``, ``Matte``) colormaps, and correponding color
   lists, accessible through the matplotlib colormap register, and listed in
   :data:`hyoga.COLORMAPS` and :data:`hyoga.SEQUENCES` (:issue:`15`).
-- Add dataset plot methods :meth:`xarray.Dataset.hyoga.plot.bedrock_hillshade`
-  and :meth:`xarray.Dataset.hyoga.plot.surface_hillshade` for relief shading
+- Add plot methods :meth:`.Dataset.hyoga.plot.bedrock_hillshade` and
+  :meth:`.Dataset.hyoga.plot.surface_hillshade` for relief shading
   (:issue:`19`).
-- Add plot method :meth:`xarray.Dataset.hyoga.plot.bedrock_altitude_contours`
+- Add plot method :meth:`.Dataset.hyoga.plot.bedrock_altitude_contours`
   for bedrock altitude filled contours, best used in combination with new
   altitude colormaps.
-- Add plot method :meth:`xarray.Dataset.hyoga.plot.naturalearth` to add global
+- Add plot method :meth:`.Dataset.hyoga.plot.naturalearth` to add global
   `Natural Earth`_ data through geopandas_ (:issue:`17`).
-- Add plot method :meth:`xarray.Dataset.hyoga.plot.paleoglaciers` to add Last
+- Add plot method :meth:`.Dataset.hyoga.plot.paleoglaciers` to add Last
   Glacial Maximum paleoglacier extents through geopandas_ (:issue:`21`).
 - Add functions :func:`hyoga.open.naturalearth` and
   :func:`hyoga.open.paleoglaciers` to open global `Natural Earth`_ data and
@@ -89,18 +89,18 @@ Masking with `where` remains available and a new documentation page explains
 Breaking changes
 ~~~~~~~~~~~~~~~~
 
-- Method :meth:`xarray.Dataset.hyoga.assign_isostasy` now returns a copy
+- Method :meth:`.Dataset.hyoga.assign_isostasy` now returns a copy
   without affecting the original data. This behaviour is consistent with
-  :meth:`xarray.Dataset.assign`.
-- Method :meth:`xarray.Dataset.hyoga.assign_isostasy` overrides any variable
+  :meth:`.Dataset.assign`.
+- Method :meth:`.Dataset.hyoga.assign_isostasy` overrides any variable
   with standard name "bedrock_altitude_change_due_to_isostatic_adjustment"
   instead of creating a new variable with the same standard name. This is
-  again consistent with :meth:`xarray.Dataset.assign`.
+  again consistent with :meth:`.Dataset.assign`.
 
 Deprecations
 ~~~~~~~~~~~~
 
-- The ``threshold`` argument in :meth:`xarray.Dataset.hyoga.interp` is deprecated
+- The ``threshold`` argument in :meth:`.Dataset.hyoga.interp` is deprecated
   and will be removed in v0.3. Use the ``glacier_masking_point`` parameter in
   :obj:`hyoga.config` or an ice mask instead (see new features).
 
@@ -109,11 +109,11 @@ New features
 
 - Plot methods now look for ``land_ice_area_fraction`` (instead of
   ``land_ice_thickness``) to determine which grid cells are glacierized.
-- Add accessor method :meth:`xarray.Dataset.hyoga.assign` to assign new
+- Add accessor method :meth:`.Dataset.hyoga.assign` to assign new
   variables by CF-compliant standard names.
-- Add accessor method :meth:`xarray.Dataset.hyoga.assign_icemask` to assign an
+- Add accessor method :meth:`.Dataset.hyoga.assign_icemask` to assign an
   ice mask variable with standard name ``land_ice_area_fraction``.
-- Add accessor method :meth:`xarray.Dataset.hyoga.where_icemask` to filter
+- Add accessor method :meth:`.Dataset.hyoga.where_icemask` to filter
   glacier variable according to ``land_ice_area_fraction``.
 - Add :obj:`hyoga.config` with a ``glacier_masking_point`` config parameter, an
   ice thickness threshold used as a fallback if ``land_ice_area_fraction`` is
@@ -122,7 +122,7 @@ New features
 Internal changes
 ~~~~~~~~~~~~~~~~
 
-- Method :meth:`xarray.Dataset.hyoga.getvar` now uses cf_xarray_ to retrieve
+- Method :meth:`.Dataset.hyoga.getvar` now uses cf_xarray_ to retrieve
   data variables by their standard name. Thus cf_xarray_ is now a required
   dependency (:issue:`12`).
 - Add module :mod:`hyoga.conf` implementing a ``config`` object to store
@@ -156,14 +156,13 @@ Deprecations
 Bug fixes
 ~~~~~~~~~
 
-- Assign surface altitude during :meth:`xarray.Dataset.hyoga.interp` if it is missing,
-  as it is needed to compute the interpolated ice mask.
-- Fix :meth:`xarray.Dataset.hyoga.assign_isostasy` and
-  :meth:`xarray.Dataset.hyoga.interp` in the case when a dataset (or a data
-  array) is used instead of a file.
-- Ensure that :meth:`xarray.Dataset.hyoga.where` and
-  :meth:`xarray.Dataset.hyoga.where_thicker` return a copy without affecting
-  the original dataset (as :meth:`xarray.Dataset.where`).
+- Assign surface altitude during :meth:`.Dataset.hyoga.interp` if it is
+  missing, as it is needed to compute the interpolated ice mask.
+- Fix :meth:`.Dataset.hyoga.assign_isostasy` and :meth:`.Dataset.hyoga.interp`
+  in the case when a dataset (or a data array) is used instead of a file.
+- Ensure that :meth:`.Dataset.hyoga.where` and
+  :meth:`.Dataset.hyoga.where_thicker` return a copy without affecting the
+  original dataset (as :meth:`.Dataset.where`).
 
 
 Documentation
