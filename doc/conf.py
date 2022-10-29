@@ -43,6 +43,9 @@ plot_formats = [('png', 100), ('pdf', 100)]  # no hires.png
 plot_include_source = True          # show source code by default
 plot_html_show_source_link = False  # no link to py script file
 plot_html_show_formats = False      # no link to output images
+plot_pre_code = (                   # executed before each plot
+    'import matplotlib.pyplot as plt\n'
+    'import hyoga')
 
 # configure sphinx.ext.autosummary
 autosummary_generate = True         # autogen files for listed entroes
