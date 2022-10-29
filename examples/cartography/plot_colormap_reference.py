@@ -11,7 +11,7 @@ Plot hyoga altitude and relief colormaps.
 
 import numpy as np
 import matplotlib.pyplot as plt
-import hyoga
+import hyoga  # register colormaps, pylint: disable=unused-import
 
 # initialize figure
 fig, axes = plt.subplots(nrows=5)
@@ -22,7 +22,8 @@ gradient = np.linspace(0, 1, 256)
 gradient = np.vstack((gradient, gradient))
 
 # plot background pattern and color gradients
-for ax, name in zip(axes, hyoga.COLORMAPS):
+colormaps = ['Bathymetric', 'Topographic', 'Elevational', 'Matte', 'Glossy']
+for ax, name in zip(axes, colormaps):
     ax.patch.set(hatch='..', edgecolor='0.5')
     ax.imshow(gradient, aspect='auto', cmap=name)
     ax.text(-8, .5, name, va='center', ha='right', fontsize=10)

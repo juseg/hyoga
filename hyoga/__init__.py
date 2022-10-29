@@ -9,8 +9,7 @@ from . import open
 # object imports
 from .core.accessor import HyogaDataset
 from .core.config import config
-from .plot.colormaps import COLORMAPS, SEQUENCES
 
 __all__ = [
     'open',
-    'config', 'HyogaDataset', 'COLORMAPS', 'SEQUENCES']
+    'config', 'HyogaDataset']

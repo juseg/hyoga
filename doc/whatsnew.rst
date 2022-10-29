@@ -48,8 +48,7 @@ New features
 
 - Add three altitude (``Topographic``, ``Bathymetric``, ``Elevational``) and
   two relief-shading (``Glossy``, ``Matte``) colormaps, and correponding color
-  lists, accessible through the matplotlib colormap register, and listed in
-  :data:`hyoga.COLORMAPS` and :data:`hyoga.SEQUENCES` (:issue:`15`).
+  lists, accessible through the matplotlib colormap register (:issue:`15`).
 - Add plot methods :meth:`.Dataset.hyoga.plot.bedrock_hillshade` and
   :meth:`.Dataset.hyoga.plot.surface_hillshade` for relief shading
   (:issue:`19`).

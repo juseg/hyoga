@@ -10,6 +10,7 @@ shortcuts to oft-used plot methods with sensible defaults.
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+import hyoga.plot.colormaps
 import hyoga.plot.hillshade
 
 
@@ -66,7 +67,7 @@ class HyogaPlotMethods:
                 not any(('colors' in style, 'levels' in style)):
 
             # replace colormap by color list
-            tuples = hyoga.SEQUENCES[style.pop('cmap')]
+            tuples = hyoga.plot.colormaps.SEQUENCES[style.pop('cmap')]
             tuples = list(dict(tuples).items())  # remove Elevational dup level
             colors = [t[1] for t in tuples]  # could use dict.values()
             colors = colors + [colors[-1]]
