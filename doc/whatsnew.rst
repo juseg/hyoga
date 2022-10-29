@@ -15,8 +15,10 @@
 What's new
 ==========
 
-v0.2 (unreleased)
------------------
+.. _v0.2.0:
+
+v0.2.0 (unreleased)
+-------------------
 
 Breaking changes
 ~~~~~~~~~~~~~~~~
@@ -76,6 +78,7 @@ Internal changes
 - Move functions to open local files to :mod:`hyoga.open.local`.
 - Move dataset plot methods to :mod:`hyoga.plot.datasets`.
 
+.. _v0.1.2:
 
 v0.1.2 (1 Aug 2022)
 -------------------
@@ -137,6 +140,8 @@ Documentation
 - A new example has been added to show that interpolation also works when
   surface topography is provided instead of bedrock topography.
 
+.. _v0.1.1:
+
 v0.1.1 (8 Mar 2021)
 -------------------
 
@@ -175,6 +180,7 @@ Documentation
 - New examples have been added to demonstrate plotting bedrock isostasy and
   interpolated model output (:doc:`examples/index`, :issue:`11`).
 
+.. _v0.1.0:
 
 v0.1.0 Akaishi (1 Mar 2021)
 ---------------------------
