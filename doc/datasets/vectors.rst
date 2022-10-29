@@ -55,7 +55,6 @@ while lower scales are available through the ``scale`` keyword argument:
    # plot example data
    with hyoga.open.example('pism.alps.in.boot.nc') as ds:
       ds.hyoga.plot.bedrock_altitude(center=False)
-          edgecolor='tab:red', facecolor='none')
       ds.hyoga.plot.naturalearth(
           theme='urban_areas', category='cultural', scale='50m',
           color='tab:orange')
@@ -81,5 +80,61 @@ such regional subsets as ``'lakes_europe'``.
       ds.hyoga.plot.bedrock_altitude(center=False)
       ds.hyoga.plot.naturalearth('rivers_all')
 
+Plotting and reprojection is handled by using :class:`geopandas.GeoDataFrame`
+objects in the background, and any additional keywords arguments are passed to
+:class:`geopandas.GeoDataFrame.plot`. This examples plots cities colored by
+regional significance:
+
+.. plot::
+
+   # plot example data
+   with hyoga.open.example('pism.alps.in.boot.nc') as ds:
+      ds.hyoga.plot.bedrock_altitude(center=False)
+      ds.hyoga.plot.naturalearth(
+          'populated_places', category='cultural',
+          column='SCALERANK', cmap='Reds_r')
+
+
+Opening vector data
+-------------------
+
+Sometimes more control is needed, or vectors may be plotted independently of
+gridded data. For such cases, hyoga provides functions to open Natural Earth
+and paleoglacier vector data for further manipulation.
+
+In the background, accessor plot methods described in previous sections use
+:func:`hyoga.open.naturalearth` and :func:`hyoga.open.paleoglaciers` to
+download, cache, and open vector data as :class:`geopandas.GeoDataFrame`.
+The aforementioned (non-plotting) keyword arguments remain available:
+
+.. plot::
+
+   hyoga.open.naturalearth(theme='urban_areas', category='cultural')
+   hyoga.open.paleoglaciers(source='bat19')
+
+Geodataframes inherit :class:`pandas.DataFrame` functionality, and thus provide
+a rich interface to subset, manipulate and visualize geographic vector data.
+For instance to plot African countries colored by population use:
+
+.. plot::
+
+   gdf = hyoga.open.naturalearth('admin_0_countries', category='cultural')
+   gdf[gdf.CONTINENT == 'Africa'].plot('POP_EST', cmap='Greens')
+
+Geodataframes can be re-projected using a variety of coordinate reference
+system formats. Plotting Batchelor et al. 2019 paleoglacier extents in arctic
+polar stereographic projection (`EPSG 3995`_) is as simple as:
+
+.. plot::
+
+   gdf = hyoga.open.paleoglaciers('bat19')
+   gdf.to_crs(3995).plot()
+
+Here is a more advanced example using Natural Earth attribute tables to select
+particular features within a theme and plot them with a different colour.
+
+.. plot:: ../examples/cartography/plot_naturalearth_geopandas.py
+
+.. _EPSG 3995: https://epsg.io/3995
 .. _Natural Earth: https://www.naturalearthdata.com/
 .. _Natural Earth downloads: https://www.naturalearthdata.com/downloads/
