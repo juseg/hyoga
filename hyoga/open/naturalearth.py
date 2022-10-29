@@ -48,7 +48,8 @@ def naturalearth(theme, category='physical', scale='10m'):
         'rivers_all': (
             'rivers_lake_centerlines', 'rivers_australia', 'rivers_europe',
             'rivers_north_america')}
-    theme = aliases.get(theme, theme)
+    if isinstance(theme, str) and theme in aliases:
+        theme = aliases[theme]
 
     # if theme is iterable, call recursively
     if hasattr(theme, '__iter__') and not isinstance(theme, str):
