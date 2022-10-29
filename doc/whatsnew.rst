@@ -11,6 +11,12 @@
    - Documentation
    - Internal changes
 
+.. Guidelines for cross-references
+   - Use relative paths for accessor members (:meth:`.Dataset.hyoga.assign`)
+   - Use relative paths for class members (:meth:`.Job.submit`)
+   - Use absolute paths for module members (:func:`hyoga.open.paleoglaciers`)
+   - Use absolute paths for external references (:meth:`xarray.Dataset.assign`)
+   - Never use ``~``, as hyoga uses explicit subaccessors and submodules.
 
 What's new
 ==========
@@ -94,11 +100,11 @@ Breaking changes
 
 - Method :meth:`.Dataset.hyoga.assign_isostasy` now returns a copy
   without affecting the original data. This behaviour is consistent with
-  :meth:`.Dataset.assign`.
+  :meth:`xarray.Dataset.assign`.
 - Method :meth:`.Dataset.hyoga.assign_isostasy` overrides any variable
   with standard name "bedrock_altitude_change_due_to_isostatic_adjustment"
   instead of creating a new variable with the same standard name. This is
-  again consistent with :meth:`.Dataset.assign`.
+  again consistent with :meth:`xarray.Dataset.assign`.
 
 Deprecations
 ~~~~~~~~~~~~
@@ -167,7 +173,7 @@ Bug fixes
   in the case when a dataset (or a data array) is used instead of a file.
 - Ensure that :meth:`.Dataset.hyoga.where` and
   :meth:`.Dataset.hyoga.where_thicker` return a copy without affecting the
-  original dataset (as :meth:`.Dataset.where`).
+  original dataset (as :meth:`xarray.Dataset.where`).
 
 
 Documentation
