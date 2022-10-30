@@ -133,7 +133,7 @@ polar stereographic projection (`EPSG 3995`_) is as simple as:
 Here is a more advanced example using Natural Earth attribute tables to select
 particular features within a theme and plot them with a different colour.
 
-.. plot:: ../examples/cartography/plot_naturalearth_geopandas.py
+.. plot:: ../examples/vectors/plot_natural_earth.py
 
 .. _EPSG 3995: https://epsg.io/3995
 .. _Natural Earth: https://www.naturalearthdata.com/

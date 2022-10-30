@@ -95,9 +95,10 @@ sphinx_gallery_conf = {
     'gallery_dirs': 'examples',      # where to save gallery plots
     # 'nested_sections' : False,     # fix duplicate sub-headings in rtd theme
     'subsection_order': sphinx_gallery.sorting.ExplicitOrder([
-        '../examples/showcase',
-        '../examples/interp',
-        '../examples/cartography'])
+         '../examples/datasets',
+         '../examples/interp',
+         '../examples/shading',
+         '../examples/vectors'])
     }
 
 

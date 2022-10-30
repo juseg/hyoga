@@ -15,7 +15,7 @@ method after importing hyoga.
 
 .. _colormaps: https://matplotlib.org/stable/tutorials/colors/colormaps.html
 
-.. plot:: ../examples/cartography/plot_colormap_reference.py
+.. plot:: ../examples/shading/plot_colormap_reference.py
    :include-source: False
 
 In addition, these colormaps trigger special behaviour when used in some of
