@@ -23,7 +23,6 @@ coastline at the highest available scale:
 
 .. plot::
 
-   # plot example data
    with hyoga.open.example('pism.alps.in.boot.nc') as ds:
       ds.hyoga.plot.bedrock_altitude(center=False)
       ds.hyoga.plot.naturalearth()
@@ -41,7 +40,6 @@ instance, to plot glaciated areas in blue, use:
 
 .. plot::
 
-   # plot example data
    with hyoga.open.example('pism.alps.in.boot.nc') as ds:
       ds.hyoga.plot.bedrock_altitude(center=False)
       ds.hyoga.plot.naturalearth('glaciated_areas', color='tab:blue')
@@ -52,7 +50,6 @@ while lower scales are available through the ``scale`` keyword argument:
 
 .. plot::
 
-   # plot example data
    with hyoga.open.example('pism.alps.in.boot.nc') as ds:
       ds.hyoga.plot.bedrock_altitude(center=False)
       ds.hyoga.plot.naturalearth(
@@ -64,7 +61,6 @@ share the same category and scale:
 
 .. plot::
 
-   # plot example data
    with hyoga.open.example('pism.alps.in.boot.nc') as ds:
       ds.hyoga.plot.bedrock_altitude(center=False)
       ds.hyoga.plot.naturalearth(('lakes', 'lakes_europe'))
@@ -75,19 +71,17 @@ such regional subsets as ``'lakes_europe'``.
 
 .. plot::
 
-   # plot example data
    with hyoga.open.example('pism.alps.in.boot.nc') as ds:
       ds.hyoga.plot.bedrock_altitude(center=False)
       ds.hyoga.plot.naturalearth('rivers_all')
 
 Plotting and reprojection is handled by using :class:`geopandas.GeoDataFrame`
 objects in the background, and any additional keywords arguments are passed to
-:class:`geopandas.GeoDataFrame.plot`. This examples plots cities colored by
+:meth:`geopandas.GeoDataFrame.plot`. This examples plots cities colored by
 regional significance:
 
 .. plot::
 
-   # plot example data
    with hyoga.open.example('pism.alps.in.boot.nc') as ds:
       ds.hyoga.plot.bedrock_altitude(center=False)
       ds.hyoga.plot.naturalearth(
