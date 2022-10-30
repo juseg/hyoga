@@ -5,7 +5,11 @@ Plotting vector graphics
 ========================
 
 Hyoga currently supports plotting two types of vector graphics:
-`Natural Earth`_ data and Last Glacial Maximum paleoglacier extents.
+:ref:`plotting_natural_earth` data and Last Glacial Maximum
+:ref:`plotting_paleoglaciers`. For direct access to geographic vectors see
+:ref:`opening_vectors`.
+
+.. _plotting_natural_earth:
 
 Natural Earth data
 ------------------
@@ -88,6 +92,41 @@ regional significance:
           'populated_places', category='cultural',
           column='SCALERANK', cmap='Reds_r')
 
+.. _plotting_paleoglaciers:
+
+Paleoglacier extents
+--------------------
+
+Paleoglacier extent reconstructions from glacial geology can be used to
+validate model results or plot standalone maps. The accessor plot method,
+:meth:`.Dataset.hyoga.plot.paleoglaciers`, will download, cache, re-project and
+plot paleoglacier extents in the :class:`xarray.Dataset` coordinates reference
+system (given by a ``.proj4`` attribute, see :ref:`plotting_natural_earth`).
+
+.. plot::
+
+   with hyoga.open.example('pism.alps.in.boot.nc') as ds:
+      ds.hyoga.plot.bedrock_altitude(center=False)
+      ds.hyoga.plot.paleoglaciers(alpha=0.75)
+
+A ``source`` keyword argument controls the source of data plotted, and
+currently supports two options. The default is a global reconstruction with
+varying level of accuracy (`Ehlers et al., 2011`_). The alternatively is a more
+homogeneous but less extensive dataset covering the arctic is and subarctic
+(`Batchelor et al., 2019`_) accessed by ``source='bat19'``. In either case,
+only Last Glacial Maximum data are currently supported.
+
+.. tip::
+
+   A consistent, versioned, metadatumed, global datasets of paleoglacier
+   extents would be a huge boost for hyoga. If you know of products even
+   partially fitting this description, please open a Github `issue`_.
+
+.. _Batchelor et al., 2019: https://doi.org/10.1038%2Fs41467-019-11601-2
+.. _Ehlers et al., 2011: https://booksite.elsevier.com/9780444534477
+.. _issue: https://github.com/juseg/hyoga/issues
+
+.. _opening_vectors:
 
 Opening vector data
 -------------------
