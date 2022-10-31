@@ -7,11 +7,11 @@ Hyoga input tools to open glacier modelling datasets.
 
 from .example import example
 from .local import dataset, mfdataset, subdataset
-from .naturalearth import naturalearth
+from .naturalearth import natural_earth
 from .paleoglaciers import paleoglaciers
 
 __all__ = [
     'example',
     'dataset', 'mfdataset', 'subdataset',
-    'naturalearth',
+    'natural_earth',
     'paleoglaciers']

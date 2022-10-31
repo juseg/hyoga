@@ -32,7 +32,7 @@ with hyoga.open.example('pism.alps.out.2d.nc') as ds:
     ds.hyoga.plot.ice_margin(ax=ax)
 
     # add coastline and rivers
-    ds.hyoga.plot.naturalearth(ax=ax)
+    ds.hyoga.plot.natural_earth(ax=ax)
 
 # set axes properties
 cax.set_ylabel('')

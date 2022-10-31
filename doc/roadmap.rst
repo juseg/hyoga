@@ -50,13 +50,13 @@ Datasets
 - |-| :meth:`.Dataset.hyoga.plot.barscale`
 - |x| :meth:`.Dataset.hyoga.plot.bedrock_hillshade`
 - |x| :meth:`.Dataset.hyoga.plot.surface_hillshade`
-- |x| :meth:`.Dataset.hyoga.plot.naturalearth`
+- |x| :meth:`.Dataset.hyoga.plot.natural_earth`
 - |x| :meth:`.Dataset.hyoga.plot.paleoglaciers`
 
 Input
 ~~~~~
 
-- |x| :func:`hyoga.open.naturalearth`
+- |x| :func:`hyoga.open.natural_earth`
 - |x| :func:`hyoga.open.paleoglaciers`
 
 Documentation

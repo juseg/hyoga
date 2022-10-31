@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 import hyoga
 
 # plot natural earth land
-gdf = hyoga.open.naturalearth('land', scale='50m').to_crs('epsg:3995')
+gdf = hyoga.open.natural_earth('land', scale='50m').to_crs('epsg:3995')
 ax = gdf.plot(color='0.9')
 
 # plot paleoglaciers

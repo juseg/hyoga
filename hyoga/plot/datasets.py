@@ -384,7 +384,7 @@ class HyogaPlotMethods:
     # Vector plot methods
     # -------------------
 
-    def naturalearth(
+    def natural_earth(
             self, theme=None, category='physical', scale='10m', **kwargs):
         """Plot Natural Earth data in dataset projection.
 
@@ -392,7 +392,7 @@ class HyogaPlotMethods:
         ----------
         theme : str or iterable, optional
             Natural Earth data theme(s) or theme aliase(s), such as ``rivers``
-            or ``lakes_all`` passed to :func:`hyoga.open.naturalearth`. If
+            or ``lakes_all`` passed to :func:`hyoga.open.natural_earth`. If
             theme is None, plot coastline, rivers and lakes. Please browse
             https://www.naturalearthdata.com for available themes.
         category : {'cultural', 'physical'}, optional
@@ -419,13 +419,13 @@ class HyogaPlotMethods:
             edgecolor = kwargs.pop('edgecolor', '0.25')
             facecolor = kwargs.pop('facecolor', '0.95')
             linewidth = kwargs.pop('linewidth', 0.5)
-            ax = self.naturalearth(
+            ax = self.natural_earth(
                 'coastline', edgecolor=edgecolor, linestyle='dashed',
                 linewidth=linewidth/2, **kwargs)
-            ax = self.naturalearth(
+            ax = self.natural_earth(
                 'rivers_all', edgecolor=edgecolor, linewidth=linewidth,
                 **kwargs)
-            ax = self.naturalearth(
+            ax = self.natural_earth(
                 'lakes_all', edgecolor=edgecolor, facecolor=facecolor,
                 linewidth=linewidth/2, **kwargs)
             return ax
@@ -439,7 +439,7 @@ class HyogaPlotMethods:
         kwargs['ax'].set_autoscale_on(False)
 
         # open natural earth data, reproject and plot
-        gdf = hyoga.open.naturalearth(theme, category=category, scale=scale)
+        gdf = hyoga.open.natural_earth(theme, category=category, scale=scale)
         return gdf.to_crs(self._ds.proj4).plot(**kwargs)
 
     def paleoglaciers(self, source='ehl11', **kwargs):

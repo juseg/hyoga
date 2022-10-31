@@ -27,7 +27,7 @@ with hyoga.open.example('pism.alps.in.boot.nc') as ds:
     ds.hyoga.plot.bedrock_hillshade(ax=ax)
 
     # add coastline and rivers
-    ds.hyoga.plot.naturalearth(ax=ax)
+    ds.hyoga.plot.natural_earth(ax=ax)
 
 # set axes properties
 ax.set_title('Bedrock altitude contours')

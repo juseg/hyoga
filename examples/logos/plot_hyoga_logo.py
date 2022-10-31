@@ -23,12 +23,12 @@ ax.axis('off')
 
 # add continents and glaciers
 crs = '+a=6378137 +proj=ortho +lon_0=-45 +lat_0=90'
-hyoga.open.naturalearth(
+hyoga.open.natural_earth(
     'admin_0_countries', category='cultural', scale='110m').to_crs(crs).plot(
         ax=ax, alpha=0.25, facecolor='w')
 hyoga.open.paleoglaciers('bat19').to_crs(crs).plot(
     ax=ax, alpha=0.75, facecolor='w')
-hyoga.open.naturalearth('glaciated_areas', scale='50m').to_crs(crs).plot(
+hyoga.open.natural_earth('glaciated_areas', scale='50m').to_crs(crs).plot(
     ax=ax, edgecolor='w', facecolor='w')
 
 # add text and overline

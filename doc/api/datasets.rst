@@ -56,5 +56,5 @@ Plotting vectors
    :toctree: generated/
    :template: autosummary/accessor_method.rst
 
-   plot.naturalearth
+   plot.natural_earth
    plot.paleoglaciers

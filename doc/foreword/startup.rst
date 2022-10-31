@@ -32,7 +32,7 @@ hydrologic features to facilitate orientation.
    with hyoga.open.example('pism.alps.out.2d.nc') as ds:
        ds.hyoga.plot.bedrock_altitude(center=False)
        ds.hyoga.plot.ice_margin(facecolor='tab:blue')
-       ds.hyoga.plot.naturalearth()
+       ds.hyoga.plot.natural_earth()
 
    # set title
    plt.title('A first plot with hyoga')

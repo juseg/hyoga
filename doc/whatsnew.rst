@@ -55,11 +55,11 @@ New features
 - Add plot method :meth:`.Dataset.hyoga.plot.bedrock_altitude_contours`
   for bedrock altitude filled contours, best used in combination with new
   altitude colormaps.
-- Add plot method :meth:`.Dataset.hyoga.plot.naturalearth` to add global
+- Add plot method :meth:`.Dataset.hyoga.plot.natural_earth` to add global
   `Natural Earth`_ data through geopandas_ (:issue:`17`).
 - Add plot method :meth:`.Dataset.hyoga.plot.paleoglaciers` to add Last
   Glacial Maximum paleoglacier extents through geopandas_ (:issue:`21`).
-- Add functions :func:`hyoga.open.naturalearth` and
+- Add functions :func:`hyoga.open.natural_earth` and
   :func:`hyoga.open.paleoglaciers` to open global `Natural Earth`_ data and
   Last Glacial Maximum paleoglacier extents as :class:`geopandas.GeoDataFrame`
   (:issue:`24`).

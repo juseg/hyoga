@@ -21,7 +21,7 @@ etc) and physical (rivers, lakes, glaciers, etc), and available at three levels
 of detail referred as the scales 1:10m, 1:50m, and 1:110m.
 
 The easiest way to plot Natural Earth as a background for gridded datasets is
-through the accessor plot method, :meth:`.Dataset.hyoga.plot.naturalearth`.
+through the accessor plot method, :meth:`.Dataset.hyoga.plot.natural_earth`.
 Called without arguments it renders a composite map of rivers, lakes, and the
 coastline at the highest available scale:
 
@@ -29,7 +29,7 @@ coastline at the highest available scale:
 
    with hyoga.open.example('pism.alps.in.boot.nc') as ds:
       ds.hyoga.plot.bedrock_altitude(center=False)
-      ds.hyoga.plot.naturalearth()
+      ds.hyoga.plot.natural_earth()
 
 .. warning::
 
@@ -46,7 +46,7 @@ instance, to plot glaciated areas in blue, use:
 
    with hyoga.open.example('pism.alps.in.boot.nc') as ds:
       ds.hyoga.plot.bedrock_altitude(center=False)
-      ds.hyoga.plot.naturalearth('glaciated_areas', color='tab:blue')
+      ds.hyoga.plot.natural_earth('glaciated_areas', color='tab:blue')
 
 The method defaults to plotting themes in the ``physical`` category at the
 highest scale of ``10m``. Cultural features require a ``category='cultural'``
@@ -56,7 +56,7 @@ while lower scales are available through the ``scale`` keyword argument:
 
    with hyoga.open.example('pism.alps.in.boot.nc') as ds:
       ds.hyoga.plot.bedrock_altitude(center=False)
-      ds.hyoga.plot.naturalearth(
+      ds.hyoga.plot.natural_earth(
           theme='urban_areas', category='cultural', scale='50m',
           color='tab:orange')
 
@@ -67,7 +67,7 @@ share the same category and scale:
 
    with hyoga.open.example('pism.alps.in.boot.nc') as ds:
       ds.hyoga.plot.bedrock_altitude(center=False)
-      ds.hyoga.plot.naturalearth(('lakes', 'lakes_europe'))
+      ds.hyoga.plot.natural_earth(('lakes', 'lakes_europe'))
 
 Hyoga also provides two aliases ``'lakes_all'`` and ``'rivers_all'`` that
 respectively plot, well, all lakes and all rivers at ``'10m'`` scale, including
@@ -77,7 +77,7 @@ such regional subsets as ``'lakes_europe'``.
 
    with hyoga.open.example('pism.alps.in.boot.nc') as ds:
       ds.hyoga.plot.bedrock_altitude(center=False)
-      ds.hyoga.plot.naturalearth('rivers_all')
+      ds.hyoga.plot.natural_earth('rivers_all')
 
 Plotting and reprojection is handled by using :class:`geopandas.GeoDataFrame`
 objects in the background, and any additional keywords arguments are passed to
@@ -88,7 +88,7 @@ regional significance:
 
    with hyoga.open.example('pism.alps.in.boot.nc') as ds:
       ds.hyoga.plot.bedrock_altitude(center=False)
-      ds.hyoga.plot.naturalearth(
+      ds.hyoga.plot.natural_earth(
           'populated_places', category='cultural',
           column='SCALERANK', cmap='Reds_r')
 
@@ -136,13 +136,13 @@ gridded data. For such cases, hyoga provides functions to open Natural Earth
 and paleoglacier vector data for further manipulation.
 
 In the background, accessor plot methods described in previous sections use
-:func:`hyoga.open.naturalearth` and :func:`hyoga.open.paleoglaciers` to
+:func:`hyoga.open.natural_earth` and :func:`hyoga.open.paleoglaciers` to
 download, cache, and open vector data as :class:`geopandas.GeoDataFrame`.
 The aforementioned (non-plotting) keyword arguments remain available:
 
 .. plot::
 
-   hyoga.open.naturalearth(theme='urban_areas', category='cultural')
+   hyoga.open.natural_earth(theme='urban_areas', category='cultural')
    hyoga.open.paleoglaciers(source='bat19')
 
 Geodataframes inherit :class:`pandas.DataFrame` functionality, and thus provide
@@ -151,7 +151,7 @@ For instance to plot African countries colored by population use:
 
 .. plot::
 
-   gdf = hyoga.open.naturalearth('admin_0_countries', category='cultural')
+   gdf = hyoga.open.natural_earth('admin_0_countries', category='cultural')
    gdf[gdf.CONTINENT == 'Africa'].plot('POP_EST', cmap='Greens')
 
 Geodataframes can be re-projected using a variety of coordinate reference

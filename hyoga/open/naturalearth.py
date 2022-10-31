@@ -17,7 +17,7 @@ import hyoga.plot
 import matplotlib.pyplot as plt
 
 
-def naturalearth(theme, category='physical', scale='10m'):
+def natural_earth(theme, category='physical', scale='10m'):
     """Open Natural Earth geodataframe
 
     Parameters
@@ -53,7 +53,7 @@ def naturalearth(theme, category='physical', scale='10m'):
 
     # if theme is iterable, call recursively
     if hasattr(theme, '__iter__') and not isinstance(theme, str):
-        return pandas.concat(naturalearth(
+        return pandas.concat(natural_earth(
             subtheme, category=category, scale=scale) for subtheme in theme)
 
     # otherwise, return geodataframe

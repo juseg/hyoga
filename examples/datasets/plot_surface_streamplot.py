@@ -31,7 +31,7 @@ with hyoga.open.example('pism.alps.out.2d.nc') as ds:
     ax.figure.colorbar(streams.lines, cax=cax, extend='both')
 
     # add coastline and rivers
-    ds.hyoga.plot.naturalearth(ax=ax)
+    ds.hyoga.plot.natural_earth(ax=ax)
 
 # set axes properties
 cax.set_ylabel('')

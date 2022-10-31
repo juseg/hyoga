@@ -31,5 +31,5 @@ Opening vector data
 .. autosummary::
    :toctree: generated/
 
-   naturalearth
+   natural_earth
    paleoglaciers
