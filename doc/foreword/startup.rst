@@ -40,7 +40,7 @@ hydrologic features to facilitate orientation.
 .. tip::
 
    Hyoga alters matplotlib_ defaults with its own style choices. However, these
-   choices can always be overriden using matplotlib keyword arguments.
+   choices can always be overridden using matplotlib keyword arguments.
 
 .. _matplotlib: https://matplotlib.org
 
