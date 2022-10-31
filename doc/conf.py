@@ -98,7 +98,8 @@ sphinx_gallery_conf = {
          '../examples/datasets',
          '../examples/interp',
          '../examples/shading',
-         '../examples/vectors'])
+         '../examples/vectors',
+         '../examples/logos'])
     }
 
 
