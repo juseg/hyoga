@@ -15,7 +15,7 @@ import hyoga
 # initialize figure
 fig = plt.figure(figsize=(9.6, 3.2))
 fig.patch.set_facecolor('0.25')  # ignored by transparent=True
-ax = fig.add_axes([17/48, 1/32, 14/48, 13/16])
+ax = fig.add_axes([17/48, 5/128, 14/48, 13/16])
 ax.patch.set_facecolor('none')
 ax.set_xlim((-6.4e6, 6.4e6))
 ax.set_ylim((-6.4e6, 6.4e6))
@@ -31,10 +31,13 @@ hyoga.open.paleoglaciers('bat19').to_crs(crs).plot(
 hyoga.open.natural_earth('glaciated_areas', scale='50m').to_crs(crs).plot(
     ax=ax, edgecolor='w', facecolor='w')
 
+# the figure height in dots
+dotheight = fig.get_window_extent().height/fig.dpi*72
+
 # add text and overline
 fig.text(
     1/2, 0, 'hy  ga', color='w', family='monospace', ha='center', va='bottom',
-    fontsize=7/8*fig.get_window_extent().height/fig.dpi*72)
+    fontsize=7/8*dotheight)
 ax.fill_between(
     [5/12, 7/12], 15/16, 1, clip_on=False, facecolor='w',
     transform=fig.transFigure)
@@ -42,7 +45,7 @@ ax.fill_between(
 # add circle for the o
 ax.add_patch(plt.Circle(
     (0, 0), 6.4e6, capstyle='round', clip_on=False, edgecolor='w',
-    facecolor='none', linewidth=16))
+    facecolor='none', linewidth=5/64*dotheight))
 
 # save static file
 # fig.savefig('../../doc/_static/png/hyoga_logo.png', transparent=True)
