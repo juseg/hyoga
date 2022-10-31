@@ -7,27 +7,11 @@ Masking and interpolation
 Ice thickness threshold
 -----------------------
 
-Let's get started with the usual imports and the demo data.
-
-.. plot::
-   :context:
-   :nofigs:
-
-   import matplotlib.pyplot as plt
-   import xarray as xr
-   import hyoga
-
-   ds = hyoga.open.example('pism.alps.out.2d.nc')
-
 Hyoga's plot methods use an ice mask to determine which grid cells are
 glacierized and which are not. According to CF conventions, this is defined by
 the standard variable ``land_ice_area_fraction``. There are several ways to
 affect the ice mask. The easiest way is to use the (currently single) parametre
-in :obj:`hyoga.config`.
-
-.. plot::
-   :context:
-   :nofigs:
+in :obj:`hyoga.config`::
 
    hyoga.config.glacier_masking_point
 
@@ -39,13 +23,18 @@ files contain a thin cover of "seasonal ice" outside the glacier margin, as is
 the case in the demo files.
 
 .. plot::
-   :context:
 
-   ds.hyoga.plot.bedrock_altitude(vmin=0, vmax=4500)
-   for i, value in enumerate([0.1, 1, 500]):
-       hyoga.config.glacier_masking_point = value
-       ds.hyoga.plot.ice_margin(edgecolor=f'C{i}', linewidths=1)
-   hyoga.config.glacier_masking_point = 1  # restore default
+   with hyoga.open.example('pism.alps.out.2d.nc') as ds:
+       ds.hyoga.plot.bedrock_altitude(vmin=0, vmax=4500)
+       for i, value in enumerate([0.1, 1, 500]):
+           hyoga.config.glacier_masking_point = value
+           ds.hyoga.plot.ice_margin(edgecolor=f'C{i}', linewidths=1)
+
+   # restore the default of 1 m
+   hyoga.config.glacier_masking_point = 1
+
+   # needed to avoid distortion
+   plt.gca().set_aspect('equal')
 
 
 Custom glacier mask
@@ -57,26 +46,20 @@ cells filled with ice at least a metre thick, and moving at least ten metres
 per year:
 
 .. plot::
-   :context:
 
-   ds = ds.hyoga.assign_icemask(
-       (ds.hyoga.getvar('land_ice_thickness') > 1) &
-       (ds.hyoga.getvar('magnitude_of_land_ice_surface_velocity') > 10))
-   ds.hyoga.plot.bedrock_altitude(vmin=0, vmax=4500)
-   ds.hyoga.plot.ice_margin(facecolor='tab:blue')
+   with hyoga.open.example('pism.alps.out.2d.nc') as ds:
+       ds = ds.hyoga.assign_icemask(
+           (ds.hyoga.getvar('land_ice_thickness') > 1) &
+           (ds.hyoga.getvar('magnitude_of_land_ice_surface_velocity') > 10))
+       ds.hyoga.plot.bedrock_altitude(vmin=0, vmax=4500)
+       ds.hyoga.plot.ice_margin(facecolor='tab:blue')
+
+   # needed to avoid distortion
+   plt.gca().set_aspect('equal')
 
 Note that the :meth:`~.Dataset.hyoga.assign_icemask` method edits (or add) a
 ``land_ice_area_fraction`` variable without affecting the rest of the dataset.
-Such lossless masking is should be enough for internal use within Hyoga. This
-mask looks a bit strange, so let us get rid of it before we move on:
-
-.. plot::
-   :context:
-   :nofigs:
-
-   ds = ds.drop_vars(ds.hyoga.getvar('land_ice_area_fraction').name)
-
-
+Such lossless masking is should be enough for internal use within Hyoga.
 However in some situations, a lossy (destructive) ice mask may be more useful.
 This includes exporting data to a compressed netCDF file for the web, where
 having homogeneous values outside the glacier mask can greatly reduce file
@@ -113,6 +96,7 @@ in the dataset with bedrock altitude in the initial state:
    :context:
    :nofigs:
 
+   ds = hyoga.open.example('pism.alps.out.2d.nc')
    ds = ds.hyoga.assign_isostasy(hyoga.open.example('pism.alps.in.boot.nc'))
 
 The method :meth:`~.Dataset.hyoga.assign_isostasy` assigns a new variable
@@ -139,6 +123,9 @@ with a much higher resolution.
    ds.hyoga.plot.surface_velocity(vmin=1e1, vmax=1e3)
    ds.hyoga.plot.surface_altitude_contours()
    ds.hyoga.plot.ice_margin(edgecolor='0.25')
+
+   # needed to avoid distortion
+   plt.gca().set_aspect('equal')
 
 .. _xarray: https//xarray.pydata.org
 .. _`CF standard names`: http://cfconventions.org/standard-names.html
