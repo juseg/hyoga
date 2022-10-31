@@ -30,8 +30,7 @@ with hyoga.open.example('pism.alps.out.2d.nc') as ds:
     ds = ds.hyoga.interp(hyoga.open.example('pism.alps.vis.refined.nc'))
 
     # plot model output
-    ds.hyoga.plot.bedrock_altitude(
-        ax=ax, cmap='gist_earth', vmin=-3000, vmax=4500)
+    ds.hyoga.plot.bedrock_altitude(ax=ax, cmap='Topographic', center=False)
     ds.hyoga.plot.surface_altitude_contours(ax=ax)
     ds.hyoga.plot.ice_margin(ax=ax, facecolor='w')
 

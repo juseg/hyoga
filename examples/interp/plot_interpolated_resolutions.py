@@ -29,8 +29,7 @@ with hyoga.open.example('pism.alps.out.2d.nc') as ds:
 
     # plot original data
     ax = axes[0]
-    ds.hyoga.plot.bedrock_altitude(
-        ax=ax, cmap='gist_earth', vmin=-3000, vmax=4500)
+    ds.hyoga.plot.bedrock_altitude(ax=ax, cmap='Topographic', center=False)
     ds.hyoga.plot.surface_altitude_contours(ax=ax)
     ds.hyoga.plot.ice_margin(ax=ax, facecolor='w')
     ax.set_title('original')
@@ -40,7 +39,7 @@ with hyoga.open.example('pism.alps.out.2d.nc') as ds:
         stride = int(res/100)
         interp = ds.hyoga.interp(topo[::stride, ::stride])
         interp.hyoga.plot.bedrock_altitude(
-            ax=ax, cmap='gist_earth', vmin=-3000, vmax=4500)
+            ax=ax, cmap='Topographic', center=False)
         interp.hyoga.plot.surface_altitude_contours(ax=ax)
         interp.hyoga.plot.ice_margin(ax=ax, facecolor='w')
         ax.set_title(f'{res} m')
