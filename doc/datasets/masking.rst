@@ -4,8 +4,6 @@
 Masking and interpolation
 =========================
 
-.. currentmodule:: xarray
-
 Ice thickness threshold
 -----------------------
 
@@ -54,9 +52,9 @@ Custom glacier mask
 -------------------
 
 For more control, on can set the ``land_ice_area_fraction`` variable using
-:meth:`~Dataset.assign_icemask`. Suppose that we define glaciers as grid cells
-filled with ice at least a metre thick, and moving at least ten metres per
-year:
+:meth:`~.Dataset.hyoga.assign_icemask`. Suppose that we define glaciers as grid
+cells filled with ice at least a metre thick, and moving at least ten metres
+per year:
 
 .. plot::
    :context:
@@ -67,7 +65,7 @@ year:
    ds.hyoga.plot.bedrock_altitude(vmin=0, vmax=4500)
    ds.hyoga.plot.ice_margin(facecolor='tab:blue')
 
-Note that the :meth:`~Dataset.hyoga.assign_icemask` method edits (or add) a
+Note that the :meth:`~.Dataset.hyoga.assign_icemask` method edits (or add) a
 ``land_ice_area_fraction`` variable without affecting the rest of the dataset.
 Such lossless masking is should be enough for internal use within Hyoga. This
 mask looks a bit strange, so let us get rid of it before we move on:
@@ -82,9 +80,10 @@ mask looks a bit strange, so let us get rid of it before we move on:
 However in some situations, a lossy (destructive) ice mask may be more useful.
 This includes exporting data to a compressed netCDF file for the web, where
 having homogeneous values outside the glacier mask can greatly reduce file
-size. This can be achieved with hyoga's :meth:`~Dataset.hyoga.where`,
-:meth:`~Dataset.hyoga.where_icemask`, and :meth:`~Dataset.hyoga.where_thicker`.
-These methods behave like xarray's :meth:`~Dataset.where`: they replace data
+size. This can be achieved with :meth:`.Dataset.hyoga.where`,
+:meth:`~.Dataset.hyoga.where_icemask`, and
+:meth:`~.Dataset.hyoga.where_thicker`.
+These methods behave like :meth:`xarray.Dataset.where`: they replace data
 values with `np.nan` outside the where condition. However, they are meant to
 only affect "glacier variables" (currently any variable whose standard name
 does not start with ``bedrock_altitude``).
@@ -116,9 +115,9 @@ in the dataset with bedrock altitude in the initial state:
 
    ds = ds.hyoga.assign_isostasy(hyoga.open.example('pism.alps.in.boot.nc'))
 
-The method :meth:`~Dataset.hyoga.assign_isostasy` assigns a new variable
+The method :meth:`~.Dataset.hyoga.assign_isostasy` assigns a new variable
 (standard name ``bedrock_altitude_change_due_to_isostatic_adjustment``). Next
-we run :meth:`~Dataset.hyoga.interp`
+we run :meth:`~.Dataset.hyoga.interp`
 which interpolates all variables, and recalculates an ice mask based on the new
 topographies, corrected for bedrock depression in this case. This uses yet
 another demo file, which contains high-resolution topographic data over a small
