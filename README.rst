@@ -18,7 +18,8 @@ Japanese word for glacier (lit. ice river). See the documentation_ for more.
 
 .. _cartopy: https://scitools.org.uk/cartopy/
 .. _CF: https://cfconventions.org
-.. _Hyoga: https://hyoga.readthedocs.io.
+.. _documentation: https://hyoga.readthedocs.io
+.. _Hyoga: https://hyoga.readthedocs.io
 .. _PISM: https://pism.io
 .. _Python: https://python.org
 .. _xarray: https://xarray.pydata.org/en/stable/
