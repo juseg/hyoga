@@ -105,8 +105,9 @@ sphinx_gallery_conf = {
 
 # -- Options for HTML output -------------------------------------------------
 
-# sphinx html logo
+# sphinx html logo and favicon
 html_logo = '_static/png/hyoga_logo.png'
+html_favicon = '_static/ico/hyoga_favicon.ico'
 
 # sphinx html theme
 html_theme = 'sphinx_book_theme'
