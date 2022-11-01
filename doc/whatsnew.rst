@@ -23,8 +23,18 @@ What's new
 
 .. _v0.2.0:
 
-v0.2.0 (unreleased)
--------------------
+v0.2.0 Bale (1 Nov. 2022)
+-------------------------
+
+.. plot:: ../examples/whatsnew/plot_v002_bale.py
+   :include-source: false
+
+This is a major relase implementing several cartographic features. It adds
+custom colormaps and plot methods for :doc:`shaded reliefs</datasets/shading>`,
+and an interface to :doc:`open and plot </datasets/vectors>` Natural Earth data
+and paleoglacier extents. The documentation uses a new theme. A logo and new
+:doc:`examples <examples/index>` were added. The package structure has been
+reworked to better serve :doc:`future plans <roadmap>`.
 
 Breaking changes
 ~~~~~~~~~~~~~~~~

@@ -13,8 +13,8 @@ import sphinx_gallery.sorting
 project = 'hyoga'
 copyright = '2021-2022'
 author = 'Julien Seguinot'
-version = '0.1 Akaishi'
-release = '0.1.2'
+version = '0.2 Bale'
+release = '0.2.0'
 
 
 # -- General configuration ---------------------------------------------------
