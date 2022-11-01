@@ -191,4 +191,7 @@ Documentation
 v0.1.0 Akaishi (1 Mar 2021)
 ---------------------------
 
+.. plot:: ../examples/whatsnew/plot_v001_akaishi.py
+   :include-source: false
+
 Nothing is old, everything is new. This is the first version!

@@ -4,6 +4,7 @@ channels:
 dependencies:
   - python
   - cartopy
+  - contextily
   - cf_xarray
   - geopandas
   - matplotlib
