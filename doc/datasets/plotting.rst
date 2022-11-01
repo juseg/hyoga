@@ -43,7 +43,7 @@ Inferring variables
 -------------------
 
 Some missing variables can be reconstructed from others present in the dataset
-(see :doc:`datasets/opening`). For instance velocity norms are reconstructed
+(see :doc:`/datasets/opening`). For instance velocity norms are reconstructed
 from their horizontal components. They plot on a logarithmic scale by default,
 but the limits can be customized:
 
@@ -88,7 +88,7 @@ with a single call to :meth:`.Dataset.hyoga.plot.surface_altitude_contours`:
    # needed to avoid distortion
    plt.gca().set_aspect('equal')
 
-More advanced composite examples are available in the :doc:`examples/index`.
+More advanced composite examples are available in the :doc:`/examples/index`.
 Here is one that uses :meth:`.Dataset.hyoga.assign_isostasy` and
 :meth:`.Dataset.hyoga.plot.bedrock_isostasy` to compute and visualize
 lithospheric deformation due to the load of the Alpine ice sheet during the
