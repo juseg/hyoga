@@ -1,10 +1,20 @@
 .. Copyright (c) 2022, Julien Seguinot (juseg.github.io)
 .. GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
-:orphan:
+Development roadmap
+===================
 
-Roadmap
-=======
+My long-term goal for hyoga is to develop a fully automated workflow to model
+paleoglaciers with PISM, and perhaps other models, anywhere on Earth.
+
+I hope that hyoga will eventually become a community package. Yet for the time
+being, the code base is still unstable, thus I will likely prioritise my own
+development roadmap over user requests.
+
+Until I come up with better contributing guidelines and co, here is an evolving
+document that I use to keep track of my progress and plan future releases, some
+kind of incremental version of the :doc:`api`, with a glimpse into the future.
+I hope to release ``v0.5.0`` sometime in Spring 2023.
 
 .. |x| raw:: html
 
@@ -64,8 +74,8 @@ Documentation
 
 - |x| :doc:`foreword/startup`
 - |-| doc: ``foreword/history``
-- |-| :doc:`datasets/shading`
-- |-| :doc:`datasets/vectors`
+- |x| :doc:`datasets/shading`
+- |x| :doc:`datasets/vectors`
 - |-| doc: ``datasets/profile``
 
 v0.1.x Plotting

@@ -49,6 +49,7 @@ research project_ on alpine biodiversity at the University of Bergen (UiB_).
    :maxdepth: 2
 
    api/index
+   roadmap
    whatsnew
 
 .. admonition:: Citing
