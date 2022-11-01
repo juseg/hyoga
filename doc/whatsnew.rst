@@ -67,6 +67,7 @@ New features
 Documentation
 ~~~~~~~~~~~~~
 
+- Add self-plotted logo, see :doc:`examples/logos/index` (:issue:`20`).
 - Add a documentation page for :doc:`foreword/startup`.
 - Add a documentation page on :doc:`datasets/shading`, including colormaps
   (:issue:`15`).
