@@ -43,3 +43,11 @@ class BasenameDownloader(Downloader):
         path = os.path.basename(path)
         path = path.split('/')[-1]
         return super().__call__(url, path)
+
+
+class OSFDownloader(Downloader):
+    """A class to download files by record key from osf.io."""
+
+    def __call__(self, record, path):
+        url = 'https://osf.io/' + record + '/download'
+        return super().__call__(url, path)

@@ -33,13 +33,11 @@ def _download_paleoglaciers_ehl11():
 
 def _download_paleoglaciers_bat19():
     """Download Batchelor et al. (2019) paleoglaciers, return cache path."""
-    files = {'https://osf.io/gzkwc/download': 'LGM_best_estimate.dbf',
-             'https://osf.io/xm6tu/download': 'LGM_best_estimate.prj',
-             'https://osf.io/9bjwn/download': 'LGM_best_estimate.shx',
-             'https://osf.io/9yhdv/download': 'LGM_best_estimate.shp'}
-    downloader = hyoga.core.download.Downloader()
-    for url, filename in files.items():
-        filepath = downloader(url, filename)
+    downloader = hyoga.core.download.OSFDownloader()
+    downloader('gzkwc', 'LGM_best_estimate.dbf')
+    downloader('xm6tu', 'LGM_best_estimate.prj')
+    downloader('9bjwn', 'LGM_best_estimate.shx')
+    filepath = downloader('9yhdv', 'LGM_best_estimate.shp')
     return (filepath, )
 
 
