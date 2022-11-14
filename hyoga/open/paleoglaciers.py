@@ -11,7 +11,7 @@ import os.path
 import zipfile
 import geopandas
 import pandas
-from hyoga.open.example import _download  # FIXME move to core?
+from hyoga.core.download import _download
 
 
 def _download_paleoglaciers_ehl11():
