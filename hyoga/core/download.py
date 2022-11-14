@@ -1,11 +1,11 @@
-# Copyright (c) 2021-2022, Julien Seguinot (juseg.github.io)
+# Copyright (c) 2022, Julien Seguinot (juseg.github.io)
 # GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
 """
-This module provide a function to download sample data needed to plot examples
-included in the documentation. There are currently only few files available
-but in the future more data may be dowloaded to demonstrate plotting time
-series and plotting output from other models.
+This module provide so-called downloader classes for various websites and data
+formats as needed by hyoga. Downloader objects are callable that retrieve one
+or several files from the web, store them in hyoga's cache directory, and
+return a path to that file, or to the main file.
 """
 
 import os.path
