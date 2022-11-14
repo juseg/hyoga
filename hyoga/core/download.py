@@ -13,17 +13,26 @@ import urllib.parse
 import requests
 
 
-def _download(url, filename=None):
-    """Download a file from the web, store in cache dir and return path."""
-    cachedir = os.path.expanduser(os.path.join('~', '.cache', 'hyoga'))
-    if filename is None:
-        filename = urllib.parse.urlparse(url).path
-        filename = os.path.basename(filename)
-        filename = filename.split('/')[-1]
-    filepath = os.path.join(cachedir, filename)
-    if not os.path.isfile(filepath):
-        os.makedirs(cachedir, exist_ok=True)
-        with open(filepath, 'wb') as binaryfile:
-            print(f"downloading {url}...")
-            binaryfile.write(requests.get(url).content)
-    return filepath
+class SimpleDownloader:
+    """A class to download files by url and optionally output name."""
+
+    def __init__(self):
+        """Create hyoga cache directory if missing."""
+        # IDEA: add config parameter for cache directory
+        self.cachedir = os.path.expanduser(os.path.join(
+            '~', '.cache', 'hyoga'))
+        os.makedirs(self.cachedir, exist_ok=True)
+
+    def __call__(self, url, filename=None):
+        """Download file if missing and return local path."""
+        if filename is None:
+            filename = urllib.parse.urlparse(url).path
+            filename = os.path.basename(filename)
+            filename = filename.split('/')[-1]
+        filepath = os.path.join(self.cachedir, filename)
+        if not os.path.isfile(filepath):
+            os.makedirs(self.cachedir, exist_ok=True)
+            with open(filepath, 'wb') as binaryfile:
+                print(f"downloading {url}...")
+                binaryfile.write(requests.get(url).content)
+        return filepath

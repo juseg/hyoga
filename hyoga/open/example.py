@@ -9,7 +9,8 @@ series and plotting output from other models.
 """
 
 import xarray as xr
-from hyoga.core.download import _download
+
+import hyoga.core.download
 
 
 def _download_example(filename):
@@ -17,7 +18,7 @@ def _download_example(filename):
     repo = 'https://raw.githubusercontent.com/juseg/hyoga-data/main'
     model = filename.split('.')[0]
     url = '/'.join((repo, model, filename))
-    return _download(url)
+    return hyoga.core.download.SimpleDownloader()(url)
 
 
 def example(filename='pism.alps.out.2d.nc'):

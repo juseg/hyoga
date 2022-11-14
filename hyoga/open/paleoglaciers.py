@@ -11,14 +11,15 @@ import os.path
 import zipfile
 import geopandas
 import pandas
-from hyoga.core.download import _download
+
+import hyoga.core.download
 
 
 def _download_paleoglaciers_ehl11():
     """Download Ehlers et al. (2011) paleoglaciers, return cache paths."""
     url = ('http://static.us.elsevierhealth.com/ehlers_digital_maps/'
            'digital_maps_02_all_other_files.zip')
-    zipfilename = _download(url)
+    zipfilename = hyoga.core.download.SimpleDownloader()(url)
     cachedir = os.path.dirname(zipfilename)
     basenames = 'lgm', 'lgm_alpen'
     for basename in basenames:
@@ -36,8 +37,9 @@ def _download_paleoglaciers_bat19():
              'https://osf.io/xm6tu/download': 'LGM_best_estimate.prj',
              'https://osf.io/9bjwn/download': 'LGM_best_estimate.shx',
              'https://osf.io/9yhdv/download': 'LGM_best_estimate.shp'}
+    downloader = hyoga.core.download.SimpleDownloader()
     for url, filename in files.items():
-        filepath = _download(url, filename=filename)
+        filepath = downloader(url, filename=filename)
     return (filepath, )
 
 
