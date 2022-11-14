@@ -13,14 +13,10 @@ import xarray as xr
 import hyoga.core.download
 
 
-def _download_example(filename):
-    """Download a file from hyoga-data github repository."""
+def example(filename='pism.alps.out.2d.nc'):
+    """Open cached example dataset from hyoga-data github repository."""
     repo = 'https://raw.githubusercontent.com/juseg/hyoga-data/main'
     model = filename.split('.')[0]
     url = '/'.join((repo, model, filename))
-    return hyoga.core.download.BasenameDownloader()(url)
-
-
-def example(filename='pism.alps.out.2d.nc'):
-    """Open cached example dataset from hyoga-data github repository."""
-    return xr.open_dataset(_download_example(filename))
+    path = hyoga.core.download.Downloader()(url, filename)
+    return xr.open_dataset(path)
