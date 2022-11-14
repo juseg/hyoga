@@ -19,7 +19,7 @@ def _download_paleoglaciers_ehl11():
     """Download Ehlers et al. (2011) paleoglaciers, return cache paths."""
     url = ('http://static.us.elsevierhealth.com/ehlers_digital_maps/'
            'digital_maps_02_all_other_files.zip')
-    zipfilename = hyoga.core.download.SimpleDownloader()(url)
+    zipfilename = hyoga.core.download.BasenameDownloader()(url)
     cachedir = os.path.dirname(zipfilename)
     basenames = 'lgm', 'lgm_alpen'
     for basename in basenames:
@@ -37,9 +37,9 @@ def _download_paleoglaciers_bat19():
              'https://osf.io/xm6tu/download': 'LGM_best_estimate.prj',
              'https://osf.io/9bjwn/download': 'LGM_best_estimate.shx',
              'https://osf.io/9yhdv/download': 'LGM_best_estimate.shp'}
-    downloader = hyoga.core.download.SimpleDownloader()
+    downloader = hyoga.core.download.Downloader()
     for url, filename in files.items():
-        filepath = downloader(url, filename=filename)
+        filepath = downloader(url, filename)
     return (filepath, )
 
 

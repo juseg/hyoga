@@ -13,8 +13,8 @@ import urllib.parse
 import requests
 
 
-class SimpleDownloader:
-    """A class to download files by url and optionally output name."""
+class Downloader:
+    """A generic class to download files by url and local output path."""
 
     def __init__(self):
         """Create hyoga cache directory if missing."""
@@ -23,16 +23,23 @@ class SimpleDownloader:
             '~', '.cache', 'hyoga'))
         os.makedirs(self.cachedir, exist_ok=True)
 
-    def __call__(self, url, filename=None):
+    def __call__(self, url, path):
         """Download file if missing and return local path."""
-        if filename is None:
-            filename = urllib.parse.urlparse(url).path
-            filename = os.path.basename(filename)
-            filename = filename.split('/')[-1]
-        filepath = os.path.join(self.cachedir, filename)
+        filepath = os.path.join(self.cachedir, path)
         if not os.path.isfile(filepath):
             os.makedirs(self.cachedir, exist_ok=True)
             with open(filepath, 'wb') as binaryfile:
                 print(f"downloading {url}...")
                 binaryfile.write(requests.get(url).content)
         return filepath
+
+
+class BasenameDownloader(Downloader):
+    """A class to download files by url and save them according to basename."""
+
+    def __call__(self, url):
+        """Download file if missing and return local path."""
+        path = urllib.parse.urlparse(url).path
+        path = os.path.basename(path)
+        path = path.split('/')[-1]
+        return super().__call__(url, path)

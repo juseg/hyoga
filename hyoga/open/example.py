@@ -18,7 +18,7 @@ def _download_example(filename):
     repo = 'https://raw.githubusercontent.com/juseg/hyoga-data/main'
     model = filename.split('.')[0]
     url = '/'.join((repo, model, filename))
-    return hyoga.core.download.SimpleDownloader()(url)
+    return hyoga.core.download.BasenameDownloader()(url)
 
 
 def example(filename='pism.alps.out.2d.nc'):
