@@ -7,8 +7,6 @@ datasets. The data are returned as a geopandas GeoDataFrame instance, allowing
 convenient postprocessing and speedy plotting.
 """
 
-import os.path
-import zipfile
 import geopandas
 import pandas
 
@@ -19,16 +17,8 @@ def _download_paleoglaciers_ehl11():
     """Download Ehlers et al. (2011) paleoglaciers, return cache paths."""
     url = ('http://static.us.elsevierhealth.com/ehlers_digital_maps/'
            'digital_maps_02_all_other_files.zip')
-    zipfilename = hyoga.core.download.BasenameDownloader()(url)
-    cachedir = os.path.dirname(zipfilename)
-    basenames = 'lgm', 'lgm_alpen'
-    for basename in basenames:
-        for ext in ('dbf', 'shp', 'shx'):
-            filename = basename + '.' + ext
-            if not os.path.isfile(os.path.join(cachedir, filename)):
-                with zipfile.ZipFile(zipfilename, 'r') as archive:
-                    archive.extract(filename, path=cachedir)
-    return (os.path.join(cachedir, b+'.shp') for b in basenames)
+    downloader = hyoga.core.download.ZipShapeDownloader()
+    return (downloader(url, name) for name in ('lgm.shp', 'lgm_alpen.shp'))
 
 
 def _download_paleoglaciers_bat19():

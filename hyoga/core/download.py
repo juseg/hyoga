@@ -11,6 +11,7 @@ series and plotting output from other models.
 import os.path
 import urllib.parse
 import requests
+import zipfile
 
 
 class Downloader:
@@ -51,3 +52,25 @@ class OSFDownloader(Downloader):
     def __call__(self, record, path):
         url = 'https://osf.io/' + record + '/download'
         return super().__call__(url, path)
+
+
+class ZipShapeDownloader(BasenameDownloader):
+    """Download zip archive and extract shapefile and metafiles."""
+
+    def __call__(self, url, filename):
+
+        # download zip file if missing
+        archivepath = super().__call__(url)
+
+        # assert full shp filename was passed
+        assert filename.endswith('.shp')
+        stem = filename[:-4]
+
+        # extract any missing file
+        for ext in ('.dbf', '.shp', '.shx'):
+            if not os.path.isfile(os.path.join(self.cachedir, stem+ext)):
+                with zipfile.ZipFile(archivepath, 'r') as archive:
+                    archive.extract(stem+ext, path=self.cachedir)
+
+        # return path of shp file
+        return os.path.join(self.cachedir, filename)
