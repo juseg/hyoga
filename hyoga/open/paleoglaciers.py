@@ -59,7 +59,6 @@ def paleoglaciers(source='ehl11'):
     # Ehlers et al. data need cleanup
     # FIXME move to _paleoglaciers_ehl11
     if source == 'ehl11':
-        gdf = gdf.set_crs('+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
         gdf = gdf.drop_duplicates()
 
     # return geodataframe
