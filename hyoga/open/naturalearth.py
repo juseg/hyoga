@@ -57,9 +57,9 @@ def natural_earth(theme, category='physical', scale='10m'):
             subtheme, category=category, scale=scale) for subtheme in theme)
 
     # otherwise, return geodataframe
-    # TODO in 0.2.x: replace cartopy.io with internal downloader
-    return geopandas.read_file(cartopy.io.shapereader.natural_earth(
-        category=category, name=theme, resolution=scale))
+    downloader = hyoga.open.downloader.NaturalEarthDownloader()
+    filepath = downloader(scale, category, theme)
+    return geopandas.read_file(filepath)
 
 
 def cities(ax=None, lang=None, include=None, exclude=None, ranks=None,

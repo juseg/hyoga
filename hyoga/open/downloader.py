@@ -72,10 +72,33 @@ class ZipShapeDownloader(BasenameDownloader):
         stem = filename[:-4]
 
         # extract any missing file
-        for ext in ('.dbf', '.shp', '.shx'):
+        for ext in ('.shp', '.cpg', '.dbf', '.prj', '.shx'):
             if not os.path.isfile(os.path.join(self.cachedir, stem+ext)):
                 with zipfile.ZipFile(archivepath, 'r') as archive:
                     archive.extract(stem+ext, path=self.cachedir)
 
         # return path of shp file
         return os.path.join(self.cachedir, filename)
+
+
+class NaturalEarthDownloader(ZipShapeDownloader):
+
+    def __call__(self, scale, category, theme):
+
+        # this is where cartopy stores the same data
+        xdg_data_home = os.environ.get("XDG_DATA_HOME", os.path.join(
+            os.path.expanduser('~'), '.local', 'share'))
+        cartopy_stem = os.path.join(
+            xdg_data_home, 'cartopy', 'shapefiles', 'natural_earth',
+            category, f'ne_{scale}_{theme}')
+
+        # if all files are there, return this path
+        extensions = ('.shp', '.cpg', '.dbf', '.prj', '.shx')
+        if all(os.path.isfile(cartopy_stem+ext) for ext in extensions):
+            return cartopy_stem + '.shp'
+
+        # otherwise we want a ZipShapeDownloader
+        # FIXME store files in subdirectory
+        return super().__call__(
+            f'https://naturalearth.s3.amazonaws.com/{scale}_{category}/'
+            f'ne_{scale}_{theme}.zip', f'ne_{scale}_{theme}.shp')
