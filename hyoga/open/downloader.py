@@ -20,8 +20,9 @@ class Downloader:
     def __init__(self):
         """Create hyoga cache directory if missing."""
         # IDEA: add config parameter for cache directory
-        self.cachedir = os.path.expanduser(os.path.join(
-            '~', '.cache', 'hyoga'))
+        xdg_cache = os.environ.get("XDG_CACHE_HOME", os.path.join(
+            os.path.expanduser('~'), '.cache'))
+        self.cachedir = os.path.join(xdg_cache, 'hyoga')
         os.makedirs(self.cachedir, exist_ok=True)
 
     def __call__(self, url, path):

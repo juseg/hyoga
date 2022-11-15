@@ -21,6 +21,16 @@
 What's new
 ==========
 
+.. _v0.2.1:
+
+v0.2.1 (unreleased)
+-------------------
+
+Internal changes
+~~~~~~~~~~~~~~~~
+
+- Cache data in ``XDG_CACHE_HOME`` if variable if present in environment.
+
 .. _v0.2.0:
 
 v0.2.0 Bale (1 Nov. 2022)
