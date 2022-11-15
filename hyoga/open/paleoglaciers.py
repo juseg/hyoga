@@ -10,20 +10,20 @@ convenient postprocessing and speedy plotting.
 import geopandas
 import pandas
 
-import hyoga.core.download
+import hyoga.open.downloader
 
 
 def _download_paleoglaciers_ehl11():
     """Download Ehlers et al. (2011) paleoglaciers, return cache paths."""
     url = ('http://static.us.elsevierhealth.com/ehlers_digital_maps/'
            'digital_maps_02_all_other_files.zip')
-    downloader = hyoga.core.download.ZipShapeDownloader()
+    downloader = hyoga.open.downloader.ZipShapeDownloader()
     return (downloader(url, name) for name in ('lgm.shp', 'lgm_alpen.shp'))
 
 
 def _download_paleoglaciers_bat19():
     """Download Batchelor et al. (2019) paleoglaciers, return cache path."""
-    downloader = hyoga.core.download.OSFDownloader()
+    downloader = hyoga.open.downloader.OSFDownloader()
     downloader('gzkwc', 'LGM_best_estimate.dbf')
     downloader('xm6tu', 'LGM_best_estimate.prj')
     downloader('9bjwn', 'LGM_best_estimate.shx')
