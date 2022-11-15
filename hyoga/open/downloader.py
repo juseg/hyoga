@@ -53,9 +53,7 @@ class Downloader:
 
     def path(self, url, path):
         """Return local path of downloaded file."""
-        xdg_cache = os.environ.get("XDG_CACHE_HOME", os.path.join(
-            os.path.expanduser('~'), '.cache'))
-        return os.path.join(xdg_cache, 'hyoga', path)
+        return path
 
     def check(self, path):
         """Check whether file is present."""
@@ -73,7 +71,25 @@ class Downloader:
             binaryfile.write(requests.get(url).content)
 
 
-class OSFDownloader(Downloader):
+class CacheDownloader(Downloader):
+    """A downloader that stores files in hyoga's cache directory.
+
+    Call parameters
+    ---------------
+    url:
+        The url of the file to download
+    path:
+        The path of the downloaded file relative to the cache directory.
+    """
+
+    def path(self, url, path):
+        """Return path of downloaded file relative to the cache directory."""
+        xdg_cache = os.environ.get("XDG_CACHE_HOME", os.path.join(
+            os.path.expanduser('~'), '.cache'))
+        return os.path.join(xdg_cache, 'hyoga', path)
+
+
+class OSFDownloader(CacheDownloader):
     """A class to download files by record key from osf.io."""
 
     def __call__(self, record, path):
@@ -81,7 +97,7 @@ class OSFDownloader(Downloader):
         return super().__call__(url, path)
 
 
-class ZipShapeDownloader(Downloader):
+class ZipShapeDownloader(CacheDownloader):
     """Download zip archive and extract shapefile and metafiles."""
 
     def __call__(self, url, path, filename):

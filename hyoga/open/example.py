@@ -18,5 +18,5 @@ def example(filename='pism.alps.out.2d.nc'):
     repo = 'https://raw.githubusercontent.com/juseg/hyoga-data/main'
     model = filename.split('.')[0]
     url = '/'.join((repo, model, filename))
-    path = hyoga.open.downloader.Downloader()(url, filename)
+    path = hyoga.open.downloader.CacheDownloader()(url, filename)
     return xr.open_dataset(path)
