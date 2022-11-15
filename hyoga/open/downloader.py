@@ -90,11 +90,19 @@ class CacheDownloader(Downloader):
 
 
 class OSFDownloader(CacheDownloader):
-    """A class to download files by record key from osf.io."""
+    """A class to download files by record key from osf.io.
 
-    def __call__(self, record, path):
-        url = 'https://osf.io/' + record + '/download'
-        return super().__call__(url, path)
+    Call parameters
+    ---------------
+    record:
+        Record key of the file to download on osf.io.
+    path:
+        The path of the downloaded file relative to the cache directory.
+    """
+
+    def url(self, record, path):
+        """Return osf.io url from record key."""
+        return 'https://osf.io/' + record + '/download'
 
 
 class ZipShapeDownloader(CacheDownloader):
