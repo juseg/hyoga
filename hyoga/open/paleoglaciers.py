@@ -15,10 +15,12 @@ import hyoga.open.downloader
 
 def _download_paleoglaciers_ehl11():
     """Download Ehlers et al. (2011) paleoglaciers, return cache paths."""
-    url = ('http://static.us.elsevierhealth.com/ehlers_digital_maps/'
-           'digital_maps_02_all_other_files.zip')
+    # FIXME store shapefiles in subdirectory
+    path = 'digital_maps_02_all_other_files.zip'
+    url = 'http://static.us.elsevierhealth.com/ehlers_digital_maps/' + path
     downloader = hyoga.open.downloader.ZipShapeDownloader()
-    return (downloader(url, name) for name in ('lgm.shp', 'lgm_alpen.shp'))
+    return (
+        downloader(url, path, name) for name in ('lgm.shp', 'lgm_alpen.shp'))
 
 
 def _download_paleoglaciers_bat19():

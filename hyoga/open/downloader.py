@@ -23,7 +23,6 @@ class Downloader:
         xdg_cache = os.environ.get("XDG_CACHE_HOME", os.path.join(
             os.path.expanduser('~'), '.cache'))
         self.cachedir = os.path.join(xdg_cache, 'hyoga')
-        os.makedirs(self.cachedir, exist_ok=True)
 
     def __call__(self, url, path):
         """Download file if missing and return local path."""
@@ -32,12 +31,19 @@ class Downloader:
         # - wget(): actually download file (code below)
         # - path(): return the local file path
         #   - deflate(): extract zip file
+
+        # create directory if missing
         filepath = os.path.join(self.cachedir, path)
+        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+
+        # download file if missing
         if not os.path.isfile(filepath):
             os.makedirs(self.cachedir, exist_ok=True)
             with open(filepath, 'wb') as binaryfile:
                 print(f"downloading {url}...")
                 binaryfile.write(requests.get(url).content)
+
+        # return local file path
         return filepath
 
 
@@ -60,26 +66,33 @@ class OSFDownloader(Downloader):
         return super().__call__(url, path)
 
 
-class ZipShapeDownloader(BasenameDownloader):
+class ZipShapeDownloader(Downloader):
     """Download zip archive and extract shapefile and metafiles."""
 
-    def __call__(self, url, filename):
+    def __call__(self, url, path, filename):
 
         # download zip file if missing
-        archivepath = super().__call__(url)
+        archivepath = super().__call__(url, path)
 
         # assert full shp filename was passed
         assert filename.endswith('.shp')
         stem = filename[:-4]
 
+        # extract directory
+        outdir = os.path.dirname(archivepath)
+
         # extract any missing file
+        # FIXME this will constantly check for new files in the archive
         for ext in ('.shp', '.cpg', '.dbf', '.prj', '.shx'):
-            if not os.path.isfile(os.path.join(self.cachedir, stem+ext)):
+            if not os.path.isfile(os.path.join(outdir, stem+ext)):
                 with zipfile.ZipFile(archivepath, 'r') as archive:
-                    archive.extract(stem+ext, path=self.cachedir)
+                    if stem + ext in archive.namelist():
+                        archive.extract(stem+ext, path=outdir)
+                    elif ext != '.shp':
+                        pass
 
         # return path of shp file
-        return os.path.join(self.cachedir, filename)
+        return os.path.join(outdir, filename)
 
 
 class NaturalEarthDownloader(ZipShapeDownloader):
@@ -99,7 +112,8 @@ class NaturalEarthDownloader(ZipShapeDownloader):
             return cartopy_stem + '.shp'
 
         # otherwise we want a ZipShapeDownloader
-        # FIXME store files in subdirectory
         return super().__call__(
             f'https://naturalearth.s3.amazonaws.com/{scale}_{category}/'
-            f'ne_{scale}_{theme}.zip', f'ne_{scale}_{theme}.shp')
+            f'ne_{scale}_{theme}.zip',
+            f'natural_earth/{scale}_{category}/ne_{scale}_{theme}.zip',
+            f'ne_{scale}_{theme}.shp')
