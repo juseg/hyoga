@@ -26,6 +26,11 @@ class Downloader:
 
     def __call__(self, url, path):
         """Download file if missing and return local path."""
+        # IDEA: we could split this in cutsomizable steps:
+        # - url(): get the url of file to download
+        # - wget(): actually download file (code below)
+        # - path(): return the local file path
+        #   - deflate(): extract zip file
         filepath = os.path.join(self.cachedir, path)
         if not os.path.isfile(filepath):
             os.makedirs(self.cachedir, exist_ok=True)
