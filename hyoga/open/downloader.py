@@ -47,17 +47,6 @@ class Downloader:
         return filepath
 
 
-class BasenameDownloader(Downloader):
-    """A class to download files by url and save them according to basename."""
-
-    def __call__(self, url):
-        """Download file if missing and return local path."""
-        path = urllib.parse.urlparse(url).path
-        path = os.path.basename(path)
-        path = path.split('/')[-1]
-        return super().__call__(url, path)
-
-
 class OSFDownloader(Downloader):
     """A class to download files by record key from osf.io."""
 
