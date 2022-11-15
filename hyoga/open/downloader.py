@@ -9,42 +9,68 @@ return a path to that file, or to the main file.
 """
 
 import os.path
-import urllib.parse
 import requests
 import zipfile
 
 
 class Downloader:
-    """A generic class to download files by url and local output path."""
+    """A callable that downloads a file and returns its path when called.
 
-    def __init__(self):
-        """Create hyoga cache directory if missing."""
-        # IDEA: add config parameter for cache directory
+    This is a base class for callable downloaders. Customization can be done by
+    subclassing and overwriting the following methods:
+
+    * :meth:`url`: return the url of file to download.
+    * :meth:`path`: return local path of downloaded file.
+    * :meth:`check`: check whether file is present or valid.
+    * :meth:`get`: actually download file (and any meta file).
+
+    Call parameters
+    ---------------
+    url : str
+        The url of the file to download.
+    path : str
+        The local path of the downloaded file.
+
+    Returns
+    -------
+    path : str
+        The local path of the downloaded file.
+    """
+
+    def __call__(self, *args, **kwargs):
+        """See class documentation for actual signature."""
+
+        # get url and
+        url = self.url(*args, **kwargs)
+        path = self.path(*args, **kwargs)
+        if not self.check(path):
+            self.get(url, path)
+        return path
+
+    def url(self, url, path):
+        """Return url of file to download."""
+        return url
+
+    def path(self, url, path):
+        """Return local path of downloaded file."""
         xdg_cache = os.environ.get("XDG_CACHE_HOME", os.path.join(
             os.path.expanduser('~'), '.cache'))
-        self.cachedir = os.path.join(xdg_cache, 'hyoga')
+        return os.path.join(xdg_cache, 'hyoga', path)
 
-    def __call__(self, url, path):
-        """Download file if missing and return local path."""
-        # IDEA: we could split this in cutsomizable steps:
-        # - url(): get the url of file to download
-        # - wget(): actually download file (code below)
-        # - path(): return the local file path
-        #   - deflate(): extract zip file
+    def check(self, path):
+        """Check whether file is present."""
+        return os.path.isfile(path)
+
+    def get(self, url, path):
+        """Download online `url` to local `path`."""
 
         # create directory if missing
-        filepath = os.path.join(self.cachedir, path)
-        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        os.makedirs(os.path.dirname(path), exist_ok=True)
 
-        # download file if missing
-        if not os.path.isfile(filepath):
-            os.makedirs(self.cachedir, exist_ok=True)
-            with open(filepath, 'wb') as binaryfile:
-                print(f"downloading {url}...")
-                binaryfile.write(requests.get(url).content)
-
-        # return local file path
-        return filepath
+        # download file
+        with open(path, 'wb') as binaryfile:
+            print(f"downloading {url}...")
+            binaryfile.write(requests.get(url).content)
 
 
 class OSFDownloader(Downloader):
