@@ -72,13 +72,10 @@ class ZipShapeDownloader(Downloader):
 
         # extract any missing file
         # FIXME this will constantly check for new files in the archive
-        for ext in ('.shp', '.cpg', '.dbf', '.prj', '.shx'):
+        for ext in ('.shp', '.dbf', '.prj', '.shx'):
             if not os.path.isfile(os.path.join(outdir, stem+ext)):
                 with zipfile.ZipFile(archivepath, 'r') as archive:
-                    if stem + ext in archive.namelist():
-                        archive.extract(stem+ext, path=outdir)
-                    elif ext != '.shp':
-                        pass
+                    archive.extract(stem+ext, path=outdir)
 
         # return path of shp file
         return os.path.join(outdir, filename)
@@ -96,7 +93,7 @@ class NaturalEarthDownloader(ZipShapeDownloader):
             category, f'ne_{scale}_{theme}')
 
         # if all files are there, return this path
-        extensions = ('.shp', '.cpg', '.dbf', '.prj', '.shx')
+        extensions = ('.shp', '.dbf', '.prj', '.shx')
         if all(os.path.isfile(cartopy_stem+ext) for ext in extensions):
             return cartopy_stem + '.shp'
 
