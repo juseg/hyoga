@@ -9,8 +9,8 @@ return a path to that file, or to the main file.
 """
 
 import os.path
-import requests
 import zipfile
+import requests
 
 
 class Downloader:
@@ -55,13 +55,13 @@ class Downloader:
             self.get(url, path, **kwargs)
         return path
 
-    def url(self, url, path):
+    def url(self, *args):
         """Return url of file to download."""
-        return url
+        return args[0]
 
-    def path(self, url, path):
+    def path(self, *args):
         """Return local path of downloaded file."""
-        return path
+        return args[1]
 
     def check(self, path):
         """Check whether file is present."""
@@ -76,7 +76,7 @@ class Downloader:
         # download file
         with open(path, 'wb') as binaryfile:
             print(f"downloading {url}...")
-            binaryfile.write(requests.get(url).content)
+            binaryfile.write(requests.get(url, timeout=5).content)
 
 
 class CacheDownloader(Downloader):
@@ -90,7 +90,8 @@ class CacheDownloader(Downloader):
         The path of the downloaded file relative to the cache directory.
     """
 
-    def path(self, url, path):
+    def path(self, *args):
+        path = super().path(*args)
         xdg_cache = os.environ.get("XDG_CACHE_HOME", os.path.join(
             os.path.expanduser('~'), '.cache'))
         return os.path.join(xdg_cache, 'hyoga', path)
@@ -107,7 +108,8 @@ class OSFDownloader(CacheDownloader):
         The path of the downloaded file relative to the cache directory.
     """
 
-    def url(self, record, path):
+    def url(self, *args):
+        record = super().url(*args)
         return 'https://osf.io/' + record + '/download'
 
 
@@ -140,6 +142,10 @@ class ArchiveDownloader(CacheDownloader):
         # this needs to be implemented in subclasses
         self.deflate(archivepath, member, outdir)
 
+    def deflate(self, archivepath, member, outdir):
+        """Extract member and any other needed files from the archive."""
+        raise NotImplementedError("This should be implemented in subclasses.")
+
 
 class ShapeZipDownloader(ArchiveDownloader):
     """A downloader that extract shapefiles and metafiles from zip archives.
@@ -155,7 +161,6 @@ class ShapeZipDownloader(ArchiveDownloader):
     """
 
     def deflate(self, archivepath, member, outdir):
-        """Extract shapefile and companion files from zip archive."""
         stem, ext = os.path.splitext(member)
         with zipfile.ZipFile(archivepath, 'r') as archive:
             for ext in ('.shp', '.dbf', '.prj', '.shx'):
@@ -175,14 +180,16 @@ class NaturalEarthDownloader(ShapeZipDownloader):
         Natural Earth data theme.
     """
 
-    def url(self, scale, category, theme):
+    def url(self, *args):
+        scale, category, theme = args
         return (
             f'https://naturalearth.s3.amazonaws.com/{scale}_{category}/'
             f'ne_{scale}_{theme}.zip')
 
-    def path(self, scale, category, theme):
+    def path(self, *args):
 
         # this is where cartopy stores the same data
+        scale, category, theme = args
         xdg_data_home = os.environ.get("XDG_DATA_HOME", os.path.join(
             os.path.expanduser('~'), '.local', 'share'))
         cartopy_stem = os.path.join(
