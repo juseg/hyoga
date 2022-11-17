@@ -14,9 +14,3 @@ python:
       path: .
       extra_requirements:
         - docs
-
-# use mamba instead of conda
-build:
-  os: "ubuntu-20.04"
-  tools:
-    python: "mambaforge-4.10"
