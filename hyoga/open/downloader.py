@@ -47,7 +47,7 @@ class Downloader:
             These two methods need to have compatible signatures.
         **kwargs :
             Keyword arguments are passed to :meth:`get` to alter the download
-            recipe. This is used to provide a member filename in a zip archive.
+            recipe. This is used to provide a member filename in an archive.
         """
         url = self.url(*args)
         path = self.path(*args)
@@ -84,14 +84,13 @@ class CacheDownloader(Downloader):
 
     Call parameters
     ---------------
-    url:
+    url : str
         The url of the file to download
-    path:
+    path : str
         The path of the downloaded file relative to the cache directory.
     """
 
     def path(self, url, path):
-        """Return path of downloaded file relative to the cache directory."""
         xdg_cache = os.environ.get("XDG_CACHE_HOME", os.path.join(
             os.path.expanduser('~'), '.cache'))
         return os.path.join(xdg_cache, 'hyoga', path)
@@ -102,19 +101,28 @@ class OSFDownloader(CacheDownloader):
 
     Call parameters
     ---------------
-    record:
+    record : str
         Record key of the file to download on osf.io.
-    path:
+    path : str
         The path of the downloaded file relative to the cache directory.
     """
 
     def url(self, record, path):
-        """Return osf.io url from record key."""
         return 'https://osf.io/' + record + '/download'
 
 
 class ArchiveDownloader(CacheDownloader):
-    """A base class to download archives and extract member files."""
+    """A base class to download archives and extract member files.
+
+    Call parameters
+    ---------------
+    url : str
+        The url of the file to download
+    path : str
+        The path of the extracted file relative to the cache directory.
+    member : str, optional
+        Member file to extract from archive, default to basename of ``path``.
+    """
 
     def get(self, url, path, member=None):
 
@@ -134,7 +142,17 @@ class ArchiveDownloader(CacheDownloader):
 
 
 class ShapeZipDownloader(ArchiveDownloader):
-    """Download zip archive and extract shapefile and metafiles."""
+    """A downloader that extract shapefiles and metafiles from zip archives.
+
+    Call parameters
+    ---------------
+    url : str
+        The url of the file to download
+    path : str
+        The path of the extracted file relative to the cache directory.
+    member : str, optional
+        Member file to extract from , default to the basename of ``path``.
+    """
 
     def deflate(self, archivepath, member, outdir):
         """Extract shapefile and companion files from zip archive."""
@@ -145,6 +163,17 @@ class ShapeZipDownloader(ArchiveDownloader):
 
 
 class NaturalEarthDownloader(ShapeZipDownloader):
+    """A downloader for Natural Earth Data.
+
+    Call parameters
+    ---------------
+    scale : {'10m', '50m', '110m'}
+        Natural Earth data scale.
+    category : {'cultural', 'physical'}
+        Natural Earth data category.
+    theme : str or iterable
+        Natural Earth data theme.
+    """
 
     def url(self, scale, category, theme):
         return (
