@@ -26,6 +26,13 @@ What's new
 v0.2.1 (unreleased)
 -------------------
 
+Breaking changes
+~~~~~~~~~~~~~~~~
+
+- Require Python 3.8 or newer (see
+  `xarray#7115 <https://github.com/pydata/xarray/issues/7115>`_,
+  `NEP-29 <https://numpy.org/neps/nep-0029-deprecation_policy.html>`_)
+
 New features
 ~~~~~~~~~~~~
 
