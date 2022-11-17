@@ -38,9 +38,19 @@ class Downloader:
     """
 
     def __call__(self, *args, **kwargs):
-        """See class documentation for actual signature."""
-        url = self.url(*args, **kwargs)
-        path = self.path(*args, **kwargs)
+        """See class documentation for actual signature.
+
+        Parameters
+        ----------
+        *args :
+            Positional arguments are passed to :meth:`url` and :meth:`path`.
+            These two methods need to have compatible signatures.
+        **kwargs :
+            Keyword arguments are passed to :meth:`get` to alter the download
+            recipe. This is used to provide a member filename in a zip archive.
+        """
+        url = self.url(*args)
+        path = self.path(*args)
         if not self.check(path):
             self.get(url, path, **kwargs)
         return path
