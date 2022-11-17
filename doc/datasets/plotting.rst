@@ -96,6 +96,5 @@ Last Glacial Maximum.
 
 .. plot:: ../examples/datasets/plot_bedrock_isostasy.py
 
-.. _cartopy: https://scitools.org.uk/cartopy/
 .. _matplotlib: https://matplotlib.org
 .. _xarray: https//xarray.pydata.org

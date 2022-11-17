@@ -26,10 +26,16 @@ What's new
 v0.2.1 (unreleased)
 -------------------
 
+New features
+~~~~~~~~~~~~
+
+- Remove dependency on cartopy_ (:issue:`25`, :pull:`28`).
+
 Internal changes
 ~~~~~~~~~~~~~~~~
 
 - Cache data in ``XDG_CACHE_HOME`` if variable if present in environment.
+- Add downloaders in :mod:`hyoga.open.downloader` (:issue:`25`, :pull:`28`).
 
 .. _v0.2.0:
 
