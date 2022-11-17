@@ -146,7 +146,12 @@ class ShapeZipDownloader(ArchiveDownloader):
 
 class NaturalEarthDownloader(ShapeZipDownloader):
 
-    def __call__(self, scale, category, theme):
+    def url(self, scale, category, theme):
+        return (
+            f'https://naturalearth.s3.amazonaws.com/{scale}_{category}/'
+            f'ne_{scale}_{theme}.zip')
+
+    def path(self, scale, category, theme):
 
         # this is where cartopy stores the same data
         xdg_data_home = os.environ.get("XDG_DATA_HOME", os.path.join(
@@ -160,9 +165,10 @@ class NaturalEarthDownloader(ShapeZipDownloader):
         if all(os.path.isfile(cartopy_stem+ext) for ext in extensions):
             return cartopy_stem + '.shp'
 
-        # otherwise we want a ZipShapeDownloader
-        return super().__call__(
-            f'https://naturalearth.s3.amazonaws.com/{scale}_{category}/'
-            f'ne_{scale}_{theme}.zip',
-            f'natural_earth/{scale}_{category}/ne_{scale}_{theme}.zip',
+        # otherwise return path relative to hyoga cache
+        xdg_cache = os.environ.get("XDG_CACHE_HOME", os.path.join(
+            os.path.expanduser('~'), '.cache'))
+        path = os.path.join(
+            xdg_cache, 'hyoga', 'natural_earth', f'{scale}_{category}',
             f'ne_{scale}_{theme}.shp')
+        return path
