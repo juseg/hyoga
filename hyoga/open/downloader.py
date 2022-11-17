@@ -39,12 +39,10 @@ class Downloader:
 
     def __call__(self, *args, **kwargs):
         """See class documentation for actual signature."""
-
-        # get url and
         url = self.url(*args, **kwargs)
         path = self.path(*args, **kwargs)
         if not self.check(path):
-            self.get(url, path)
+            self.get(url, path, **kwargs)
         return path
 
     def url(self, url, path):
@@ -105,33 +103,38 @@ class OSFDownloader(CacheDownloader):
         return 'https://osf.io/' + record + '/download'
 
 
-class ZipShapeDownloader(CacheDownloader):
+class ArchiveDownloader(CacheDownloader):
+    """A base class to download archives and extract member files."""
+
+    def get(self, url, path, member=None):
+
+        # save archive as named online
+        outdir, basename = os.path.split(path)
+        archivepath = os.path.join(outdir, url.split('/')[-1])
+
+        # download it only if missing
+        if not super().check(archivepath):
+            super().get(url, archivepath)
+
+        # by default assume member name is path basename
+        member = member or basename
+
+        # this needs to be implemented in subclasses
+        self.deflate(archivepath, member, outdir)
+
+
+class ShapeZipDownloader(ArchiveDownloader):
     """Download zip archive and extract shapefile and metafiles."""
 
-    def __call__(self, url, path, filename):
-
-        # download zip file if missing
-        archivepath = super().__call__(url, path)
-
-        # assert full shp filename was passed
-        assert filename.endswith('.shp')
-        stem = filename[:-4]
-
-        # extract directory
-        outdir = os.path.dirname(archivepath)
-
-        # extract any missing file
-        # FIXME this will constantly check for new files in the archive
-        for ext in ('.shp', '.dbf', '.prj', '.shx'):
-            if not os.path.isfile(os.path.join(outdir, stem+ext)):
-                with zipfile.ZipFile(archivepath, 'r') as archive:
-                    archive.extract(stem+ext, path=outdir)
-
-        # return path of shp file
-        return os.path.join(outdir, filename)
+    def deflate(self, archivepath, member, outdir):
+        """Extract shapefile and companion files from zip archive."""
+        stem, ext = os.path.splitext(member)
+        with zipfile.ZipFile(archivepath, 'r') as archive:
+            for ext in ('.shp', '.dbf', '.prj', '.shx'):
+                archive.extract(stem+ext, path=outdir)
 
 
-class NaturalEarthDownloader(ZipShapeDownloader):
+class NaturalEarthDownloader(ShapeZipDownloader):
 
     def __call__(self, scale, category, theme):
 
