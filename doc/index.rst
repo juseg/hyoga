@@ -5,11 +5,11 @@ Hyoga
 =====
 
 Hyoga is a small Python_ library to visualize ice-sheet model datasets.
-It acts as a thin wrapper around cartopy_ and xarray_ for CF_-compliant
+It acts as a thin wrapper around GeoPandas_ and xarray_ for CF_-compliant
 datasets on regular grids used for instance in PISM_. Hyoga (氷河) is the
 Japanese word for glacier (lit. ice river).
 
-.. _cartopy: https://scitools.org.uk/cartopy/
+.. _GeoPandas: https://geopandas.org
 .. _CF: https://cfconventions.org
 .. _PISM: https://pism.io
 .. _Python: https://python.org

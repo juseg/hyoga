@@ -7,37 +7,29 @@ datasets. The data are returned as a geopandas GeoDataFrame instance, allowing
 convenient postprocessing and speedy plotting.
 """
 
-import os.path
-import zipfile
 import geopandas
 import pandas
-from hyoga.open.example import _download  # FIXME move to core?
+
+import hyoga.open.downloader
 
 
 def _download_paleoglaciers_ehl11():
     """Download Ehlers et al. (2011) paleoglaciers, return cache paths."""
+    # FIXME store shapefiles in subdirectory
     url = ('http://static.us.elsevierhealth.com/ehlers_digital_maps/'
            'digital_maps_02_all_other_files.zip')
-    zipfilename = _download(url)
-    cachedir = os.path.dirname(zipfilename)
-    basenames = 'lgm', 'lgm_alpen'
-    for basename in basenames:
-        for ext in ('dbf', 'shp', 'shx'):
-            filename = basename + '.' + ext
-            if not os.path.isfile(os.path.join(cachedir, filename)):
-                with zipfile.ZipFile(zipfilename, 'r') as archive:
-                    archive.extract(filename, path=cachedir)
-    return (os.path.join(cachedir, b+'.shp') for b in basenames)
+    downloader = hyoga.open.downloader.ShapeZipDownloader()
+    return (
+        downloader(url, path) for path in ('lgm.shp', 'lgm_alpen.shp'))
 
 
 def _download_paleoglaciers_bat19():
     """Download Batchelor et al. (2019) paleoglaciers, return cache path."""
-    files = {'https://osf.io/gzkwc/download': 'LGM_best_estimate.dbf',
-             'https://osf.io/xm6tu/download': 'LGM_best_estimate.prj',
-             'https://osf.io/9bjwn/download': 'LGM_best_estimate.shx',
-             'https://osf.io/9yhdv/download': 'LGM_best_estimate.shp'}
-    for url, filename in files.items():
-        filepath = _download(url, filename=filename)
+    downloader = hyoga.open.downloader.OSFDownloader()
+    downloader('gzkwc', 'LGM_best_estimate.dbf')
+    downloader('xm6tu', 'LGM_best_estimate.prj')
+    downloader('9bjwn', 'LGM_best_estimate.shx')
+    filepath = downloader('9yhdv', 'LGM_best_estimate.shp')
     return (filepath, )
 
 
@@ -67,7 +59,6 @@ def paleoglaciers(source='ehl11'):
     # Ehlers et al. data need cleanup
     # FIXME move to _paleoglaciers_ehl11
     if source == 'ehl11':
-        gdf = gdf.set_crs('+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
         gdf = gdf.drop_duplicates()
 
     # return geodataframe

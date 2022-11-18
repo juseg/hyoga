@@ -7,12 +7,11 @@ Getting started
 Installing hyoga
 ----------------
 
-Assuming xarray_, geopandas_ and cartopy_ are already installed, I recommend
+Assuming GeoPandas_ and xarray_ are already installed, I recommend
 installing hyoga using pip::
 
    pip install hyoga
 
-.. _cartopy: https://scitools.org.uk/cartopy/
 .. _geopandas: https://geopandas.org
 .. _xarray: https://xarray.pydata.org/en/stable/
 
