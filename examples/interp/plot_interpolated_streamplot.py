@@ -45,7 +45,6 @@ with hyoga.open.example('pism.alps.out.2d.nc') as ds:
 ax.set_title(r'Ice surface velocity (m$\,$a$^{-1}$)')
 ax.xaxis.set_visible(False)
 ax.yaxis.set_visible(False)
-ax.set_aspect('equal')
 
 # show
 plt.show()
