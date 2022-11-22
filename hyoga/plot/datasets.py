@@ -23,20 +23,32 @@ class HyogaPlotMethods:
         self._hyoga = accessor
         self._ds = accessor._ds
 
-    # Dataset plot methods
-    # --------------------
+    # Data array wrappers
+    # -------------------
 
     def _contour(self, var, **kwargs):
+        """Plot variable as line contours with equal aspect."""
         cts = var.plot.contour(**kwargs)
+        cts.axes.set_aspect('equal')
+        # IDEA: wrappers could also hide axes
+        # cts.axes.xaxis.set_visible(False)
+        # cts.axes.yaxis.set_visible(False)
         return cts
 
     def _contourf(self, var, **kwargs):
+        """Plot variable as filled contours with equal aspect."""
         cts = var.plot.contourf(**kwargs)
+        cts.axes.set_aspect('equal')
         return cts
 
     def _imshow(self, var, **kwargs):
+        """Plot variable as image with equal aspect."""
         img = var.plot.imshow(**kwargs)
+        img.axes.set_aspect('equal')
         return img
+
+    # Dataset plot methods
+    # --------------------
 
     def bedrock_altitude(self, sealevel=0, **kwargs):
         """Plot bedrock topography and shoreline.
