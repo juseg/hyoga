@@ -38,6 +38,15 @@ class HyogaPlotMethods:
         self._tailor_map_axes(cts.axes)
         return cts
 
+    def _hillshade(self, var, altitude=None, azimuth=None, weight=None,
+                   **kwargs):
+        """Plot topographic variable multidirectional hillshade image."""
+        var = hyoga.plot.hillshade._compute_multishade(
+            var, altitude, azimuth, weight)
+        style = dict(add_colorbar=False, cmap='Glossy')
+        style.update(**kwargs)  # Py>=3.9: kwargs = defaults | kwargs
+        return self._imshow(var, **style)
+
     def _imshow(self, var, **kwargs):
         """Plot variable image with equal aspect and hidden axes."""
         img = var.plot.imshow(**kwargs)
@@ -194,7 +203,7 @@ class HyogaPlotMethods:
             The plotted bedrock hillshade image.
         """
         darray = self._hyoga.getvar('bedrock_altitude') * exag
-        return hyoga.plot.hillshade.hillshade(
+        return self._hillshade(
             darray, altitude=altitude, azimuth=azimuth, weight=weight,
             **kwargs)
 
@@ -355,7 +364,7 @@ class HyogaPlotMethods:
             The plotted surface hillshade image.
         """
         darray = self._hyoga.getvar('surface_altitude') * exag
-        return hyoga.plot.hillshade.hillshade(
+        return self._hillshade(
             darray, altitude=altitude, azimuth=azimuth, weight=weight,
             **kwargs)
 
