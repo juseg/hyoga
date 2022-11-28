@@ -30,21 +30,24 @@ class HyogaPlotMethods:
         """Plot variable as line contours with equal aspect."""
         cts = var.plot.contour(**kwargs)
         cts.axes.set_aspect('equal')
-        # IDEA: wrappers could also hide axes
-        # cts.axes.xaxis.set_visible(False)
-        # cts.axes.yaxis.set_visible(False)
+        cts.axes.xaxis.set_visible(False)
+        cts.axes.yaxis.set_visible(False)
         return cts
 
     def _contourf(self, var, **kwargs):
         """Plot variable as filled contours with equal aspect."""
         cts = var.plot.contourf(**kwargs)
         cts.axes.set_aspect('equal')
+        cts.axes.xaxis.set_visible(False)
+        cts.axes.yaxis.set_visible(False)
         return cts
 
     def _imshow(self, var, **kwargs):
         """Plot variable as image with equal aspect."""
         img = var.plot.imshow(**kwargs)
         img.axes.set_aspect('equal')
+        img.axes.xaxis.set_visible(False)
+        img.axes.yaxis.set_visible(False)
         return img
 
     # Dataset plot methods
