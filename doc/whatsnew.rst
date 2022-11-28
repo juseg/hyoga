@@ -38,6 +38,13 @@ New features
 
 - Remove dependency on cartopy_ (:issue:`25`, :pull:`28`).
 
+Bug fixes
+~~~~~~~~~
+
+- Add missing required dependency on requests_.
+
+.. _requests: https://requests.readthedocs.io
+
 Internal changes
 ~~~~~~~~~~~~~~~~
 
