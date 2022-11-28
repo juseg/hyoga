@@ -37,6 +37,8 @@ New features
 ~~~~~~~~~~~~
 
 - Remove dependency on cartopy_ (:issue:`25`, :pull:`28`).
+- Set aspect ratio equal when plotting datasets (:issue:`26`, :pull:`31`).
+- Hide map axes and labels when plotting datasets (:issue:`30`, :pull:`34`).
 
 Bug fixes
 ~~~~~~~~~
@@ -50,6 +52,7 @@ Internal changes
 
 - Cache data in ``XDG_CACHE_HOME`` if variable if present in environment.
 - Add downloaders in :mod:`hyoga.open.downloader` (:issue:`25`, :pull:`28`).
+- Add minimal continuous integration, no tests yet (:pull:`32`).
 
 .. _v0.2.0:
 
