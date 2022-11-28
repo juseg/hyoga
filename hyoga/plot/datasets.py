@@ -27,27 +27,21 @@ class HyogaPlotMethods:
     # -------------------
 
     def _contour(self, var, **kwargs):
-        """Plot variable as line contours with equal aspect."""
+        """Plot variable line contours with equal aspect and hidden axes."""
         cts = var.plot.contour(**kwargs)
-        cts.axes.set_aspect('equal')
-        cts.axes.xaxis.set_visible(False)
-        cts.axes.yaxis.set_visible(False)
+        self._tailor_map_axes(cts.axes)
         return cts
 
     def _contourf(self, var, **kwargs):
-        """Plot variable as filled contours with equal aspect."""
+        """Plot variable filled contours with equal aspect and hidden axes."""
         cts = var.plot.contourf(**kwargs)
-        cts.axes.set_aspect('equal')
-        cts.axes.xaxis.set_visible(False)
-        cts.axes.yaxis.set_visible(False)
+        self._tailor_map_axes(cts.axes)
         return cts
 
     def _imshow(self, var, **kwargs):
-        """Plot variable as image with equal aspect."""
+        """Plot variable image with equal aspect and hidden axes."""
         img = var.plot.imshow(**kwargs)
-        img.axes.set_aspect('equal')
-        img.axes.xaxis.set_visible(False)
-        img.axes.yaxis.set_visible(False)
+        self._tailor_map_axes(img.axes)
         return img
 
     def _streamplot(self, *args, **kwargs):
@@ -59,10 +53,14 @@ class HyogaPlotMethods:
             streams = ax.streamplot(*args, **kwargs)
         except ValueError:
             streams = None
+        self._tailor_map_axes(ax)
+        return streams
+
+    def _tailor_map_axes(self, ax):
+        """Set aspect equal and hide axes and labels."""
         ax.set_aspect('equal')
         ax.xaxis.set_visible(False)
         ax.yaxis.set_visible(False)
-        return streams
 
     # Dataset plot methods
     # --------------------
