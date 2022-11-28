@@ -117,7 +117,7 @@ class HyogaPlotMethods:
             #         levels, colors[:-1], extend='min')
 
         # plot and return contour set
-        return darray.plot.contourf(**style)
+        return self._contourf(darray, **style)
 
     def bedrock_erosion(self, constant=5.2e-8, exponent=2.34, **kwargs):
         """Plot erosion rate based on basal velocity.
