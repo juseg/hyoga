@@ -37,8 +37,6 @@ with hyoga.open.example('pism.alps.out.2d.nc') as ds:
 # set axes properties
 cax.set_ylabel('')
 ax.set_title(r'Glacier erosion rate (mm$\,$a$^{-1}$)')
-ax.xaxis.set_visible(False)
-ax.yaxis.set_visible(False)
 
 # show
 plt.show()

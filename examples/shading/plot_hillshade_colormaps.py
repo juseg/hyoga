@@ -27,12 +27,9 @@ with hyoga.open.example('pism.alps.vis.refined.nc') as ds:
     ds.hyoga.plot.bedrock_hillshade(ax=axes[0], cmap='Glossy')
     ds.hyoga.plot.bedrock_hillshade(ax=axes[1], cmap='Matte', vmin=0)
 
-# set axes properties
+# set titles
 axes[0].set_title('Glossy')
 axes[1].set_title('Matte')
-for ax in axes:
-    ax.xaxis.set_visible(False)
-    ax.yaxis.set_visible(False)
 
 # show
 plt.show()

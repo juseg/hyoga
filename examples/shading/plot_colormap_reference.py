@@ -29,7 +29,7 @@ for ax, name in zip(axes, colormaps):
     ax.text(-8, .5, name, va='center', ha='right', fontsize=10)
     ax.set(xticks=[], yticks=[])
 
-# set axes properties
+# set title
 axes[0].set_title('Hyoga colormaps')
 
 # show

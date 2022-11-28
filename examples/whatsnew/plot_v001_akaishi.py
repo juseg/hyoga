@@ -22,10 +22,8 @@ ax.set_ylim(4200e3, 4290e3)
 # add stamen terrain
 cx.add_basemap(ax, source=cx.providers.Stamen.TerrainBackground)
 
-# set axes properties
+# set title
 ax.set_title('Akaishi Mountains')
-ax.xaxis.set_visible(False)
-ax.yaxis.set_visible(False)
 
 # show
 plt.show()
