@@ -50,6 +50,20 @@ class HyogaPlotMethods:
         img.axes.yaxis.set_visible(False)
         return img
 
+    def _streamplot(self, *args, **kwargs):
+        """Plot streamplot with equal aspect and hidden axes."""
+        # streamplot colormapping fails on empty arrays (mpl issue #19323)
+        # (this is fixed in matplotlib 3.6.0, released Sep. 2022)
+        ax = kwargs.pop('ax', plt.gca())
+        try:
+            streams = ax.streamplot(*args, **kwargs)
+        except ValueError:
+            streams = None
+        ax.set_aspect('equal')
+        ax.xaxis.set_visible(False)
+        ax.yaxis.set_visible(False)
+        return streams
+
     # Dataset plot methods
     # --------------------
 
@@ -387,8 +401,9 @@ class HyogaPlotMethods:
             The plotted surface velocity streamlines.
         """
 
+        # IDEA: add basal streamplot mostly sharing this code
+
         # get style parameters
-        ax = kwargs.pop('ax', plt.gca())  # not a mpl kwargs
         vmin = kwargs.pop('vmin', None)  # not a streamplot param
         vmax = kwargs.pop('vmax', None)  # not a streamplot param
         norm = kwargs.get('norm', mpl.colors.LogNorm(vmin=vmin, vmax=vmax))
@@ -402,15 +417,9 @@ class HyogaPlotMethods:
         cvar = (uvar**2+vvar**2)**0.5
 
         # streamplot surface velocity
-        try:
-            return ax.streamplot(
+        return self._streamplot(
                 uvar.x.data, uvar.y.data, uvar.data, vvar.data,
                 color=cvar.to_masked_array(), norm=norm, **style)
-
-        # streamplot colormapping fails on empty arrays (mpl issue #19323)
-        # (this is fixed in matplotlib 3.6.0, released Sep. 2022)
-        except ValueError:
-            return None
 
     # Vector plot methods
     # -------------------
