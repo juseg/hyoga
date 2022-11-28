@@ -33,9 +33,6 @@ the case in the demo files.
    # restore the default of 1 m
    hyoga.config.glacier_masking_point = 1
 
-   # needed to avoid distortion
-   plt.gca().set_aspect('equal')
-
 
 Custom glacier mask
 -------------------
@@ -53,9 +50,6 @@ per year:
            (ds.hyoga.getvar('magnitude_of_land_ice_surface_velocity') > 10))
        ds.hyoga.plot.bedrock_altitude(vmin=0, vmax=4500)
        ds.hyoga.plot.ice_margin(facecolor='tab:blue')
-
-   # needed to avoid distortion
-   plt.gca().set_aspect('equal')
 
 Note that the :meth:`~.Dataset.hyoga.assign_icemask` method edits (or add) a
 ``land_ice_area_fraction`` variable without affecting the rest of the dataset.
@@ -123,9 +117,6 @@ with a much higher resolution.
    ds.hyoga.plot.surface_velocity(vmin=1e1, vmax=1e3)
    ds.hyoga.plot.surface_altitude_contours()
    ds.hyoga.plot.ice_margin(edgecolor='0.25')
-
-   # needed to avoid distortion
-   plt.gca().set_aspect('equal')
 
 .. _xarray: https//xarray.pydata.org
 .. _`CF standard names`: http://cfconventions.org/standard-names.html

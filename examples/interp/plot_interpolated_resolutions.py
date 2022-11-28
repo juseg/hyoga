@@ -50,7 +50,6 @@ with hyoga.open.example('pism.alps.out.2d.nc') as ds:
 
 # set axes properties
 for ax in axes:
-    ax.set_aspect('equal')
     ax.xaxis.set_visible(False)
     ax.yaxis.set_visible(False)
 

@@ -23,6 +23,30 @@ class HyogaPlotMethods:
         self._hyoga = accessor
         self._ds = accessor._ds
 
+    # Data array wrappers
+    # -------------------
+
+    def _contour(self, var, **kwargs):
+        """Plot variable as line contours with equal aspect."""
+        cts = var.plot.contour(**kwargs)
+        cts.axes.set_aspect('equal')
+        # IDEA: wrappers could also hide axes
+        # cts.axes.xaxis.set_visible(False)
+        # cts.axes.yaxis.set_visible(False)
+        return cts
+
+    def _contourf(self, var, **kwargs):
+        """Plot variable as filled contours with equal aspect."""
+        cts = var.plot.contourf(**kwargs)
+        cts.axes.set_aspect('equal')
+        return cts
+
+    def _imshow(self, var, **kwargs):
+        """Plot variable as image with equal aspect."""
+        img = var.plot.imshow(**kwargs)
+        img.axes.set_aspect('equal')
+        return img
+
     # Dataset plot methods
     # --------------------
 
@@ -51,7 +75,7 @@ class HyogaPlotMethods:
         style = dict(add_colorbar=False, cmap='Greys', zorder=-1)
         style.update(kwargs)
         var = self._hyoga.getvar('bedrock_altitude') - sealevel
-        return var.plot.imshow(**style)
+        return self._imshow(var, **style)
 
     def bedrock_altitude_contours(self, **kwargs):
         """Plot bedrock topography filled countours."""
@@ -124,7 +148,7 @@ class HyogaPlotMethods:
         var = var.where(self._hyoga.getvar('land_ice_area_fraction') >= 0.5)
         var = (constant*var**exponent).assign_attrs(
             long_name='glacier erosion rate', units='mm a-1')
-        return var.plot.contourf(**style)
+        return self._contourf(var, **style)
 
     def bedrock_hillshade(self, altitude=None, azimuth=None, weight=None,
                           exag=1, **kwargs):
@@ -191,7 +215,7 @@ class HyogaPlotMethods:
         # plot bedrock deformation contours
         style = dict(alpha=0.75, cmap='PRGn_r')
         style.update(**kwargs)
-        return var.plot.contourf(**style)
+        return self._contourf(var, **style)
 
     def bedrock_shoreline(self, sealevel=0, **kwargs):
         """Plot bedrock topography and shoreline.
@@ -213,7 +237,7 @@ class HyogaPlotMethods:
         style = dict(colors=['0.25'], levels=[0], linewidths=0.25, zorder=0)
         style.update(**kwargs)
         var = self._hyoga.getvar('bedrock_altitude') - sealevel
-        return var.plot.contour(**style)
+        return self._contour(var, **style)
 
     def ice_margin(self, edgecolor='0.25', facecolor=None, **kwargs):
         """Plot ice margin line and/or filled contour
@@ -241,12 +265,12 @@ class HyogaPlotMethods:
         if edgecolor is not None:
             style = dict(colors=[edgecolor], levels=[0.5], linewidths=0.25)
             style.update(kwargs)
-            contours.append(var.plot.contour(**style))
+            contours.append(self._contour(var, **style))
         if facecolor is not None:
             style = dict(add_colorbar=False, alpha=0.75, colors=[facecolor],
                          extend='neither', levels=[0.5, 1.5])
             style.update(kwargs)
-            contours.append(var.plot.contourf(**style))
+            contours.append(self._contourf(var, **style))
         return contours if len(contours) > 1 else contours[0]
 
     def surface_altitude_contours(self, major=1000, minor=200, **kwargs):
@@ -276,12 +300,14 @@ class HyogaPlotMethods:
         if major is not None:
             style = dict(colors=['0.25'], linewidths=0.25)
             style.update(kwargs)
-            contours.append(var.plot.contour(
+            contours.append(self._contour(
+                var,
                 levels=[lev for lev in levels if lev % major == 0], **style))
         if minor is not None:
             style = dict(colors=['0.25'], linewidths=0.1)
             style.update(kwargs)
-            contours.append(var.plot.contour(
+            contours.append(self._contour(
+                var,
                 levels=[lev for lev in levels if lev % major != 0], **style))
         return contours if len(contours) > 1 else contours[0]
 
@@ -337,7 +363,7 @@ class HyogaPlotMethods:
         style.update(kwargs)
         var = self._hyoga.getvar('magnitude_of_land_ice_surface_velocity')
         var = var.where(self._hyoga.getvar('land_ice_area_fraction') >= 0.5)
-        return var.plot.imshow(**style)
+        return self._imshow(var, **style)
 
     def surface_velocity_streamplot(self, **kwargs):
         """Plot surface velocity streamlines.

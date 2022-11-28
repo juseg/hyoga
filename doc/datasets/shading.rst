@@ -39,9 +39,6 @@ the example data using the ``Topographic`` colormap.
        ds.hyoga.plot.bedrock_altitude_contours(cmap='Topographic', vmin=0)
        ds.hyoga.plot.bedrock_hillshade(cmap='Glossy')
 
-   # needed to avoid distortion
-   plt.gca().set_aspect('equal')
-
 Note how the bedrock altitude contour levels are not equidistant, but are
 instead densified at lower elevation to highlight lower reliefs and fit the
 highly skewed ``Topographic`` colormap.
@@ -60,9 +57,6 @@ underlying topography. This is what a simple hillshade image looks like:
    with hyoga.open.example('pism.alps.vis.refined.nc') as ds:
        ds.hyoga.plot.bedrock_hillshade()
 
-   # needed to avoid distortion
-   plt.gca().set_aspect('equal')
-
 While :meth:`.Dataset.hyoga.plot.bedrock_hillshade` uses the bedrock altitude,
 an equivalent :meth:`.Dataset.hyoga.plot.surface_hillshade` plots shaded relief
 from the ice surface altitude. By default, however, hillshades are plotted as
@@ -74,9 +68,6 @@ a half-transparent layer best overlaid onto an altitude map:
        ds.hyoga.plot.bedrock_altitude(cmap='Topographic')
        ds.hyoga.plot.bedrock_hillshade()
 
-   # needed to avoid distortion
-   plt.gca().set_aspect('equal')
-
 The illumination direction can be customized using ``altitude`` and ``azimuth``
 angles. Low relief can be accentuated using an ``exag`` exaggeration factor:
 
@@ -85,9 +76,6 @@ angles. Low relief can be accentuated using an ``exag`` exaggeration factor:
    with hyoga.open.example('pism.alps.vis.refined.nc') as ds:
        ds.hyoga.plot.bedrock_altitude(cmap='Topographic')
        ds.hyoga.plot.bedrock_hillshade(altitude=30, azimuth=-15, exag=3)
-
-   # needed to avoid distortion
-   plt.gca().set_aspect('equal')
 
 The ``altitude`` and ``azimuth`` arguments accepts lists, allowing
 multidirectional shaded relief. The ``weight`` arguments applies different

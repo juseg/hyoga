@@ -18,9 +18,6 @@ bedrock altitude and a simple ice margin contour:
        ds.hyoga.plot.bedrock_altitude(center=False)
        ds.hyoga.plot.ice_margin(facecolor='tab:blue')
 
-   # needed to avoid distortion
-   plt.gca().set_aspect('equal')
-
 Hyoga alters matplotlib_ defaults with its own style choices. However, these
 choices can always be overridden using matplotlib keyword arguments.
 Accessor plot methods such as :meth:`~.Dataset.hyoga.plot.bedrock_altitude` and
@@ -35,9 +32,6 @@ literally be called anything or whatever and still plot:
        ds = ds.rename(topg='anything', thk='whatever')
        ds.hyoga.plot.bedrock_altitude(cmap='Topographic', center=False)
        ds.hyoga.plot.ice_margin(facecolor='white')
-
-   # needed to avoid distortion
-   plt.gca().set_aspect('equal')
 
 Inferring variables
 -------------------
@@ -54,9 +48,6 @@ but the limits can be customized:
        ds.hyoga.plot.surface_velocity(vmin=1e1, vmax=1e3)
        ds.hyoga.plot.ice_margin(edgecolor='0.25')
 
-   # needed to avoid distortion
-   plt.gca().set_aspect('equal')
-
 Similarly, :meth:`.Dataset.hyoga.plot.surface_velocity_streamplot` accepts a
 ``cmap`` argument that activates log-colouring of surface velocity streamlines
 according to the velocity magnitude:
@@ -68,9 +59,6 @@ according to the velocity magnitude:
        ds.hyoga.plot.ice_margin(facecolor='w')
        ds.hyoga.plot.surface_velocity_streamplot(
            cmap='Blues', vmin=1e1, vmax=1e3, density=(6, 4))
-
-   # needed to avoid distortion
-   plt.gca().set_aspect('equal')
 
 Composite plots
 ---------------
@@ -84,9 +72,6 @@ with a single call to :meth:`.Dataset.hyoga.plot.surface_altitude_contours`:
        ds.hyoga.plot.bedrock_altitude(center=False)
        ds.hyoga.plot.ice_margin(facecolor='w')
        ds.hyoga.plot.surface_altitude_contours(major=500, minor=100)
-
-   # needed to avoid distortion
-   plt.gca().set_aspect('equal')
 
 More advanced composite examples are available in the :doc:`/examples/index`.
 Here is one that uses :meth:`.Dataset.hyoga.assign_isostasy` and
