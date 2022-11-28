@@ -46,10 +46,8 @@ states = hyoga.open.natural_earth(
 states[states.name == 'Salzburg'].to_crs(crs).plot(
     ax=ax, alpha=0.75, facecolor='tab:green')
 
-# set axes properties
+# set title
 ax.set_title('Natural Earth with Geopandas')
-ax.xaxis.set_visible(False)
-ax.yaxis.set_visible(False)
 
 # show
 plt.show()

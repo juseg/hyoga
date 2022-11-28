@@ -41,10 +41,8 @@ with hyoga.open.example('pism.alps.out.2d.nc') as ds:
     # add colorbar manually
     ax.figure.colorbar(streams.lines, cax=cax, extend='both')
 
-# set axes properties
+# set title
 ax.set_title(r'Ice surface velocity (m$\,$a$^{-1}$)')
-ax.xaxis.set_visible(False)
-ax.yaxis.set_visible(False)
 
 # show
 plt.show()

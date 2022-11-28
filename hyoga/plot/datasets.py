@@ -27,25 +27,49 @@ class HyogaPlotMethods:
     # -------------------
 
     def _contour(self, var, **kwargs):
-        """Plot variable as line contours with equal aspect."""
+        """Plot variable line contours with equal aspect and hidden axes."""
         cts = var.plot.contour(**kwargs)
-        cts.axes.set_aspect('equal')
-        # IDEA: wrappers could also hide axes
-        # cts.axes.xaxis.set_visible(False)
-        # cts.axes.yaxis.set_visible(False)
+        self._tailor_map_axes(cts.axes)
         return cts
 
     def _contourf(self, var, **kwargs):
-        """Plot variable as filled contours with equal aspect."""
+        """Plot variable filled contours with equal aspect and hidden axes."""
         cts = var.plot.contourf(**kwargs)
-        cts.axes.set_aspect('equal')
+        self._tailor_map_axes(cts.axes)
         return cts
 
+    def _hillshade(self, var, altitude=None, azimuth=None, weight=None,
+                   **kwargs):
+        """Plot topographic variable multidirectional hillshade image."""
+        var = hyoga.plot.hillshade._compute_multishade(
+            var, altitude, azimuth, weight)
+        style = dict(add_colorbar=False, cmap='Glossy')
+        style.update(**kwargs)  # Py>=3.9: kwargs = defaults | kwargs
+        return self._imshow(var, **style)
+
     def _imshow(self, var, **kwargs):
-        """Plot variable as image with equal aspect."""
+        """Plot variable image with equal aspect and hidden axes."""
         img = var.plot.imshow(**kwargs)
-        img.axes.set_aspect('equal')
+        self._tailor_map_axes(img.axes)
         return img
+
+    def _streamplot(self, *args, **kwargs):
+        """Plot streamplot with equal aspect and hidden axes."""
+        # streamplot colormapping fails on empty arrays (mpl issue #19323)
+        # (this is fixed in matplotlib 3.6.0, released Sep. 2022)
+        ax = kwargs.pop('ax', plt.gca())
+        try:
+            streams = ax.streamplot(*args, **kwargs)
+        except ValueError:
+            streams = None
+        self._tailor_map_axes(ax)
+        return streams
+
+    def _tailor_map_axes(self, ax):
+        """Set aspect equal and hide axes and labels."""
+        ax.set_aspect('equal')
+        ax.xaxis.set_visible(False)
+        ax.yaxis.set_visible(False)
 
     # Dataset plot methods
     # --------------------
@@ -114,7 +138,7 @@ class HyogaPlotMethods:
             #         levels, colors[:-1], extend='min')
 
         # plot and return contour set
-        return darray.plot.contourf(**style)
+        return self._contourf(darray, **style)
 
     def bedrock_erosion(self, constant=5.2e-8, exponent=2.34, **kwargs):
         """Plot erosion rate based on basal velocity.
@@ -179,7 +203,7 @@ class HyogaPlotMethods:
             The plotted bedrock hillshade image.
         """
         darray = self._hyoga.getvar('bedrock_altitude') * exag
-        return hyoga.plot.hillshade.hillshade(
+        return self._hillshade(
             darray, altitude=altitude, azimuth=azimuth, weight=weight,
             **kwargs)
 
@@ -340,7 +364,7 @@ class HyogaPlotMethods:
             The plotted surface hillshade image.
         """
         darray = self._hyoga.getvar('surface_altitude') * exag
-        return hyoga.plot.hillshade.hillshade(
+        return self._hillshade(
             darray, altitude=altitude, azimuth=azimuth, weight=weight,
             **kwargs)
 
@@ -384,8 +408,9 @@ class HyogaPlotMethods:
             The plotted surface velocity streamlines.
         """
 
+        # IDEA: add basal streamplot mostly sharing this code
+
         # get style parameters
-        ax = kwargs.pop('ax', plt.gca())  # not a mpl kwargs
         vmin = kwargs.pop('vmin', None)  # not a streamplot param
         vmax = kwargs.pop('vmax', None)  # not a streamplot param
         norm = kwargs.get('norm', mpl.colors.LogNorm(vmin=vmin, vmax=vmax))
@@ -399,15 +424,9 @@ class HyogaPlotMethods:
         cvar = (uvar**2+vvar**2)**0.5
 
         # streamplot surface velocity
-        try:
-            return ax.streamplot(
+        return self._streamplot(
                 uvar.x.data, uvar.y.data, uvar.data, vvar.data,
                 color=cvar.to_masked_array(), norm=norm, **style)
-
-        # streamplot colormapping fails on empty arrays (mpl issue #19323)
-        # (this is fixed in matplotlib 3.6.0, released Sep. 2022)
-        except ValueError:
-            return None
 
     # Vector plot methods
     # -------------------

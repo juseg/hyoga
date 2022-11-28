@@ -86,34 +86,3 @@ def _compute_multishade(darray, altitude=None, azimuth=None, weight=None):
         _compute_hillshade(darray, alti, azim)*wgt
         for alti, azim, wgt in zip(altitude, azimuth, weight))
     return shades
-
-
-def hillshade(darray, altitude=None, azimuth=None, weight=None, **kwargs):
-    """Plot multidirectional hillshade image from data array.
-
-    Parameters
-    ----------
-    altitude: float or iterable, optional
-        Altitude angle(s) of illumination in degrees. Defaults to three light
-        sources at 45 degrees. Any of ``azimuth``, ``altitude`` and ``weight``
-        provided as iterables need to have equal lengths.
-    azimuth: float or iterable, optional
-        Azimuth angle(s) of illumination in degrees (clockwise from north).
-        Defaults to three light sources at 255, 315 and 15 degree azimuths.
-    weight: float or iterable, optional
-        Weight coefficient(s) for each unidirectional hillshade array. It is
-        intended, but not required, that the weights add up to 1.
-        Defaults to [0.25, 0.5, 0.25].
-    **kwargs: optional
-        Keyword arguments passed to :meth:`xarray.DataArray.plot.imshow`.
-        Defaults to a glossy colormap scaled linearly between -1 and 1.
-
-    Returns
-    -------
-    image: AxesImage
-        The plotted hillshade image.
-    """
-    darray = _compute_multishade(darray, altitude, azimuth, weight)
-    style = dict(add_colorbar=False, cmap='Glossy')
-    style.update(**kwargs)
-    return darray.plot.imshow(**style)

@@ -48,10 +48,5 @@ with hyoga.open.example('pism.alps.out.2d.nc') as ds:
     axes[0].set_xlim(axes[1].get_xlim())
     axes[0].set_ylim(axes[1].get_ylim())
 
-# set axes properties
-for ax in axes:
-    ax.xaxis.set_visible(False)
-    ax.yaxis.set_visible(False)
-
 # show
 plt.show()

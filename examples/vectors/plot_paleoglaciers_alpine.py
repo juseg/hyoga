@@ -20,10 +20,8 @@ with hyoga.open.example('pism.alps.in.boot.nc') as ds:
     ds.hyoga.plot.bedrock_altitude(vmin=0, vmax=4500)
     ax = ds.hyoga.plot.paleoglaciers(alpha=0.75)
 
-# set axes properties
+# set title
 ax.set_title('Last Glacial Maximum (Ehlers et al., 2011)')
-ax.xaxis.set_visible(False)
-ax.yaxis.set_visible(False)
 
 # show
 plt.show()

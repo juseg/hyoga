@@ -31,8 +31,6 @@ with hyoga.open.example('pism.alps.in.boot.nc') as ds:
 
 # set axes properties
 ax.set_title('Bedrock altitude contours')
-ax.xaxis.set_visible(False)
-ax.yaxis.set_visible(False)
 cax.set_ylabel('')
 
 # show

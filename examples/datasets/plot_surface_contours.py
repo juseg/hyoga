@@ -24,10 +24,8 @@ with hyoga.open.example('pism.alps.out.2d.nc') as ds:
     # add coastline and rivers
     ax = ds.hyoga.plot.natural_earth()
 
-# set axes properties
+# set title
 ax.set_title(r'Surface elevation contours')
-ax.xaxis.set_visible(False)
-ax.yaxis.set_visible(False)
 
 # show
 plt.show()
