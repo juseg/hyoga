@@ -21,8 +21,10 @@ ax = gdf.plot(color='0.9')
 gdf = hyoga.open.paleoglaciers('bat19').to_crs('epsg:3995')
 ax = gdf.plot(ax=ax, alpha=0.75)
 
-# set title
+# set axes properties
 ax.set_title('Last Glacial Maximum (Batchelor et al., 2019)')
+ax.xaxis.set_visible(False)
+ax.yaxis.set_visible(False)
 
 # reasonable axes limits
 ax.set_xlim(-7.2e6, 7.2e6)
