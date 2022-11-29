@@ -160,10 +160,17 @@ class ShapeZipDownloader(ArchiveDownloader):
         Member file to extract from , default to the basename of ``path``.
     """
 
+    extensions = ('.shp', '.dbf', '.prj', '.shx')
+
+    def check(self, path):
+        stem, ext = os.path.splitext(path)
+        supercheck = super().check  # call super() outside generator
+        return all(supercheck(stem+ext) for ext in self.extensions)
+
     def deflate(self, archivepath, member, outdir):
         stem, ext = os.path.splitext(member)
         with zipfile.ZipFile(archivepath, 'r') as archive:
-            for ext in ('.shp', '.dbf', '.prj', '.shx'):
+            for ext in self.extensions:
                 archive.extract(stem+ext, path=outdir)
 
 
