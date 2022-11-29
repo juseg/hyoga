@@ -47,6 +47,12 @@ Bug fixes
 
 .. _requests: https://requests.readthedocs.io
 
+Documentation
+~~~~~~~~~~~~~
+
+- List plot method :meth:`.Dataset.hyoga.plot.bedrock_altitude_contours`
+  parameters in docstring (:issue: `33`).
+
 Internal changes
 ~~~~~~~~~~~~~~~~
 

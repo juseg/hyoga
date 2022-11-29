@@ -102,8 +102,24 @@ class HyogaPlotMethods:
         return self._imshow(var, **style)
 
     def bedrock_altitude_contours(self, **kwargs):
-        """Plot bedrock topography filled countours."""
-        # FIXME docstring
+        """Plot bedrock topography filled countours.
+
+        Parameters
+        ----------
+        **kwargs: optional
+            Keyword arguments passed to :meth:`xarray.DataArray.plot.contourf`.
+            If any of ``Topographic``, ``Bathymetric``, or ``Elevational`` is
+            passed as ``cmap``, and both ``colors`` and ``levels`` are missing,
+            they will use a predefined set enhancing detail near the zero. The
+            altitude range remains adjustable using ``vmin`` and ``vmax``.
+            Defaults to a grey colormap, ``zorder=-1`` so that any other plot
+            becomes an overlay to the bedrock altitude.
+
+        Returns
+        -------
+        contours : QuadContourSet
+            The plotted bedrock altitude contour set.
+        """
 
         # get plotting style, read bedrock altitude
         style = dict(add_colorbar=True, cmap='Greys', zorder=-1)
