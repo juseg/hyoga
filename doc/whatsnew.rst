@@ -52,6 +52,7 @@ Internal changes
 
 - Cache data in ``XDG_CACHE_HOME`` if variable if present in environment.
 - Add downloaders in :mod:`hyoga.open.downloader` (:issue:`25`, :pull:`28`).
+- Check for shapefile ``.dbf``, ``.prj``, ``.shx`` (:issue:`29`, :pull:`35`).
 - Add minimal continuous integration, no tests yet (:pull:`32`).
 
 .. _v0.2.0:
