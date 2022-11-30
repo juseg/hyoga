@@ -33,6 +33,13 @@ Breaking changes
   `xarray#7115 <https://github.com/pydata/xarray/issues/7115>`_,
   `NEP-29 <https://numpy.org/neps/nep-0029-deprecation_policy.html>`_)
 
+Deprecations
+~~~~~~~~~~~~
+
+- The ``sealevel`` argument in :meth:`.Dataset.hyoga.plot.bedrock_altitude` is
+  deprecated and will be removed in v0.4.0. Use ``center=sealevel`` instead
+  (:issue:`27`, :pull:`36`).
+
 New features
 ~~~~~~~~~~~~
 
@@ -51,7 +58,9 @@ Documentation
 ~~~~~~~~~~~~~
 
 - List plot method :meth:`.Dataset.hyoga.plot.bedrock_altitude_contours`
-  parameters in docstring (:issue: `33`).
+  parameters in docstring (:issue:`33`).
+- Homogenize and explain the use of ``center=False`` in documentation pages and
+  gallery examples (:issue:`27`, :pull:`36`)
 
 Internal changes
 ~~~~~~~~~~~~~~~~
