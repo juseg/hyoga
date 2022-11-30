@@ -17,7 +17,7 @@ import hyoga
 with hyoga.open.example('pism.alps.out.2d.nc') as ds:
 
     # plot model output
-    ds.hyoga.plot.bedrock_altitude(cmap='Greys', vmin=0, vmax=4500)
+    ds.hyoga.plot.bedrock_altitude(cmap='Greys', center=False)
     ds.hyoga.plot.ice_margin(edgecolor='tab:blue', linewidths=1)
     ds.hyoga.plot.ice_margin(facecolor='tab:blue')
 

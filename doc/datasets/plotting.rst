@@ -18,6 +18,15 @@ bedrock altitude and a simple ice margin contour:
        ds.hyoga.plot.bedrock_altitude(center=False)
        ds.hyoga.plot.ice_margin(facecolor='tab:blue')
 
+.. note::
+
+   Due to isostatic depression, the example bedrock altitude extends slightly
+   below zero. Here ``center=False`` instructs xarray to not center the
+   colormap around zero despite the negative values. Alternatively, use
+   ``vmin`` and ``vmax`` to pass explicit bounds. Use ``center=True`` or
+   ``center=sealevel`` in order to plot undersea and land altitudes using a
+   diverging colormap.
+
 Hyoga alters matplotlib_ defaults with its own style choices. However, these
 choices can always be overridden using matplotlib keyword arguments.
 Accessor plot methods such as :meth:`~.Dataset.hyoga.plot.bedrock_altitude` and
@@ -44,7 +53,7 @@ but the limits can be customized:
 .. plot::
 
    with hyoga.open.example('pism.alps.out.2d.nc') as ds:
-       ds.hyoga.plot.bedrock_altitude(vmin=0, vmax=4500)
+       ds.hyoga.plot.bedrock_altitude(center=False)
        ds.hyoga.plot.surface_velocity(vmin=1e1, vmax=1e3)
        ds.hyoga.plot.ice_margin(edgecolor='0.25')
 

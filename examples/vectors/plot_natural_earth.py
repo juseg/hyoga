@@ -18,7 +18,7 @@ ax = plt.subplot()
 
 # plot demo bedrock altitude
 with hyoga.open.example('pism.alps.out.2d.nc') as ds:
-    ds.hyoga.plot.bedrock_altitude(ax=ax, vmin=0, vmax=4500)
+    ds.hyoga.plot.bedrock_altitude(ax=ax, vmin=0)
 
     # plot canonical Natural Earth background
     ds.hyoga.plot.natural_earth(ax=ax)

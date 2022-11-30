@@ -25,7 +25,7 @@ the case in the demo files.
 .. plot::
 
    with hyoga.open.example('pism.alps.out.2d.nc') as ds:
-       ds.hyoga.plot.bedrock_altitude(vmin=0, vmax=4500)
+       ds.hyoga.plot.bedrock_altitude(center=False)
        for i, value in enumerate([0.1, 1, 500]):
            hyoga.config.glacier_masking_point = value
            ds.hyoga.plot.ice_margin(edgecolor=f'C{i}', linewidths=1)
@@ -48,7 +48,7 @@ per year:
        ds = ds.hyoga.assign_icemask(
            (ds.hyoga.getvar('land_ice_thickness') > 1) &
            (ds.hyoga.getvar('magnitude_of_land_ice_surface_velocity') > 10))
-       ds.hyoga.plot.bedrock_altitude(vmin=0, vmax=4500)
+       ds.hyoga.plot.bedrock_altitude(center=False)
        ds.hyoga.plot.ice_margin(facecolor='tab:blue')
 
 Note that the :meth:`~.Dataset.hyoga.assign_icemask` method edits (or add) a
@@ -113,7 +113,7 @@ with a much higher resolution.
 .. plot::
    :context:
 
-   ds.hyoga.plot.bedrock_altitude(vmin=0, vmax=4500)
+   ds.hyoga.plot.bedrock_altitude(center=False)
    ds.hyoga.plot.surface_velocity(vmin=1e1, vmax=1e3)
    ds.hyoga.plot.surface_altitude_contours()
    ds.hyoga.plot.ice_margin(edgecolor='0.25')

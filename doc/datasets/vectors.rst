@@ -28,7 +28,7 @@ coastline at the highest available scale:
 .. plot::
 
    with hyoga.open.example('pism.alps.in.boot.nc') as ds:
-      ds.hyoga.plot.bedrock_altitude(center=False)
+      ds.hyoga.plot.bedrock_altitude(vmin=0)
       ds.hyoga.plot.natural_earth()
 
 .. warning::
@@ -45,7 +45,7 @@ instance, to plot glaciated areas in blue, use:
 .. plot::
 
    with hyoga.open.example('pism.alps.in.boot.nc') as ds:
-      ds.hyoga.plot.bedrock_altitude(center=False)
+      ds.hyoga.plot.bedrock_altitude(vmin=0)
       ds.hyoga.plot.natural_earth('glaciated_areas', color='tab:blue')
 
 The method defaults to plotting themes in the ``physical`` category at the
@@ -55,7 +55,7 @@ while lower scales are available through the ``scale`` keyword argument:
 .. plot::
 
    with hyoga.open.example('pism.alps.in.boot.nc') as ds:
-      ds.hyoga.plot.bedrock_altitude(center=False)
+      ds.hyoga.plot.bedrock_altitude(vmin=0)
       ds.hyoga.plot.natural_earth(
           theme='urban_areas', category='cultural', scale='50m',
           color='tab:orange')
@@ -66,7 +66,7 @@ share the same category and scale:
 .. plot::
 
    with hyoga.open.example('pism.alps.in.boot.nc') as ds:
-      ds.hyoga.plot.bedrock_altitude(center=False)
+      ds.hyoga.plot.bedrock_altitude(vmin=0)
       ds.hyoga.plot.natural_earth(('lakes', 'lakes_europe'))
 
 Hyoga also provides two aliases ``'lakes_all'`` and ``'rivers_all'`` that
@@ -76,7 +76,7 @@ such regional subsets as ``'lakes_europe'``.
 .. plot::
 
    with hyoga.open.example('pism.alps.in.boot.nc') as ds:
-      ds.hyoga.plot.bedrock_altitude(center=False)
+      ds.hyoga.plot.bedrock_altitude(vmin=0)
       ds.hyoga.plot.natural_earth('rivers_all')
 
 Plotting and reprojection is handled by using :class:`geopandas.GeoDataFrame`
@@ -87,7 +87,7 @@ regional significance:
 .. plot::
 
    with hyoga.open.example('pism.alps.in.boot.nc') as ds:
-      ds.hyoga.plot.bedrock_altitude(center=False)
+      ds.hyoga.plot.bedrock_altitude(vmin=0)
       ds.hyoga.plot.natural_earth(
           'populated_places', category='cultural',
           column='SCALERANK', cmap='Reds_r')
@@ -106,7 +106,7 @@ system (given by a ``.proj4`` attribute, see :ref:`plotting_natural_earth`).
 .. plot::
 
    with hyoga.open.example('pism.alps.in.boot.nc') as ds:
-      ds.hyoga.plot.bedrock_altitude(center=False)
+      ds.hyoga.plot.bedrock_altitude(vmin=0)
       ds.hyoga.plot.paleoglaciers(alpha=0.75)
 
 A ``source`` keyword argument controls the source of data plotted, and
