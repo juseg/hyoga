@@ -17,7 +17,7 @@ import hyoga
 with hyoga.open.example('pism.alps.in.boot.nc') as ds:
 
     # plot model output
-    ds.hyoga.plot.bedrock_altitude(vmin=0, vmax=4500)
+    ds.hyoga.plot.bedrock_altitude(vmin=0)
     ax = ds.hyoga.plot.paleoglaciers(alpha=0.75)
 
 # set title
