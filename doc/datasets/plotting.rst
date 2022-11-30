@@ -44,7 +44,7 @@ but the limits can be customized:
 .. plot::
 
    with hyoga.open.example('pism.alps.out.2d.nc') as ds:
-       ds.hyoga.plot.bedrock_altitude(vmin=0, vmax=4500)
+       ds.hyoga.plot.bedrock_altitude(center=False)
        ds.hyoga.plot.surface_velocity(vmin=1e1, vmax=1e3)
        ds.hyoga.plot.ice_margin(edgecolor='0.25')
 
