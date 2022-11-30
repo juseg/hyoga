@@ -36,6 +36,7 @@ Breaking changes
 Deprecations
 ~~~~~~~~~~~~
 
+- Remove :func:`hyoga.open.visual`, deprecated in v0.1.0.
 - The ``sealevel`` argument in :meth:`.Dataset.hyoga.plot.bedrock_altitude` is
   deprecated and will be removed in v0.4.0. Use ``center=sealevel`` instead
   (:issue:`27`, :pull:`36`).

@@ -10,7 +10,6 @@ in any example and probably not very useful for now so I recommend sticking to
 import os
 import re
 import glob
-import warnings
 import numpy as np
 import xarray as xr
 
@@ -141,17 +140,4 @@ def subdataset(filename, time, shift=0, tolerance=1e-9, **kwargs):
     filename = filelist[np.searchsorted(filelist, filename.format(shift+time))]
     ds = dataset(filename, **kwargs)
     ds = ds.sel(age=-time/1e3, method='nearest', tolerance=tolerance)
-    return ds
-
-
-def visual(filename, bootfile, interpfile, time, ax=None, sigma=None,
-           variables=None, **kwargs):
-    """Open interpolated output for visualization."""
-    warnings.warn(
-        "open.visual() is deprecated and will be removed in v0.2.0, use "
-        "open.dataset(...).interp(...) or open.subdataset(...).interp(...).",
-        FutureWarning)
-    ds = subdataset(filename, time, **kwargs)
-    ds = ds.ice.visual(bootfile=bootfile, interpfile=interpfile, ax=ax,
-                       sigma=sigma, variables=variables)
     return ds
