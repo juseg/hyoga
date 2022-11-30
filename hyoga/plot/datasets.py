@@ -8,6 +8,7 @@ exhaustive list of all possible visualizations, but rather to provide a few
 shortcuts to oft-used plot methods with sensible defaults.
 """
 
+import warnings
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import hyoga.plot.colormaps
@@ -85,6 +86,9 @@ class HyogaPlotMethods:
             level, which may be useful for instance if different colors are
             used for negative and positive elevations. Note that `vmax=3000`,
             though, will always be 3000 bedrock altitude units above sea level.
+            .. deprecated:: 0.2.1
+                will be removed in version 0.4.0. To center the colormap around
+                sealevel, use the xarray keyword argument ``center=sealevel``.
         **kwargs: optional
             Keyword arguments passed to :meth:`xarray.DataArray.plot.imshow`.
             Defaults to a grey colormap, `zorder=-1` so that any other plot
@@ -98,6 +102,11 @@ class HyogaPlotMethods:
         """
         style = dict(add_colorbar=False, cmap='Greys', zorder=-1)
         style.update(kwargs)
+        # if threshold is present, compute an ice mask
+        if sealevel != 0:
+            warnings.warn(
+                "the sealevel argument is deprecated and will be removed in "
+                "v0.4.0, use center=sealevel instead.", FutureWarning)
         var = self._hyoga.getvar('bedrock_altitude') - sealevel
         return self._imshow(var, **style)
 
