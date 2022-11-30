@@ -267,13 +267,13 @@ class HyogaPlotMethods:
         return self._contourf(var, **style)
 
     def bedrock_shoreline(self, sealevel=0, **kwargs):
-        """Plot bedrock topography and shoreline.
+        """Plot bedrock shoreline contour.
 
         Parameters
         ----------
         sealevel: float, optional
-            Substract this value to the bedrock altitude before plotting. This
-            will effectively shift the shoreline according to sea level.
+            A single contour level determining the shoreline altitude. Will be
+            overriden if ``levels`` is present in ``kwargs``.
         **kwargs: optional
             Keyword arguments passed to :meth:`xarray.DataArray.plot.contour`.
             Defaults to a dark gray thin contour.
@@ -283,9 +283,9 @@ class HyogaPlotMethods:
         contours : QuadContourSet
             The plotted bedrock shoreline contour set.
         """
-        style = dict(colors=['0.25'], levels=[0], linewidths=0.25, zorder=0)
+        style = dict(colors=['0.25'], levels=[sealevel], linewidths=0.25)
         style.update(**kwargs)
-        var = self._hyoga.getvar('bedrock_altitude') - sealevel
+        var = self._hyoga.getvar('bedrock_altitude')
         return self._contour(var, **style)
 
     def ice_margin(self, edgecolor='0.25', facecolor=None, **kwargs):
