@@ -25,7 +25,7 @@ with hyoga.open.example('pism.alps.out.2d.nc') as ds:
     ds = ds.hyoga.assign_isostasy(hyoga.open.example('pism.alps.in.boot.nc'))
 
     # plot model output
-    ds.hyoga.plot.bedrock_altitude(ax=ax, vmin=0, vmax=4500)
+    ds.hyoga.plot.bedrock_altitude(ax=ax, center=False)
     ds.hyoga.plot.surface_altitude_contours(ax=ax)
     ds.hyoga.plot.bedrock_isostasy(
         ax=ax, cbar_ax=cax, levels=[-150, -100, -50, 0, 0.5, 1, 1.5])
