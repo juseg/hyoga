@@ -23,15 +23,21 @@ What's new
 
 .. _v0.2.1:
 
-v0.2.1 (unreleased)
--------------------
+v0.2.1 (1 Dec. 2022)
+--------------------
+
+This release removes the required dependency on cartopy_ by implementing own
+downloaders for Natural Earth and other (and future) data. All dependencies,
+and the docs, can be built with pip. Plot methods set aspect ratio to equal,
+and coordinate labels are hidden by default. Development has moved on a
+feature-branch squash workflow (as xarray_ and geopandas_).
 
 Breaking changes
 ~~~~~~~~~~~~~~~~
 
 - Require Python 3.8 or newer (see
   `xarray#7115 <https://github.com/pydata/xarray/issues/7115>`_,
-  `NEP-29 <https://numpy.org/neps/nep-0029-deprecation_policy.html>`_)
+  `NEP-29 <https://numpy.org/neps/nep-0029-deprecation_policy.html>`_).
 
 Deprecations
 ~~~~~~~~~~~~
@@ -79,7 +85,7 @@ v0.2.0 Bale (1 Nov. 2022)
 .. plot:: ../examples/whatsnew/plot_v002_bale.py
    :include-source: false
 
-This is a major relase implementing several cartographic features. It adds
+This is a minor release implementing several cartographic features. It adds
 custom colormaps and plot methods for :doc:`shaded reliefs</datasets/shading>`,
 and an interface to :doc:`open and plot </datasets/vectors>` Natural Earth data
 and paleoglacier extents. The documentation uses a new theme. A logo and new

@@ -14,7 +14,7 @@ project = 'hyoga'
 copyright = '2021-2022'
 author = 'Julien Seguinot'
 version = '0.2 Bale'
-release = '0.2.0'
+release = '0.2.1'
 
 
 # -- General configuration ---------------------------------------------------
