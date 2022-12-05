@@ -13,6 +13,7 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import hyoga.plot.colormaps
 import hyoga.plot.hillshade
+import hyoga.plot.scalebar
 
 
 class HyogaPlotMethods:
@@ -544,3 +545,34 @@ class HyogaPlotMethods:
         # open paleoglaciers data, reproject and plot
         gdf = hyoga.open.paleoglaciers(source=source)
         return gdf.to_crs(self._ds.proj4).plot(**kwargs)
+
+    # Axes decorations
+    # ----------------
+
+    def scale_bar(
+            self, ax=None, label=None, loc='lower right', size=1000, **kwargs):
+        """Add a horizontal bar with a text label showing map scale.
+
+        Parameters
+        ----------
+        FIXME
+
+        Returns
+        -------
+        FIXME
+        """
+
+        # smart defaults
+        # FIXME smarter default size based on data extent
+        if ax is None:
+            ax = plt.gca()
+        if label is None:
+            label = f'{size/1e3:.0f}' + r'$\,$km'
+
+        # init scale bar
+        asb = hyoga.plot.scalebar.AnchoredScaleBar(
+            label=label, loc=loc, size=size, transform=ax.transData,
+            color='black', marker='|')
+
+        # add scale bar to axes
+        return ax.add_artist(asb)
