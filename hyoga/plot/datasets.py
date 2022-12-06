@@ -9,6 +9,7 @@ shortcuts to oft-used plot methods with sensible defaults.
 """
 
 import warnings
+import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import hyoga.plot.colormaps
@@ -550,7 +551,7 @@ class HyogaPlotMethods:
     # ----------------
 
     def scale_bar(
-            self, ax=None, label=None, loc='lower right', size=1000, **kwargs):
+            self, ax=None, label=None, loc='lower right', size=None, **kwargs):
         """Add a horizontal bar with a text label showing map scale.
 
         Parameters
@@ -562,10 +563,25 @@ class HyogaPlotMethods:
         FIXME
         """
 
-        # smart defaults
-        # FIXME smarter default size based on data extent
+        # get current axes if None provided
         if ax is None:
             ax = plt.gca()
+
+        # size defaults to a function of axes extent
+        if size is None:
+            # compute axes area
+            xlim = ax.get_xlim()
+            ylim = ax.get_ylim()
+            area = (xlim[1]-xlim[0])**2 + (ylim[1]-ylim[0])**2
+            # divide square root of area by ten
+            size = float(area)**0.5 / 10
+            # round log10 to nearest increment
+            log = round(3*np.log10(size)) / 3
+            # approximate to first significant figure
+            size = round(10**log, -int(log))
+
+        # by default assume the unit is meters
+        # IDEA: use x and y unit attribute instead
         if label is None:
             label = f'{size/1e3:.0f}' + r'$\,$km'
 
