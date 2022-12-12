@@ -16,10 +16,11 @@ class AnchoredScaleBar(mpl.offsetbox.AnchoredOffsetbox):
     # modified from the matplotlib 3.6 anchored artists example
     # https://matplotlib.org/stable/gallery/misc/anchored_artists.html
 
-    def __init__(self, label, loc, size, transform, **kwargs):
-        self.label = mpl.offsetbox.TextArea(label)
+    def __init__(self, label, loc, size, transform, color=None, **kwargs):
+        self.label = mpl.offsetbox.TextArea(label, textprops=dict(color=color))
         self.scale = mpl.offsetbox.AuxTransformBox(transform)
-        self.scale.add_artist(mpl.lines.Line2D([0, size], [0, 0], **kwargs))
+        self.scale.add_artist(mpl.lines.Line2D(
+            [0, size], [0, 0], color=color, **kwargs))
         self._box = mpl.offsetbox.VPacker(
             children=[self.label, self.scale], align='center', pad=0, sep=0)
         super().__init__(loc, child=self._box, frameon=False)
