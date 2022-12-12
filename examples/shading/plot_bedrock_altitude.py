@@ -23,6 +23,9 @@ with hyoga.open.example('pism.alps.in.boot.nc') as ds:
     # add coastline and rivers
     ax = ds.hyoga.plot.natural_earth()
 
+    # add scale bar
+    ds.hyoga.plot.scale_bar()
+
 # set title
 ax.set_title('Bedrock altitude')
 
