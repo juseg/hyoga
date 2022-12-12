@@ -556,11 +556,27 @@ class HyogaPlotMethods:
 
         Parameters
         ----------
-        FIXME
+        ax : :class:`matplotlib.axes.Axes` (or a subclass), optional
+            Matplotlib axes used for plotting. Default to current axes.
+        label : str, optional
+            Text label. If None provided, assume coordinates are in meters, and
+            add label in kilometers according to the size parameter.
+        loc : str, optional
+            Location of the scale bar relative to axes (e.g. 'upper left',
+            'center right'), default to 'lower right'. See the `loc` parameter
+            of :class:`matplotlib.axes.Axes.legend` for details.
+        size : float, optional
+            Bar size in data coordinates. Default to a function of axes area
+            rounded on an approximate log scale (1, 2, 5, 10, 20 km etc).
+        **kwargs : optional
+            Additional keyword arguments are passed to the
+            :class:`matplotlib.lines.Line2D` artist for the scale bar. Default
+            to a black bar with a vertical marker on each end.
 
         Returns
         -------
-        FIXME
+        abs : :class:`~AnchoredScaleBar`
+            An anchored container for the scale bar and text label.
         """
 
         # get current axes if None provided
