@@ -586,9 +586,10 @@ class HyogaPlotMethods:
             label = f'{size/1e3:.0f}' + r'$\,$km'
 
         # init scale bar
+        style = dict(color='black', marker='|')
+        style.update(kwargs)
         asb = hyoga.plot.scalebar.AnchoredScaleBar(
-            label=label, loc=loc, size=size, transform=ax.transData,
-            color='black', marker='|')
+            label=label, loc=loc, size=size, transform=ax.transData, **style)
 
         # add scale bar to axes
         return ax.add_artist(asb)
