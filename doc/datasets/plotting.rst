@@ -17,6 +17,7 @@ bedrock altitude and a simple ice margin contour:
    with hyoga.open.example('pism.alps.out.2d.nc') as ds:
        ds.hyoga.plot.bedrock_altitude(center=False)
        ds.hyoga.plot.ice_margin(facecolor='tab:blue')
+       ds.hyoga.plot.scale_bar()
 
 .. note::
 

@@ -117,6 +117,7 @@ with a much higher resolution.
    ds.hyoga.plot.surface_velocity(vmin=1e1, vmax=1e3)
    ds.hyoga.plot.surface_altitude_contours()
    ds.hyoga.plot.ice_margin(edgecolor='0.25')
+   ds.hyoga.plot.scale_bar()
 
 .. _xarray: https//xarray.pydata.org
 .. _`CF standard names`: http://cfconventions.org/standard-names.html
