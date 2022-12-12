@@ -32,6 +32,7 @@ hydrologic features to facilitate orientation.
        ds.hyoga.plot.bedrock_altitude(center=False)
        ds.hyoga.plot.ice_margin(facecolor='tab:blue')
        ds.hyoga.plot.natural_earth()
+       ds.hyoga.plot.scale_bar()
 
    # set title
    plt.title('A first plot with hyoga')

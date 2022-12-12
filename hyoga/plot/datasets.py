@@ -9,10 +9,12 @@ shortcuts to oft-used plot methods with sensible defaults.
 """
 
 import warnings
+import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import hyoga.plot.colormaps
 import hyoga.plot.hillshade
+import hyoga.plot.scalebar
 
 
 class HyogaPlotMethods:
@@ -544,3 +546,66 @@ class HyogaPlotMethods:
         # open paleoglaciers data, reproject and plot
         gdf = hyoga.open.paleoglaciers(source=source)
         return gdf.to_crs(self._ds.proj4).plot(**kwargs)
+
+    # Axes decorations
+    # ----------------
+
+    def scale_bar(
+            self, ax=None, label=None, loc='lower right', size=None, **kwargs):
+        """Add a horizontal bar with a text label showing map scale.
+
+        Parameters
+        ----------
+        ax : :class:`matplotlib.axes.Axes` (or a subclass), optional
+            Matplotlib axes used for plotting. Default to current axes.
+        label : str, optional
+            Text label. If None provided, assume coordinates are in meters, and
+            add label in kilometers according to the size parameter.
+        loc : str, optional
+            Location of the scale bar relative to axes (e.g. 'upper left',
+            'center right'), default to 'lower right'. See the `loc` parameter
+            of :class:`matplotlib.axes.Axes.legend` for details.
+        size : float, optional
+            Bar size in data coordinates. Default to a function of axes area
+            rounded on an approximate log scale (1, 2, 5, 10, 20 km etc).
+        **kwargs : optional
+            Additional keyword arguments are passed to the
+            :class:`matplotlib.lines.Line2D` artist for the scale bar. Default
+            to a black bar with a vertical marker on each end.
+
+        Returns
+        -------
+        abs : :class:`~AnchoredScaleBar`
+            An anchored container for the scale bar and text label.
+        """
+
+        # get current axes if None provided
+        if ax is None:
+            ax = plt.gca()
+
+        # size defaults to a function of axes extent
+        if size is None:
+            # compute axes area
+            xlim = ax.get_xlim()
+            ylim = ax.get_ylim()
+            area = (xlim[1]-xlim[0])**2 + (ylim[1]-ylim[0])**2
+            # divide square root of area by ten
+            size = float(area)**0.5 / 10
+            # round log10 to nearest increment
+            log = round(3*np.log10(size)) / 3
+            # approximate to first significant figure
+            size = round(10**log, -int(log))
+
+        # by default assume the unit is meters
+        # IDEA: use x and y unit attribute instead
+        if label is None:
+            label = f'{size/1e3:.0f}' + r'$\,$km'
+
+        # init scale bar
+        style = dict(color='black', marker='|')
+        style.update(kwargs)
+        asb = hyoga.plot.scalebar.AnchoredScaleBar(
+            label=label, loc=loc, size=size, transform=ax.transData, **style)
+
+        # add scale bar to axes
+        return ax.add_artist(asb)

@@ -57,11 +57,11 @@ Datasets
 ~~~~~~~~
 
 - |-| :meth:`.Dataset.hyoga.profile`
-- |-| :meth:`.Dataset.hyoga.plot.barscale`
 - |x| :meth:`.Dataset.hyoga.plot.bedrock_hillshade`
 - |x| :meth:`.Dataset.hyoga.plot.surface_hillshade`
 - |x| :meth:`.Dataset.hyoga.plot.natural_earth`
 - |x| :meth:`.Dataset.hyoga.plot.paleoglaciers`
+- |x| :meth:`.Dataset.hyoga.plot.scale_bar`
 
 Input
 ~~~~~

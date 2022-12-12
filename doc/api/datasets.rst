@@ -58,3 +58,12 @@ Plotting vectors
 
    plot.natural_earth
    plot.paleoglaciers
+
+Plotting decorations
+--------------------
+
+.. autosummary::
+   :toctree: generated/
+   :template: autosummary/accessor_method.rst
+
+   plot.scale_bar

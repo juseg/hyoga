@@ -35,6 +35,9 @@ with hyoga.open.example('pism.alps.out.2d.nc') as ds:
     ds.hyoga.plot.surface_altitude_contours(ax=ax)
     ds.hyoga.plot.ice_margin(ax=ax, facecolor='w')
 
+    # add scale bar
+    ds.hyoga.plot.scale_bar()
+
 # set title
 ax.set_title('Interpolated output')
 
