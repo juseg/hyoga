@@ -416,6 +416,38 @@ class HyogaDataset:
         # return interpolated data
         return ds
 
+    def profile(self, filename, crs=None, interval=None, **kwargs):
+        """Interpolate onto coordinates along a profile."""
+
+        # FIXME use geopandas instead
+        import cartopy.crs as ccrs
+        import cartopy.io.shapereader as cshp
+
+        # read profile from shapefile
+        shp = cshp.Reader(filename)
+        geom = next(shp.geometries())
+        points = np.asarray(geom)
+        if crs is not None:
+            points = crs.transform_points(ccrs.PlateCarree(), *points.T)[:, :2]
+
+        # compute distance along profile
+        x, y = np.asarray(points).T
+        dist = ((np.diff(x)**2+np.diff(y)**2)**0.5).cumsum()
+        dist = np.insert(dist, 0, 0)
+
+        # build coordinate xarrays
+        x = xr.DataArray(x, coords=[dist], dims='d')
+        y = xr.DataArray(y, coords=[dist], dims='d')
+
+        # if interval was given, interpolate coordinates
+        if interval is not None:
+            dist = np.arange(0, dist[-1], interval)
+            x = x.interp(d=dist, method='linear')
+            y = y.interp(d=dist, method='linear')
+
+        # interpolate dataset to new coordinates
+        return self._ds.interp(x=x, y=y, method='linear', assume_sorted=True)
+
     def where(self, cond, **kwargs):
         """Filter glacier (non-bedrock) variables according to a condition.
 
