@@ -9,6 +9,7 @@ xarray dataset accessor. Plotting methods are kept in a separate module.
 """
 
 import warnings
+import geopandas
 import numpy as np
 import scipy.ndimage
 import xarray as xr
@@ -416,22 +417,14 @@ class HyogaDataset:
         # return interpolated data
         return ds
 
-    def profile(self, filename, crs=None, interval=None, **kwargs):
+    def profile(self, filepath, interval=None, **kwargs):
         """Interpolate onto coordinates along a profile."""
 
-        # FIXME use geopandas instead
-        import cartopy.crs as ccrs
-        import cartopy.io.shapereader as cshp
-
         # read profile from shapefile
-        shp = cshp.Reader(filename)
-        geom = next(shp.geometries())
-        points = np.asarray(geom)
-        if crs is not None:
-            points = crs.transform_points(ccrs.PlateCarree(), *points.T)[:, :2]
+        gdf = geopandas.read_file(filepath)
+        x, y = gdf.squeeze().geometry.coords.xy
 
         # compute distance along profile
-        x, y = np.asarray(points).T
         dist = ((np.diff(x)**2+np.diff(y)**2)**0.5).cumsum()
         dist = np.insert(dist, 0, 0)
 
