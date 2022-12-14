@@ -417,12 +417,27 @@ class HyogaDataset:
         # return interpolated data
         return ds
 
-    def profile(self, filepath, interval=None, **kwargs):
-        """Interpolate onto coordinates along a profile."""
+    def profile(self, datasource, interval=None, **kwargs):
+        """Interpolate onto coordinates along a profile.
 
-        # read profile from shapefile
-        gdf = geopandas.read_file(filepath)
-        x, y = gdf.squeeze().geometry.coords.xy
+        Parameters
+        ----------
+        datasource: sequence, array, GeoDataFrame, str, Path or file-like
+            Sequence of (x, y) coordinate tuples, (N, 2) coordinate array,
+            GeoDataFrame or path to a shapefile containing a single line,
+            along which the dataset will be interpolated.
+        """
+
+        # read profile from datasource
+        if isinstance(datasource, list):
+            x, y = np.array(datasource).T
+        elif isinstance(datasource, np.ndarray):
+            x, y = datasource.T
+        elif isinstance(datasource, geopandas.GeoDataFrame):
+            x, y = datasource.squeeze().geometry.coords.xy
+        else:
+            datasource = geopandas.read_file(datasource)
+            x, y = datasource.squeeze().geometry.coords.xy
 
         # compute distance along profile
         dist = ((np.diff(x)**2+np.diff(y)**2)**0.5).cumsum()
