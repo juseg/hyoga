@@ -25,8 +25,7 @@ with hyoga.open.example('pism.alps.out.2d.nc') as ds:
     ds.hyoga.plot.ice_margin(ax=ax, facecolor='tab:blue')
 
     # interpolate along profile
-    filepath = '/home/julien/git/work/alps/data/native/profile_rhine.shp'
-    ds = ds.hyoga.profile(filepath)
+    ds = ds.hyoga.profile(hyoga.open.example('profile.rhine.shp'))
 
     # plot profile line in map view
     ax.plot(ds.x, ds.y, color='w', dashes=(2, 1))
