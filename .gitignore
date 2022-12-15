@@ -1,3 +1,4 @@
+.coverage
 *.nc
 *.pyc
 /doc/_build
