@@ -4,10 +4,14 @@
 Hyoga
 =====
 
+.. image:: https://readthedocs.org/projects/hyoga/badge/?version=latest
+   :target: https://hyoga.readthedocs.io
+.. image:: https://github.com/juseg/hyoga/actions/workflows/tests/badge.svg
+   :target: https://github.com/juseg/hyoga/actions?query=workflow%3Atests
+.. image:: https://codecov.io/github/juseg/hyoga/branch/main/graph/badge.svg
+   :target: https://codecov.io/github/juseg/hyoga
 .. image:: https://img.shields.io/pypi/v/hyoga.svg
    :target: https://pypi.python.org/pypi/hyoga
-.. image:: https://img.shields.io/pypi/l/hyoga.svg
-   :target: https://www.gnu.org/licenses/gpl-3.0.txt
 .. image:: https://zenodo.org/badge/227465038.svg
    :target: https://zenodo.org/badge/latestdoi/227465038
 
