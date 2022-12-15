@@ -41,8 +41,6 @@ ax.set_ylim(5000e3, 5400e3)
 ax.set_title('map view')
 
 # set profile axes properties
-pfax.set_xlabel('distance along profile (m)')
-pfax.set_ylabel('elevation (m)')
 pfax.set_title('profile view')
 pfax.yaxis.set_label_position("right")
 pfax.yaxis.tick_right()

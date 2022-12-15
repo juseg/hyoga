@@ -454,7 +454,15 @@ class HyogaDataset:
             y = y.interp(d=dist, method='linear')
 
         # interpolate dataset to new coordinates
-        return self._ds.interp(x=x, y=y, method='linear', assume_sorted=True)
+        ds = self._ds.interp(x=x, y=y, method='linear', assume_sorted=True)
+
+        # set new coordinate attributes
+        ds.d.attrs.update(long_name='distance along profile')
+        if 'units' in self._ds.x.attrs:
+            ds.d.attrs.update(units=self._ds.x.units)
+
+        # return interpolated dataset
+        return ds
 
     def where(self, cond, **kwargs):
         """Filter glacier (non-bedrock) variables according to a condition.
