@@ -417,15 +417,28 @@ class HyogaDataset:
         # return interpolated data
         return ds
 
-    def profile(self, datasource, interval=None, **kwargs):
+    def profile(self, datasource, interval=None):
         """Interpolate onto coordinates along a profile.
 
         Parameters
         ----------
-        datasource: sequence, array, GeoDataFrame, str, Path or file-like
+        datasource : sequence, array, GeoDataFrame, str, Path or file-like
             Sequence of (x, y) coordinate tuples, (N, 2) coordinate array,
             GeoDataFrame or path to a shapefile containing a single line,
             along which the dataset will be interpolated.
+        interval : float, optional
+            If provided, resample (linearly interpolate) profile coordinates
+            to a fixed spatial resolution given by ``interval``. If ``None``,
+            the data are interpolated to the exact ``datasource`` coordinate,
+            which may produce an irreguar grid.
+
+        Returns
+        -------
+        dataset : Dataset
+            The interpolated dataset, where horizontal dimensions ``x`` and
+            ``y`` are replaced by a new dimension ``d`` with a grid spacing of
+            either ``interval`` or the distance between points in
+            ``datasource``.
         """
 
         # read profile from datasource
