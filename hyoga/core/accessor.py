@@ -21,8 +21,10 @@ import hyoga.plot.datasets
 def _coords_from_axes(ax):
     """Compute coordinate vectors from matplotlib axes."""
     bbox = ax.get_window_extent()
+    xlim = ax.get_xlim()
+    ylim = ax.get_ylim()
     return _coords_from_extent(
-        ax.get_extent(), int(round(bbox.width)), int(round(bbox.height)))
+        (*xlim, *ylim), int(round(bbox.width)), int(round(bbox.height)))
 
 
 def _coords_from_extent(extent, cols, rows):

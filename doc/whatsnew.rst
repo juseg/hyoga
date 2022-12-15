@@ -34,6 +34,11 @@ New features
 - Add plot method :meth:`.Dataset.hyoga.plot.scale_bar` and a new example for
   automatically sized, anchored scale bars (:issue:`16`, :pull:`44`).
 
+Bug fixes
+~~~~~~~~~
+
+- Fix grid interpolation on non-cartopy axes (:issue:`45`).
+
 .. _v0.2.1:
 
 v0.2.1 (1 Dec. 2022)
