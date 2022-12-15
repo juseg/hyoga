@@ -29,6 +29,8 @@ v0.2.2 (unreleased)
 New features
 ------------
 
+- Add accessor method :meth:`.Dataset.hyoga.profile`, a new example and a
+  documentation section for profile interpolation (:issue:`18`, :pull:`46`).
 - Add plot method :meth:`.Dataset.hyoga.plot.scale_bar` and a new example for
   automatically sized, anchored scale bars (:issue:`16`, :pull:`44`).
 

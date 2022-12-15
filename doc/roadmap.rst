@@ -56,7 +56,7 @@ v0.2.x Cartography
 Datasets
 ~~~~~~~~
 
-- |-| :meth:`.Dataset.hyoga.profile`
+- |x| :meth:`.Dataset.hyoga.profile`
 - |x| :meth:`.Dataset.hyoga.plot.bedrock_hillshade`
 - |x| :meth:`.Dataset.hyoga.plot.surface_hillshade`
 - |x| :meth:`.Dataset.hyoga.plot.natural_earth`
@@ -76,7 +76,6 @@ Documentation
 - |-| doc: ``foreword/history``
 - |x| :doc:`datasets/shading`
 - |x| :doc:`datasets/vectors`
-- |-| doc: ``datasets/profile``
 
 v0.1.x Plotting
 ---------------

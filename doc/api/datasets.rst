@@ -21,6 +21,7 @@ Postprocessing
    assign_isostasy
    getvar
    interp
+   profile
    where
    where_icemask
    where_thicker
