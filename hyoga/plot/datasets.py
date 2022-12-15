@@ -88,9 +88,11 @@ class HyogaPlotMethods:
             level, which may be useful for instance if different colors are
             used for negative and positive elevations. Note that `vmax=3000`,
             though, will always be 3000 bedrock altitude units above sea level.
+
             .. deprecated:: 0.2.1
                 will be removed in version 0.4.0. To center the colormap around
                 sealevel, use the xarray keyword argument ``center=sealevel``.
+
         **kwargs: optional
             Keyword arguments passed to :meth:`xarray.DataArray.plot.imshow`.
             Defaults to a grey colormap, `zorder=-1` so that any other plot

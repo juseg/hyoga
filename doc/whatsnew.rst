@@ -45,6 +45,8 @@ and the docs, can be built with pip. Plot methods set aspect ratio to equal,
 and coordinate labels are hidden by default. Development has moved on a
 feature-branch squash workflow (as xarray_ and geopandas_).
 
+.. _xarray: https://xarray.dev
+
 Breaking changes
 ~~~~~~~~~~~~~~~~
 
