@@ -9,6 +9,7 @@ xarray dataset accessor. Plotting methods are kept in a separate module.
 """
 
 import warnings
+import geopandas
 import numpy as np
 import scipy.ndimage
 import xarray as xr
@@ -414,6 +415,66 @@ class HyogaDataset:
         ds = ds.hyoga.assign_icemask(icemask)
 
         # return interpolated data
+        return ds
+
+    def profile(self, datasource, interval=None):
+        """Interpolate onto coordinates along a profile.
+
+        Parameters
+        ----------
+        datasource : sequence, array, GeoDataFrame, str, Path or file-like
+            Sequence of (x, y) coordinate tuples, (N, 2) coordinate array,
+            GeoDataFrame or path to a shapefile containing a single line,
+            along which the dataset will be interpolated.
+        interval : float, optional
+            If provided, resample (linearly interpolate) profile coordinates
+            to a fixed spatial resolution given by ``interval``. If ``None``,
+            the data are interpolated to the exact ``datasource`` coordinate,
+            which may produce an irreguar grid.
+
+        Returns
+        -------
+        dataset : Dataset
+            The interpolated dataset, where horizontal dimensions ``x`` and
+            ``y`` are replaced by a new dimension ``d`` with a grid spacing of
+            either ``interval`` or the distance between points in
+            ``datasource``.
+        """
+
+        # read profile from datasource
+        if isinstance(datasource, list):
+            x, y = np.array(datasource).T
+        elif isinstance(datasource, np.ndarray):
+            x, y = datasource.T
+        elif isinstance(datasource, geopandas.GeoDataFrame):
+            x, y = datasource.squeeze().geometry.coords.xy
+        else:
+            datasource = geopandas.read_file(datasource)
+            x, y = datasource.squeeze().geometry.coords.xy
+
+        # compute distance along profile
+        dist = ((np.diff(x)**2+np.diff(y)**2)**0.5).cumsum()
+        dist = np.insert(dist, 0, 0)
+
+        # build coordinate xarrays
+        x = xr.DataArray(x, coords=[dist], dims='d')
+        y = xr.DataArray(y, coords=[dist], dims='d')
+
+        # if interval was given, interpolate coordinates
+        if interval is not None:
+            dist = np.arange(0, dist[-1], interval)
+            x = x.interp(d=dist, method='linear')
+            y = y.interp(d=dist, method='linear')
+
+        # interpolate dataset to new coordinates
+        ds = self._ds.interp(x=x, y=y, method='linear', assume_sorted=True)
+
+        # set new coordinate attributes
+        ds.d.attrs.update(long_name='distance along profile')
+        if 'units' in self._ds.x.attrs:
+            ds.d.attrs.update(units=self._ds.x.units)
+
+        # return interpolated dataset
         return ds
 
     def where(self, cond, **kwargs):

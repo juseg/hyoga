@@ -60,6 +60,7 @@ extlinks = {
 intersphinx_mapping = {
     'geopandas': ('https://geopandas.org/en/stable/', None),
     'matplotlib': ('https://matplotlib.org/stable/', None),
+    'numpy': ('https://numpy.org/doc/stable/', None),
     'pandas': ('https://pandas.pydata.org/docs/', None),
     'python': ('https://docs.python.org/3/', None),
     'xarray': ('http://xarray.pydata.org/en/stable/', None)

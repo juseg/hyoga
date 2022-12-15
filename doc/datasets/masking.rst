@@ -4,8 +4,8 @@
 Masking and interpolation
 =========================
 
-Ice thickness threshold
------------------------
+Masking variables
+-----------------
 
 Hyoga's plot methods use an ice mask to determine which grid cells are
 glacierized and which are not. According to CF conventions, this is defined by
@@ -32,10 +32,6 @@ the case in the demo files.
 
    # restore the default of 1 m
    hyoga.config.glacier_masking_point = 1
-
-
-Custom glacier mask
--------------------
 
 For more control, on can set the ``land_ice_area_fraction`` variable using
 :meth:`~.Dataset.hyoga.assign_icemask`. Suppose that we define glaciers as grid
@@ -65,8 +61,8 @@ values with `np.nan` outside the where condition. However, they are meant to
 only affect "glacier variables" (currently any variable whose standard name
 does not start with ``bedrock_altitude``).
 
-Interpolation to another topography
------------------------------------
+Grid interpolation
+------------------
 
 For enhanced visuals, hyoga supports interpolating and remasking model output
 onto a different (usually higher-resolution) topography. This produces an image
@@ -119,5 +115,67 @@ with a much higher resolution.
    ds.hyoga.plot.ice_margin(edgecolor='0.25')
    ds.hyoga.plot.scale_bar()
 
-.. _xarray: https//xarray.pydata.org
-.. _`CF standard names`: http://cfconventions.org/standard-names.html
+Profile interpolation
+---------------------
+
+Profile interpolation aggregates variables with two horizontal dimensions (and
+possibly more dimensions) along a profile curve (or surface) defined by a
+sequence of (x, y) points. Let us draw a linear cross-section across the
+example dataset and plot this line on a map.
+
+.. plot::
+   :context: reset
+
+   # prepare a linear profile
+   import numpy as np
+   x = np.linspace(250e3, 450e3, 21)
+   y = np.linspace(5200e3, 5000e3, 21)
+   points = list(zip(x, y))
+
+   # plot profile line on a map
+   ds = hyoga.open.example('pism.alps.out.2d.nc')
+   ds.hyoga.plot.bedrock_altitude(center=False)
+   ds.hyoga.plot.ice_margin(facecolor='tab:blue')
+   plt.plot(x, y, color='tab:red', marker='x')
+
+The accessor method :meth:`~.Dataset.hyoga.profile` can be used to linearly
+interpolate the gridded dataset onto these coordinates, producing a new dataset
+where the ``x`` and ``y`` coordinates are swapped for a new coordinate ``d``,
+for the distance along the profile.
+
+.. plot::
+   :context: close-figs
+
+   profile = ds.hyoga.profile(points)
+   profile.hyoga.getvar('bedrock_altitude').plot(color='0.25')
+   profile.hyoga.getvar('surface_altitude').plot(color='C0')
+
+An additional ``interval`` keyword can be passed to control the horizontal
+resolution of the new profile dataset. This is particularly useful if the
+sequence of ``points`` is not regularly spaced.
+
+.. plot::
+   :context: close-figs
+
+   # prepare three subplots
+   fig, axes = plt.subplots(nrows=3, sharex=True, sharey=True)
+
+   # 10, 3, and 1 km resolutions
+   for ax, interval in zip(axes, [10e3, 3e3, 1e3]):
+       profile = ds.hyoga.profile(points, interval=interval)
+       profile.hyoga.getvar('bedrock_altitude').plot(ax=ax, color='0.25')
+       profile.hyoga.getvar('surface_altitude').plot(ax=ax, color='C0')
+
+   # remove duplicate labels
+   for ax in axes[:2]:
+       ax.set_xlabel('')
+   for ax in axes[::2]:
+       ax.set_ylabel('')
+
+The sequence of points in the above example does not have to form a straight
+line. Besides, it can also be provided as a :class:`numpy.ndarray`, a
+:class:`geopandas.GeoDataFrame`, or a path to a vector file containing a
+single, linestring geometry. Here is a more advanced example using a custom
+shapefile provided in the example data.
+
+.. plot:: ../examples/interp/plot_profile_altitudes.py
