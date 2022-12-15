@@ -6,7 +6,7 @@ Hyoga
 
 .. image:: https://readthedocs.org/projects/hyoga/badge/?version=latest
    :target: https://hyoga.readthedocs.io
-.. image:: https://github.com/juseg/hyoga/actions/workflows/tests/badge.svg
+.. image:: https://github.com/juseg/hyoga/actions/workflows/tests.yaml/badge.svg
    :target: https://github.com/juseg/hyoga/actions?query=workflow%3Atests
 .. image:: https://codecov.io/github/juseg/hyoga/branch/main/graph/badge.svg
    :target: https://codecov.io/github/juseg/hyoga
