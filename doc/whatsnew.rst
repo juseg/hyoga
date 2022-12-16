@@ -27,7 +27,7 @@ v0.2.2 (unreleased)
 -------------------
 
 New features
-------------
+~~~~~~~~~~~~
 
 - Add accessor method :meth:`.Dataset.hyoga.profile`, a new example and a
   documentation section for profile interpolation (:issue:`18`, :pull:`46`).
@@ -38,6 +38,13 @@ Bug fixes
 ~~~~~~~~~
 
 - Fix grid interpolation on non-cartopy axes (:issue:`45`).
+
+Internal changes
+~~~~~~~~~~~~~~~~
+
+- Add very simple tests for all plot methods (:issue:`37`, pull:`49`).
+- Compute code coverage and upload to codecov.io (:issue:`38`, pull:`47`).
+- Add docs, tests and codecov badges in readme file (:pull:`48`).
 
 .. _v0.2.1:
 
