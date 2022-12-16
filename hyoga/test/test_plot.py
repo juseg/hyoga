@@ -83,11 +83,13 @@ def test_surface_velocity_streamplot():
 
 def test_natural_earth():
     ds = make_dataset()
-    ds.hyoga.plot.naturalearth()
+    ds.attrs.update(proj4='+proj=lonlat')
+    ds.hyoga.plot.natural_earth()
 
 
 def test_paleoglaciers():
     ds = make_dataset()
+    ds.attrs.update(proj4='+proj=lonlat')
     ds.hyoga.plot.paleoglaciers()
 
 
