@@ -45,6 +45,7 @@ Internal changes
 - Add very simple tests for all plot methods (:issue:`37`, pull:`49`).
 - Compute code coverage and upload to codecov.io (:issue:`38`, pull:`47`).
 - Add docs, tests and codecov badges in readme file (:pull:`48`).
+- Add automatic delivery on PyPI (:issue:`39`, :pull:`50`).
 
 .. _v0.2.1:
 
