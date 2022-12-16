@@ -27,6 +27,9 @@ def test_bedrock_altitude_contours():
 
 def test_bedrock_erosion():
     ds = make_dataset()
+    ds = ds.assign(
+        u=ds.b.assign_attrs(standard_name='land_ice_basal_x_velocity'),
+        v=ds.b.assign_attrs(standard_name='land_ice_basal_y_velocity'))
     ds.hyoga.plot.bedrock_erosion()
 
 
@@ -37,6 +40,8 @@ def test_bedrock_hillshade():
 
 def test_bedrock_isostasy():
     ds = make_dataset()
+    ds = ds.assign(d=ds.b.assign_attrs(
+        standard_name='bedrock_altitude_change_due_to_isostatic_adjustment'))
     ds.hyoga.plot.bedrock_isostasy()
 
 
@@ -62,11 +67,17 @@ def test_surface_hillshade():
 
 def test_surface_velocity():
     ds = make_dataset()
+    ds = ds.assign(
+        u=ds.b.assign_attrs(standard_name='land_ice_surface_x_velocity'),
+        v=ds.b.assign_attrs(standard_name='land_ice_surface_y_velocity'))
     ds.hyoga.plot.surface_velocity()
 
 
 def test_surface_velocity_streamplot():
     ds = make_dataset()
+    ds = ds.assign(
+        u=ds.b.assign_attrs(standard_name='land_ice_surface_x_velocity'),
+        v=ds.b.assign_attrs(standard_name='land_ice_surface_y_velocity'))
     ds.hyoga.plot.surface_velocity_streamplot()
 
 
