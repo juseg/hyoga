@@ -23,8 +23,14 @@ What's new
 
 .. _v0.2.2:
 
-v0.2.2 (unreleased)
--------------------
+v0.2.2 (16 Dec. 2022)
+---------------------
+
+This release implements profile :doc:`interpolation <datasets/masking>` and
+scale bars, both documented in new :doc:`examples<examples/index>`, and fixes a
+bug in grid interpolation to axes coordinates. Continuous integration has been
+improved with lazy tests for all plot methods, and monitoring of code coverage,
+increased from 33 to 73 percent in this release.
 
 New features
 ~~~~~~~~~~~~
@@ -42,8 +48,8 @@ Bug fixes
 Internal changes
 ~~~~~~~~~~~~~~~~
 
-- Add very simple tests for all plot methods (:issue:`37`, pull:`49`).
-- Compute code coverage and upload to codecov.io (:issue:`38`, pull:`47`).
+- Add very simple tests for all plot methods (:issue:`37`, :pull:`49`).
+- Compute code coverage and upload to codecov.io (:issue:`38`, :pull:`47`).
 - Add docs, tests and codecov badges in readme file (:pull:`48`).
 - Add automatic delivery on PyPI (:issue:`39`, :pull:`50`).
 
