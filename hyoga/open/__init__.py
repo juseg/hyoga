@@ -9,9 +9,11 @@ from .example import example
 from .local import dataset, mfdataset, subdataset
 from .naturalearth import natural_earth
 from .paleoglaciers import paleoglaciers
+from .surface import surface
 
 __all__ = [
     'example',
     'dataset', 'mfdataset', 'subdataset',
     'natural_earth',
-    'paleoglaciers']
+    'paleoglaciers',
+    'surface']
