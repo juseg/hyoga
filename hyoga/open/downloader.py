@@ -135,7 +135,8 @@ class ArchiveDownloader(CacheDownloader):
 
         # save archive as named online
         outdir, basename = os.path.split(path)
-        archivepath = os.path.join(outdir, url.split('/')[-1])
+        # FIXME GEBCO arvhive is just named 'zip'
+        archivepath = os.path.join(outdir, url.rstrip('/').split('/')[-1])
 
         # download it only if missing
         if not super().check(archivepath):
