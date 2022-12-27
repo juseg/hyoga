@@ -73,10 +73,15 @@ class Downloader:
         # create directory if missing
         os.makedirs(os.path.dirname(path), exist_ok=True)
 
-        # download file
-        with open(path, 'wb') as binaryfile:
+        # open url and raise any http error
+        with requests.get(url, stream=True, timeout=5) as request:
+            request.raise_for_status()
+
+            # download file chunks
             print(f"downloading {url}...")
-            binaryfile.write(requests.get(url, timeout=5).content)
+            with open(path, 'wb') as binaryfile:
+                for chunk in request.iter_content(chunk_size=1024**2):
+                    binaryfile.write(chunk)
 
 
 class CacheDownloader(Downloader):
