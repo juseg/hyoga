@@ -147,8 +147,27 @@ class ArchiveDownloader(CacheDownloader):
         raise NotImplementedError("This should be implemented in subclasses.")
 
 
+class ZipDownloader(ArchiveDownloader):
+    """
+    Download a zip archive and extract a single file.
+
+    Call parameters
+    ---------------
+    url : str
+        The url of the file to download
+    path : str
+        The path of the extracted file relative to the cache directory.
+    member : str, optional
+        Member file to extract from , default to the basename of ``path``.
+    """
+
+    def deflate(self, archivepath, member, outdir):
+        with zipfile.ZipFile(archivepath, 'r') as archive:
+            archive.extract(member, path=outdir)
+
+
 class ShapeZipDownloader(ArchiveDownloader):
-    """A downloader that extract shapefiles and metafiles from zip archives.
+    """A downloader that extracts shapefiles and metafiles from zip archives.
 
     Call parameters
     ---------------
