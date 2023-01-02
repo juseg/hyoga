@@ -73,10 +73,15 @@ class Downloader:
         # create directory if missing
         os.makedirs(os.path.dirname(path), exist_ok=True)
 
-        # download file
-        with open(path, 'wb') as binaryfile:
+        # open url and raise any http error
+        with requests.get(url, stream=True, timeout=5) as request:
+            request.raise_for_status()
+
+            # download file chunks
             print(f"downloading {url}...")
-            binaryfile.write(requests.get(url, timeout=5).content)
+            with open(path, 'wb') as binaryfile:
+                for chunk in request.iter_content(chunk_size=1024**2):
+                    binaryfile.write(chunk)
 
 
 class CacheDownloader(Downloader):
@@ -130,7 +135,8 @@ class ArchiveDownloader(CacheDownloader):
 
         # save archive as named online
         outdir, basename = os.path.split(path)
-        archivepath = os.path.join(outdir, url.split('/')[-1])
+        # FIXME GEBCO arvhive is just named 'zip'
+        archivepath = os.path.join(outdir, url.rstrip('/').split('/')[-1])
 
         # download it only if missing
         if not super().check(archivepath):
@@ -147,8 +153,27 @@ class ArchiveDownloader(CacheDownloader):
         raise NotImplementedError("This should be implemented in subclasses.")
 
 
+class ZipDownloader(ArchiveDownloader):
+    """
+    Download a zip archive and extract a single file.
+
+    Call parameters
+    ---------------
+    url : str
+        The url of the file to download
+    path : str
+        The path of the extracted file relative to the cache directory.
+    member : str, optional
+        Member file to extract from , default to the basename of ``path``.
+    """
+
+    def deflate(self, archivepath, member, outdir):
+        with zipfile.ZipFile(archivepath, 'r') as archive:
+            archive.extract(member, path=outdir)
+
+
 class ShapeZipDownloader(ArchiveDownloader):
-    """A downloader that extract shapefiles and metafiles from zip archives.
+    """A downloader that extracts shapefiles and metafiles from zip archives.
 
     Call parameters
     ---------------

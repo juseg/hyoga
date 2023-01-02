@@ -7,16 +7,8 @@ Input - ``hyoga.open``
 .. automodule:: hyoga.open
 .. currentmodule:: hyoga.open
 
-Opening example data
---------------------
-
-.. autosummary::
-   :toctree: generated/
-
-   example
-
-Opening local datasets
-----------------------
+Opening local data
+------------------
 
 .. autosummary::
    :toctree: generated/
@@ -24,6 +16,17 @@ Opening local datasets
    dataset
    mfdataset
    subdataset
+
+
+Opening online data
+-------------------
+
+.. autosummary::
+   :toctree: generated/
+
+   bootstrap
+   example
+
 
 Opening vector data
 -------------------

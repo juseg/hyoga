@@ -47,7 +47,7 @@ v0.3.x Inputs
 -------------
 
 - |-| :func:`hyoga.open.atmosphere`
-- |-| :func:`hyoga.open.surface`
+- |x| :func:`hyoga.open.bootstrap`
 - |-| :func:`hyoga.open.timeseries`
 
 v0.2.x Cartography
