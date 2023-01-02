@@ -21,6 +21,17 @@
 What's new
 ==========
 
+.. _v0.3.0:
+
+v0.3.0 (unreleased)
+-------------------
+
+New features
+~~~~~~~~~~~~
+
+- Add :func:`hyoga.open.bootstrap` to open global elevation data from GEBCO as
+  bootstrapping data for PISM (:issue:`1`, :pull:`51`).
+
 .. _v0.2.2:
 
 v0.2.2 (16 Dec. 2022)
