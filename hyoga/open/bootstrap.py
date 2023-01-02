@@ -22,8 +22,9 @@ def _download_gebco():
     return filepath
 
 
-def surface(crs, extent, resolution=1e3):
-    """Open online surface (bootstrapping) data.
+def bootstrap(crs, extent, resolution=1e3):
+    """
+    Open bootstrapping data from online datasets for PISM.
 
     Currently a single dataset (GEBCO) is supported.
 
@@ -43,7 +44,8 @@ def surface(crs, extent, resolution=1e3):
     -------
     ds : Dataset
         The resulting dataset containing surface variables with the requested
-        ``crs``, ``extent``, and ``resolution``.
+        ``crs``, ``extent``, and ``resolution``. Use ``ds.to_netcdf()`` to
+        export as PISM bootstrapping file.
     """
 
     # open global data (use decode_coords='all' to read grid_mapping attribute)
