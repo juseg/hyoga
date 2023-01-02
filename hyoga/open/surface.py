@@ -25,10 +25,9 @@ def _download_gebco():
 def surface(crs, extent, resolution=1e3):
     """Open online surface data."""
 
-    # open global data
+    # open global data (use decode_coords='all' to read grid_mapping attribute)
     filepath = _download_gebco()
-    ds = xr.open_dataset(filepath)
-    ds = ds.rio.write_crs(ds.crs.epsg_code)
+    ds = xr.open_dataset(filepath, decode_coords='all')
 
     # clip, reproject and clip again
     west, east, south, north = extent
