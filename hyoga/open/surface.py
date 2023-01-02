@@ -35,6 +35,9 @@ def surface(crs, extent, resolution=1e3):
     ds = ds.rio.reproject(crs, resolution=resolution)
     ds = ds.rio.clip_box(west, south, east, north)
 
+    # flip data to increasing y-coord (needed by PISM)
+    ds = ds.isel(y=slice(None, None, -1))
+
     # set better standard name
     ds.elevation.attrs.update(standard_name='bedrock_altitude')
 
