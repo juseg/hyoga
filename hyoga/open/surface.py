@@ -23,7 +23,28 @@ def _download_gebco():
 
 
 def surface(crs, extent, resolution=1e3):
-    """Open online surface data."""
+    """Open online surface (bootstrapping) data.
+
+    Currently a single dataset (GEBCO) is supported.
+
+    Parameters
+    ----------
+    crs : str
+        Coordinate reference system for the resulting dataset as OGC WKT or
+        Proj.4 string, will be passed to Dataset.rio.reproject.
+    extent : (west, east, south, north)
+        Extent for the resulting dataset in projected coordinates given by
+        ``crs``, will be passed to Dataset.rio.clip_box.
+    resolution : float, optional
+        Resolution for the output dataset in projected coordinates given by
+        ``crs``, will be passed to Dataset.rio.reproject.
+
+    Returns
+    -------
+    ds : Dataset
+        The resulting dataset containing surface variables with the requested
+        ``crs``, ``extent``, and ``resolution``.
+    """
 
     # open global data (use decode_coords='all' to read grid_mapping attribute)
     filepath = _download_gebco()
