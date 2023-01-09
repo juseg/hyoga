@@ -30,7 +30,7 @@ New features
 ~~~~~~~~~~~~
 
 - Add :func:`hyoga.open.bootstrap` to open global elevation data from GEBCO as
-  bootstrapping data for PISM (:issue:`1`, :pull:`51`).
+  bootstrapping data for PISM (:issue:`1`, :pull:`51`, :issue:`54`, pull:`55`).
 
 .. _v0.2.2:
 
