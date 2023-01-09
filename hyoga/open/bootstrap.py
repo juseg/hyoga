@@ -7,6 +7,7 @@ for predefined domains, including altitude, ice thickness and geothermal heat
 flux data.
 """
 
+import affine
 import xarray as xr
 import rioxarray  # noqa pylint: disable=unused-import
 
@@ -55,11 +56,12 @@ def bootstrap(crs, extent, resolution=1e3):
     # clip, reproject and clip again
     west, east, south, north = extent
     ds = ds.rio.clip_box(west, south, east, north, crs=crs)
-    ds = ds.rio.reproject(crs, resolution=resolution)
+    bounds = ds.rio.transform_bounds(crs)
+    xoffset = bounds[0] - bounds[0] % resolution
+    yoffset = bounds[1] - bounds[1] % resolution
+    transform = affine.Affine(resolution, 0, xoffset, 0, resolution, yoffset)
+    ds = ds.rio.reproject(crs, transform=transform)  # resampling=1
     ds = ds.rio.clip_box(west, south, east, north)
-
-    # flip data to increasing y-coord (needed by PISM)
-    ds = ds.isel(y=slice(None, None, -1))
 
     # set better standard name
     ds.elevation.attrs.update(standard_name='bedrock_altitude')
