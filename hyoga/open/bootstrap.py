@@ -60,7 +60,7 @@ def bootstrap(crs, extent, resolution=1e3):
     xoffset = bounds[0] - bounds[0] % resolution
     yoffset = bounds[1] - bounds[1] % resolution
     transform = affine.Affine(resolution, 0, xoffset, 0, resolution, yoffset)
-    ds = ds.rio.reproject(crs, transform=transform)  # resampling=1
+    ds = ds.rio.reproject(crs, transform=transform, resampling=1)
     ds = ds.rio.clip_box(west, south, east, north)
 
     # set better standard name
