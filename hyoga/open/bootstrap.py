@@ -7,6 +7,7 @@ for predefined domains, including altitude, ice thickness and geothermal heat
 flux data.
 """
 
+import affine
 import xarray as xr
 import rioxarray  # noqa pylint: disable=unused-import
 
@@ -20,6 +21,19 @@ def _download_gebco():
         'https://www.bodc.ac.uk/data/open_download/gebco/'
         'gebco_2022_sub_ice_topo/zip/', 'gebco/GEBCO_2022_sub_ice_topo.nc')
     return filepath
+
+
+def _reproject_data_array(da, crs, extent, resolution):
+    """Reproject data array to exact bounds via affine transform."""
+    west, east, south, north = extent
+    da = da.rio.clip_box(west, south, east, north, crs=crs)
+    bounds = da.rio.transform_bounds(crs)
+    xoffset = bounds[0] - bounds[0] % resolution
+    yoffset = bounds[1] - bounds[1] % resolution
+    transform = affine.Affine(resolution, 0, xoffset, 0, resolution, yoffset)
+    da = da.rio.reproject(crs, transform=transform, resampling=1)
+    da = da.rio.clip_box(west, south, east, north)
+    return da
 
 
 def bootstrap(crs, extent, resolution=1e3):
@@ -50,19 +64,13 @@ def bootstrap(crs, extent, resolution=1e3):
 
     # open global data (use decode_coords='all' to read grid_mapping attribute)
     filepath = _download_gebco()
-    ds = xr.open_dataset(filepath, decode_coords='all')
+    da = xr.open_dataarray(filepath, decode_coords='all', decode_cf=True)
 
-    # clip, reproject and clip again
-    west, east, south, north = extent
-    ds = ds.rio.clip_box(west, south, east, north, crs=crs)
-    ds = ds.rio.reproject(crs, resolution=resolution)
-    ds = ds.rio.clip_box(west, south, east, north)
-
-    # flip data to increasing y-coord (needed by PISM)
-    ds = ds.isel(y=slice(None, None, -1))
+    # reproject to match bounds
+    da = _reproject_data_array(da, crs, extent, resolution)
 
     # set better standard name
-    ds.elevation.attrs.update(standard_name='bedrock_altitude')
+    da.attrs.update(standard_name='bedrock_altitude')
 
-    # return projected dataset
-    return ds
+    # return as dataset
+    return da.to_dataset()
