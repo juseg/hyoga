@@ -18,11 +18,29 @@ import hyoga.open.downloader
 
 def _open_elevation(source='gebco'):
     """Open elevation data (bedrock or surface) from online source."""
-    downloader = hyoga.open.downloader.ZipDownloader()
-    filepath = downloader(
-        'https://www.bodc.ac.uk/data/open_download/gebco/'
-        'gebco_2022_sub_ice_topo/zip/', 'gebco/GEBCO_2022_sub_ice_topo.nc')
-    da = xr.open_dataarray(filepath, decode_coords='all', decode_cf=True)
+
+    # GEBCO global elevation data
+    if source == 'gebco':
+        downloader = hyoga.open.downloader.ZipDownloader()
+        path = downloader(
+            'https://www.bodc.ac.uk/data/open_download/gebco/'
+            'gebco_2022_sub_ice_topo/zip/', 'gebco/GEBCO_2022_sub_ice_topo.nc')
+        da = xr.open_dataarray(path, decode_coords='all', decode_cf=True)
+
+    # CHELSA climate data input DEM
+    elif source == 'chelsa':
+        downloader = hyoga.open.downloader.CacheDownloader()
+        path = downloader(
+            'https://os.zhdk.cloud.switch.ch/envicloud/chelsa/chelsa_V2/'
+            'GLOBAL/input/dem_latlong.nc', 'chelsa/dem_latlong.nc')
+        da = xr.open_dataarray(path, decode_coords='all')
+        da = da.isel(lat=slice(None, None, -1))
+
+    # invalid sources
+    else:
+        raise ValueError(f'{source} is not a valid elevation data source.')
+
+    # return selected data array
     return da
 
 
