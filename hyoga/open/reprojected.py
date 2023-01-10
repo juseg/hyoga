@@ -44,6 +44,31 @@ def _open_elevation(source='gebco'):
     return da
 
 
+def _open_climatology(source='chelsa', variable='tas'):
+    """Open monthly climatology (temperature or precip) from online source."""
+
+    # CHELSA 1981-2010 global climatologies
+    if source == 'chelsa':
+        downloader = hyoga.open.downloader.CacheDownloader()
+        basenames = (
+            f'CHELSA_{variable}_{month+1:02d}_1981-2010_V.2.1.tif'
+            for month in range(12))
+        paths = (downloader(
+            'https://os.zhdk.cloud.switch.ch/envicloud/chelsa/chelsa_V2/'
+            f'GLOBAL/climatologies/1981-2010/{variable}/{basename}',
+            f'chelsa/{basename}') for basename in basenames)
+        ds = xr.open_mfdataset(
+            paths, combine='nested', concat_dim='time', decode_cf=True)
+        da = ds.band_data.squeeze()
+
+    # invalid sources
+    else:
+        raise ValueError(f'{source} is not a valid climatology source.')
+
+    # return selected data array
+    return da
+
+
 def _reproject_data_array(da, crs, extent, resolution):
     """Reproject data array to exact bounds via affine transform."""
     west, east, south, north = extent
