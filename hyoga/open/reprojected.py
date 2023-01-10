@@ -9,19 +9,21 @@ Geographic reprojection is handled by rioxarray.
 """
 
 import affine
+import numpy as np
 import xarray as xr
 import rioxarray  # noqa pylint: disable=unused-import
 
 import hyoga.open.downloader
 
 
-def _download_gebco():
-    """Download GEBCO sub-ice bathymetric and topographic data."""
+def _open_elevation(source='gebco'):
+    """Open elevation data (bedrock or surface) from online source."""
     downloader = hyoga.open.downloader.ZipDownloader()
     filepath = downloader(
         'https://www.bodc.ac.uk/data/open_download/gebco/'
         'gebco_2022_sub_ice_topo/zip/', 'gebco/GEBCO_2022_sub_ice_topo.nc')
-    return filepath
+    da = xr.open_dataarray(filepath, decode_coords='all', decode_cf=True)
+    return da
 
 
 def _reproject_data_array(da, crs, extent, resolution):
@@ -63,11 +65,8 @@ def bootstrap(crs, extent, resolution=1e3):
         export as PISM bootstrapping file.
     """
 
-    # open global data (use decode_coords='all' to read grid_mapping attribute)
-    filepath = _download_gebco()
-    da = xr.open_dataarray(filepath, decode_coords='all', decode_cf=True)
-
-    # reproject to match bounds
+    # open reprojected elevation data
+    da = _open_elevation(source='gebco')
     da = _reproject_data_array(da, crs, extent, resolution)
 
     # set better standard name
