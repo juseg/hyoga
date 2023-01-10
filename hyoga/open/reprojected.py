@@ -2,9 +2,10 @@
 # GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
 """
-This module contains a function to open surface-level bootstrapping datasets
-for predefined domains, including altitude, ice thickness and geothermal heat
-flux data.
+This module contain function to open reprojected raster from online sources
+stored in the hyoga cache directory. The resulting datasets can be exported as
+PISM input files (bootstrapping and atmosphere files) using `ds.to_netcdf()`.
+Geographic reprojection is handled by rioxarray.
 """
 
 import affine
