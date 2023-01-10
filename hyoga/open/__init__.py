@@ -9,10 +9,10 @@ from .example import example
 from .local import dataset, mfdataset, subdataset
 from .naturalearth import natural_earth
 from .paleoglaciers import paleoglaciers
-from .reprojected import bootstrap
+from .reprojected import atmosphere, bootstrap
 
 __all__ = [
-    'bootstrap',
+    'atmosphere', 'bootstrap',
     'example',
     'dataset', 'mfdataset', 'subdataset',
     'natural_earth',

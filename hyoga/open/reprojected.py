@@ -82,6 +82,50 @@ def _reproject_data_array(da, crs, extent, resolution):
     return da
 
 
+def atmosphere(crs, extent, resolution=1e3):
+    """Open atmospheric data from online datasets for PISM."""
+
+    # open reprojected online data
+    temp = _open_climatology(variable='tas')
+    temp = _reproject_data_array(temp, crs, extent, resolution)
+    prec = _open_climatology(variable='pr')
+    prec = _reproject_data_array(prec, crs, extent, resolution)
+    elev = _open_elevation(source='chelsa')
+    elev = _reproject_data_array(elev, crs, extent, resolution)
+
+    # combine into dataset
+    ds = xr.Dataset({
+        'air_temp': temp,
+        'precipitation': prec,
+        'elevation': elev})
+
+    # assign time coordinate and bounds
+    months = np.array([31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31])
+    bounds = np.stack([months.cumsum()-months[0], months.cumsum()]).T
+    ds = ds.assign_coords(
+        time=(('time'), bounds[:, 0]),
+        time_bounds=(('time', 'nv'), bounds))
+    ds.time.attrs.update(
+        bounds='time_bounds', calendar='noleap', units='days since 1-1-1')
+
+    # convert precipitation to kg m-2 day-1
+    ds['precipitation'] /= xr.DataArray(months, coords={'time': ds.time})
+
+    # set variable attributes
+    ds.air_temp.attrs.update(
+        long_name='near-surface air temperature',
+        standard_name='air_temperature', units='degC')
+    ds.precipitation.attrs.update(
+        long_name='mean annual precipitation rate',
+        standard_name='precipitation_flux', units='kg m-2 day-1')
+    ds.elevation.attrs.update(
+        long_name='ice surface altitude',
+        standard_name='surface_altitude', units='m')
+
+    # return projected dataset
+    return ds
+
+
 def bootstrap(crs, extent, resolution=1e3):
     """
     Open bootstrapping data from online datasets for PISM.
