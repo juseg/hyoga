@@ -191,7 +191,7 @@ def atmosphere(crs, extent, resolution=1e3):
     return ds
 
 
-def bootstrap(crs, extent, resolution=1e3):
+def bootstrap(crs, extent, bedrock=None, surface='gebco', resolution=1e3):
     """
     Open bootstrapping data from online datasets for PISM.
 
@@ -226,15 +226,24 @@ def bootstrap(crs, extent, resolution=1e3):
         Name of ice thickess dataset, default to none?
     """
 
-    # open reprojected elevation data
-    da = _open_elevation(source='gebco')
-    da = _reproject_data_array(da, crs, extent, resolution)
+    # initialize empty dataset
+    ds = xr.Dataset()
 
-    # set better standard name
-    da.attrs.update(standard_name='bedrock_altitude')
+    # add reprojected bedrock altitude
+    if bedrock is not None:
+        da = _open_elevation(source=bedrock)
+        da = _reproject_data_array(da, crs, extent, resolution)
+        da.attrs.update(standard_name='bedrock_altitude')
+        ds = ds.assign(bedrock=da)
 
-    # convert to dataset and clear scaling
-    ds = da.to_dataset()
+    # add reprojected surface altitude
+    if surface is not None:
+        da = _open_elevation(source=surface)
+        da = _reproject_data_array(da, crs, extent, resolution)
+        da.attrs.update(standard_name='surface_altitude')
+        ds = ds.assign(surface=da)
+
+    # clear scaling attributes
     _clear_scaling_attributes(ds)
 
     # return projected dataset
