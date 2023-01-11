@@ -34,6 +34,12 @@ New features
 - Add :func:`hyoga.open.atmosphere` to open monthly climatologies from CHELSA
   as atmospheric data for PISM (:issue:`3`, :pull:`56`).
 
+Bug fixes
+~~~~~~~~~
+
+- Add workaround for scipy 0.10.0 bug in profile interpolation with mixed data
+  types (https://github.com/scipy/scipy/issues/17718, :issue:`58`, :pr:`59`).
+
 .. _v0.2.2:
 
 v0.2.2 (16 Dec. 2022)
