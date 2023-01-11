@@ -29,8 +29,9 @@ v0.3.0 (unreleased)
 New features
 ~~~~~~~~~~~~
 
-- Add :func:`hyoga.open.bootstrap` to open global elevation data from GEBCO as
-  bootstrapping data for PISM (:issue:`1`, :pull:`51`, :issue:`54`, pull:`55`).
+- Add :func:`hyoga.open.bootstrap` to open global elevation data from either
+  GEBCO or CHELSA as bootstrapping data for PISM (:issue:`1`, :pull:`51`,
+  :issue:`54`, pull:`55`, :issue:`57`, :pull:`60`).
 - Add :func:`hyoga.open.atmosphere` to open monthly climatologies from CHELSA
   as atmospheric data for PISM (:issue:`3`, :pull:`56`).
 
