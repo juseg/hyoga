@@ -38,7 +38,7 @@ Bug fixes
 ~~~~~~~~~
 
 - Add workaround for scipy 0.10.0 bug in profile interpolation with mixed data
-  types (https://github.com/scipy/scipy/issues/17718, :issue:`58`, :pr:`59`).
+  types (https://github.com/scipy/scipy/issues/17718, :issue:`58`, :pull:`59`).
 
 .. _v0.2.2:
 
