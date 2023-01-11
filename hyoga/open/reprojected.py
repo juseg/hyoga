@@ -91,7 +91,49 @@ def _reproject_data_array(da, crs, extent, resolution):
 
 
 def atmosphere(crs, extent, resolution=1e3):
-    """Open atmospheric data from online datasets for PISM."""
+    """
+    Open atmospheric data from online datasets for PISM.
+
+    Currently a single dataset (CHELSA) is supported.
+
+    Parameters
+    ----------
+    crs : str
+        Coordinate reference system for the resulting dataset as OGC WKT or
+        Proj.4 string, will be passed to Dataset.rio.reproject.
+    extent : (west, east, south, north)
+        Extent for the resulting dataset in projected coordinates given by
+        ``crs``, will be passed to Dataset.rio.clip_box.
+    resolution : float, optional
+        Resolution for the output dataset in projected coordinates given by
+        ``crs``, will be passed to Dataset.rio.reproject.
+
+    Returns
+    -------
+    ds : Dataset
+        The resulting dataset containing surface variables with the requested
+        ``crs``, ``extent``, and ``resolution``. Use ``ds.to_netcdf()`` to
+        export as PISM bootstrapping file.
+
+    Notes
+    -----
+
+    The **calendar** is set to 'noleap'. The 365-day year is divided into
+    twelve unequal months, including a 28-day February month. This the default
+    calendar in PISM. Other calendars could be added in future versions.
+
+    To avoid ambiguity, **time units** are set to 'days'. A Udunits 'year' is
+    always 365.242198781 days, not a calendar year. A Udunits 'month' is one
+    twelfth of that, not a calendar month. In addition, Python's ``cftime``
+    (and thus xarray) does not understand the unit '365 days'.
+
+    Similarly, precipitation rates are converted to daily. According to CHELSA
+    docs monthly climatologies "represent averages for the calendar month". The
+    1981--2010 period contains 6 leap years over 30 years, so the average
+    February lasts 28.2 days. Due to the no-leap calendar, February
+    precipitations are condensed over a slightly shorter period of 28 days,
+    which overestimates daily rates. However, the total amount is unaffected.
+    """
 
     # open reprojected online data
     temp = _open_climatology(variable='tas')
