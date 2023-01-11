@@ -230,11 +230,10 @@ def bootstrap(crs, extent, bedrock='gebco', resolution=1e3):
     ds = xr.Dataset()
 
     # add reprojected bedrock altitude
-    if bedrock is not None:
-        da = _open_elevation(source=bedrock)
-        da = _reproject_data_array(da, crs, extent, resolution)
-        da.attrs.update(standard_name='bedrock_altitude')
-        ds = ds.assign(bedrock=da)
+    da = _open_elevation(source=bedrock)
+    da = _reproject_data_array(da, crs, extent, resolution)
+    da.attrs.update(standard_name='bedrock_altitude')
+    ds = ds.assign(bedrock=da)
 
     # clear scaling attributes
     _clear_scaling_attributes(ds)
