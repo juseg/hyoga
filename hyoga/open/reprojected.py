@@ -195,8 +195,6 @@ def bootstrap(crs, extent, bedrock=None, surface='gebco', resolution=1e3):
     """
     Open bootstrapping data from online datasets for PISM.
 
-    Currently a single dataset (GEBCO) is supported.
-
     Parameters
     ----------
     crs : str
@@ -205,6 +203,13 @@ def bootstrap(crs, extent, bedrock=None, surface='gebco', resolution=1e3):
     extent : (west, east, south, north)
         Extent for the resulting dataset in projected coordinates given by
         ``crs``, will be passed to Dataset.rio.clip_box.
+    bedrock : 'chelsa' or 'gebco', optional
+        Bedrock altitude data source, default to None:
+        - 'chelsa': global 1-arc-second CHELSA input DEM from GMTED2010.
+        - 'gebco': global 15-arc-second elevation data from GEBCO.
+    surface : 'chelsa' or 'gebco', optional
+        Surface altitude data source, with same options as for the bedrock
+        altitude. Default to 'gebco'.
     resolution : float, optional
         Resolution for the output dataset in projected coordinates given by
         ``crs``, will be passed to Dataset.rio.reproject.
@@ -218,8 +223,6 @@ def bootstrap(crs, extent, bedrock=None, surface='gebco', resolution=1e3):
 
     Future parameters
     -----------------
-    surface : 'gebco', optional
-        Name of ice surface altitude dataset, default to 'gebco'.
     geoflux : ?, optional
         Name of geothermal heat flux dataset, default to none?
     thickness : ?, optional
