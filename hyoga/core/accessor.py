@@ -468,8 +468,24 @@ class HyogaDataset:
             x = x.interp(d=dist, method='linear')
             y = y.interp(d=dist, method='linear')
 
+        # temporary workaround for scipy 1.10.0 issue 17718
+        ds = self._ds
+        if scipy.__version__ == "1.10.0":
+            x_dtype = x.dtype
+            y_dtype = y.dtype
+            x = x.astype('float64')
+            y = y.astype('float64')
+            ds = ds.astype('float64')
+
         # interpolate dataset to new coordinates
-        ds = self._ds.interp(x=x, y=y, method='linear', assume_sorted=True)
+        ds = ds.interp(x=x, y=y, method='linear', assume_sorted=True)
+
+        # return to original precision (scipy 1.10.0 issue 17718)
+        if scipy.__version__ == "1.10.0":
+            x = x.astype(x_dtype)
+            y = y.astype(y_dtype)
+            for var in ds:
+                ds[var] = ds[var].astype(self._ds[var].dtype)
 
         # set new coordinate attributes
         ds.d.attrs.update(long_name='distance along profile')
