@@ -46,7 +46,7 @@ v0.4.x Domains
 v0.3.x Inputs
 -------------
 
-- |-| :func:`hyoga.open.atmosphere`
+- |x| :func:`hyoga.open.atmosphere`
 - |x| :func:`hyoga.open.bootstrap`
 - |-| :func:`hyoga.open.timeseries`
 

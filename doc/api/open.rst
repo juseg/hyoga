@@ -24,6 +24,7 @@ Opening online data
 .. autosummary::
    :toctree: generated/
 
+   atmosphere
    bootstrap
    example
 
