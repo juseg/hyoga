@@ -16,6 +16,14 @@ import rioxarray  # noqa pylint: disable=unused-import
 import hyoga.open.downloader
 
 
+def _clear_scaling_attributes(ds):
+    """Clear scaled encoding attributes not understood by PISM."""
+    for var in ds.data_vars.values():
+        var.encoding.pop('add_offset', None)
+        var.encoding.pop('scale_factor', None)
+        var.encoding.pop('dtype', None)
+
+
 def _open_elevation(source='gebco'):
     """Open elevation data (bedrock or surface) from online source."""
 
@@ -122,6 +130,9 @@ def atmosphere(crs, extent, resolution=1e3):
         long_name='ice surface altitude',
         standard_name='surface_altitude', units='m')
 
+    # clear scaling attributes
+    _clear_scaling_attributes(ds)
+
     # return projected dataset
     return ds
 
@@ -159,5 +170,9 @@ def bootstrap(crs, extent, resolution=1e3):
     # set better standard name
     da.attrs.update(standard_name='bedrock_altitude')
 
-    # return as dataset
-    return da.to_dataset()
+    # convert to dataset and clear scaling
+    ds = da.to_dataset()
+    _clear_scaling_attributes(ds)
+
+    # return projected dataset
+    return ds
