@@ -11,3 +11,4 @@ Xarray datasets
    shading
    vectors
    masking
+   refining
