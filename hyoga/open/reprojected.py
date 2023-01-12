@@ -79,14 +79,13 @@ def _open_climatology(source='chelsa', variable='tas'):
 
 def _reproject_data_array(da, crs, extent, resolution):
     """Reproject data array to exact bounds via affine transform."""
-    west, east, south, north = extent
-    da = da.rio.clip_box(west, south, east, north, crs=crs)
+    da = da.rio.clip_box(crs=crs, *extent)
     bounds = da.rio.transform_bounds(crs)
     xoffset = bounds[0] - bounds[0] % resolution
     yoffset = bounds[1] - bounds[1] % resolution
     transform = affine.Affine(resolution, 0, xoffset, 0, resolution, yoffset)
     da = da.rio.reproject(crs, transform=transform, resampling=1)
-    da = da.rio.clip_box(west, south, east, north)
+    da = da.rio.clip_box(*extent)
     return da
 
 
@@ -101,7 +100,7 @@ def atmosphere(crs, extent, resolution=1e3):
     crs : str
         Coordinate reference system for the resulting dataset as OGC WKT or
         Proj.4 string, will be passed to Dataset.rio.reproject.
-    extent : (west, east, south, north)
+    extent : (west, south, east, north)
         Extent for the resulting dataset in projected coordinates given by
         ``crs``, will be passed to Dataset.rio.clip_box.
     resolution : float, optional
@@ -200,7 +199,7 @@ def bootstrap(crs, extent, bedrock='gebco', resolution=1e3):
     crs : str
         Coordinate reference system for the resulting dataset as OGC WKT or
         Proj.4 string, will be passed to Dataset.rio.reproject.
-    extent : (west, east, south, north)
+    extent : (west, south, east, north)
         Extent for the resulting dataset in projected coordinates given by
         ``crs``, will be passed to Dataset.rio.clip_box.
     bedrock : 'chelsa' or 'gebco', optional
