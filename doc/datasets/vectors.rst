@@ -33,10 +33,13 @@ coastline at the highest available scale:
 
 .. warning::
 
-   To reproject Natural Earth data in the gridded dataset projection, the
-   dataset Coordinate Reference System is sought in a ``ds.proj4`` attribute,
-   typically a PROJ4 string but possibly any other format understood by
-   :meth:`geopandas.GeoDataFrame.to_crs`.
+   To reproject vector data in the gridded dataset projection, a Coordinate
+   Reference System is required. It can be provided in different ways:
+
+   - Using ``decode_coords='all'`` when opening CF-compliant data with xarray.
+   - Setting the CRS with rioxarray using :meth:`.Dataset.rio.set_crs`.
+   - In a :attr:`Dataset.proj4` attribute, as a PROJ string or any other format
+     understood by :meth:`geopandas.GeoDataFrame.to_crs`.
 
 Any other Natural Earth theme from the `Natural Earth downloads`_ page can be
 picked, and the usual matplotlib styling keyword arguments are available. For
