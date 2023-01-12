@@ -514,9 +514,12 @@ class HyogaPlotMethods:
         # TODO: open geopandas issue to allow gdf.plot(autolim=False)
         kwargs['ax'].set_autoscale_on(False)
 
+        # get dataset crs (or proj4 attr for backward compat)
+        crs = self._ds.rio.crs or self._ds.proj4
+
         # open natural earth data, reproject and plot
         gdf = hyoga.open.natural_earth(theme, category=category, scale=scale)
-        return gdf.to_crs(self._ds.proj4).plot(**kwargs)
+        return gdf.to_crs(crs).plot(**kwargs)
 
     def paleoglaciers(self, source='ehl11', **kwargs):
         """Plot Last Glacial Maximum paleoglacier extent.
@@ -545,9 +548,12 @@ class HyogaPlotMethods:
         # TODO: open geopandas issue to allow gdf.plot(autolim=False)
         kwargs['ax'].set_autoscale_on(False)
 
+        # get dataset crs (or proj4 attr for backward compat)
+        crs = self._ds.rio.crs or self._ds.proj4
+
         # open paleoglaciers data, reproject and plot
         gdf = hyoga.open.paleoglaciers(source=source)
-        return gdf.to_crs(self._ds.proj4).plot(**kwargs)
+        return gdf.to_crs(crs).plot(**kwargs)
 
     # Axes decorations
     # ----------------
