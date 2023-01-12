@@ -77,19 +77,19 @@ def _open_climatology(source='chelsa', variable='tas'):
     return da
 
 
-def _reproject_data_array(da, crs, extent, resolution):
+def _reproject_data_array(da, crs, bounds, resolution):
     """Reproject data array to exact bounds via affine transform."""
-    da = da.rio.clip_box(crs=crs, *extent)
+    da = da.rio.clip_box(crs=crs, *bounds)
     bounds = da.rio.transform_bounds(crs)
     xoffset = bounds[0] - bounds[0] % resolution
     yoffset = bounds[1] - bounds[1] % resolution
     transform = affine.Affine(resolution, 0, xoffset, 0, resolution, yoffset)
     da = da.rio.reproject(crs, transform=transform, resampling=1)
-    da = da.rio.clip_box(*extent)
+    da = da.rio.clip_box(*bounds)
     return da
 
 
-def atmosphere(crs, extent, resolution=1e3):
+def atmosphere(crs, bounds, resolution=1e3):
     """
     Open atmospheric data from online datasets for PISM.
 
@@ -100,7 +100,7 @@ def atmosphere(crs, extent, resolution=1e3):
     crs : str
         Coordinate reference system for the resulting dataset as OGC WKT or
         Proj.4 string, will be passed to Dataset.rio.reproject.
-    extent : (west, south, east, north)
+    bounds : (west, south, east, north)
         Extent for the resulting dataset in projected coordinates given by
         ``crs``, will be passed to Dataset.rio.clip_box.
     resolution : float, optional
@@ -111,7 +111,7 @@ def atmosphere(crs, extent, resolution=1e3):
     -------
     ds : Dataset
         The resulting dataset containing surface variables with the requested
-        ``crs``, ``extent``, and ``resolution``. Use ``ds.to_netcdf()`` to
+        ``crs``, ``bounds``, and ``resolution``. Use ``ds.to_netcdf()`` to
         export as PISM bootstrapping file.
 
     Notes
@@ -136,7 +136,7 @@ def atmosphere(crs, extent, resolution=1e3):
     Future parameters
     -----------------
     domain : str, optional
-        Modelling domain defining geographic projection and extent.
+        Modelling domain defining geographic projection and bounds.
     temperature : 'chelsa', optional
         Near-surface air temperature data source, default to 'chelsa'.
     precipitation : 'chelsa', optional
@@ -148,11 +148,11 @@ def atmosphere(crs, extent, resolution=1e3):
 
     # open reprojected online data
     temp = _open_climatology(variable='tas')
-    temp = _reproject_data_array(temp, crs, extent, resolution)
+    temp = _reproject_data_array(temp, crs, bounds, resolution)
     prec = _open_climatology(variable='pr')
-    prec = _reproject_data_array(prec, crs, extent, resolution)
+    prec = _reproject_data_array(prec, crs, bounds, resolution)
     elev = _open_elevation(source='chelsa')
-    elev = _reproject_data_array(elev, crs, extent, resolution)
+    elev = _reproject_data_array(elev, crs, bounds, resolution)
 
     # combine into dataset
     ds = xr.Dataset({
@@ -190,7 +190,7 @@ def atmosphere(crs, extent, resolution=1e3):
     return ds
 
 
-def bootstrap(crs, extent, bedrock='gebco', resolution=1e3):
+def bootstrap(crs, bounds, bedrock='gebco', resolution=1e3):
     """
     Open bootstrapping data from online datasets for PISM.
 
@@ -199,7 +199,7 @@ def bootstrap(crs, extent, bedrock='gebco', resolution=1e3):
     crs : str
         Coordinate reference system for the resulting dataset as OGC WKT or
         Proj.4 string, will be passed to Dataset.rio.reproject.
-    extent : (west, south, east, north)
+    bounds : (west, south, east, north)
         Extent for the resulting dataset in projected coordinates given by
         ``crs``, will be passed to Dataset.rio.clip_box.
     bedrock : 'chelsa' or 'gebco', optional
@@ -214,7 +214,7 @@ def bootstrap(crs, extent, bedrock='gebco', resolution=1e3):
     -------
     ds : Dataset
         The resulting dataset containing surface variables with the requested
-        ``crs``, ``extent``, and ``resolution``. Use ``ds.to_netcdf()`` to
+        ``crs``, ``bounds``, and ``resolution``. Use ``ds.to_netcdf()`` to
         export as PISM bootstrapping file.
 
     Future parameters
@@ -230,7 +230,7 @@ def bootstrap(crs, extent, bedrock='gebco', resolution=1e3):
 
     # add reprojected bedrock altitude
     da = _open_elevation(source=bedrock)
-    da = _reproject_data_array(da, crs, extent, resolution)
+    da = _reproject_data_array(da, crs, bounds, resolution)
     da.attrs.update(standard_name='bedrock_altitude')
     ds = ds.assign(bedrock=da)
 
