@@ -132,19 +132,18 @@ def atmosphere(crs, bounds, resolution=1e3):
     February lasts 28.2 days. Due to the no-leap calendar, February
     precipitations are condensed over a slightly shorter period of 28 days,
     which overestimates daily rates. However, the total amount is unaffected.
-
-    Future parameters
-    -----------------
-    domain : str, optional
-        Modelling domain defining geographic projection and bounds.
-    temperature : 'chelsa', optional
-        Near-surface air temperature data source, default to 'chelsa'.
-    precipitation : 'chelsa', optional
-        Precipitation rate data source, default to same as temperature.
-    elevation : 'chelsa', optional
-        Surface elevation for time-lapse corrections, default to same as
-        temperature.
     """
+
+    # future parameters:
+    # - domain : str, optional
+    #     Modelling domain defining geographic projection and bounds.
+    # - temperature : 'chelsa', optional
+    #     Near-surface air temperature data source, default to 'chelsa'.
+    # - precipitation : 'chelsa', optional
+    #     Precipitation rate data source, default to same as temperature.
+    # - elevation : 'chelsa', optional
+    #     Surface elevation for time-lapse corrections, default to same as
+    #     temperature.
 
     # open reprojected online data
     temp = _open_climatology(variable='tas')
@@ -216,14 +215,13 @@ def bootstrap(crs, bounds, bedrock='gebco', resolution=1e3):
         The resulting dataset containing surface variables with the requested
         ``crs``, ``bounds``, and ``resolution``. Use ``ds.to_netcdf()`` to
         export as PISM bootstrapping file.
-
-    Future parameters
-    -----------------
-    geoflux : ?, optional
-        Name of geothermal heat flux dataset, default to none?
-    thickness : ?, optional
-        Name of ice thickess dataset, default to none?
     """
+
+    # future parameters
+    # - geoflux : ?, optional
+    #     Name of geothermal heat flux dataset, default to none?
+    # - thickness : ?, optional
+    #     Name of ice thickess dataset, default to none?
 
     # initialize empty dataset
     ds = xr.Dataset()
