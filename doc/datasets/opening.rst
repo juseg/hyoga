@@ -4,8 +4,8 @@
 Opening datasets
 ================
 
-Reading output files
---------------------
+Reading local files
+-------------------
 
 Hyoga acts as a thin wrapper around a much more powerful Python library called
 xarray_. Xarray is used to open a dataset that can be processed by hyoga.
@@ -17,19 +17,41 @@ us with a :class:`xarray.Dataset` object ready to use with hyoga::
    import xarray as xr
    ds = xr.open_dataset('yourfile.nc')
 
-However, for the sake of this documentation, we use an example dataset. This
-will download a PISM output file from an online repository, and store it into a
-``~/.cache/hyoga`` directory so that it can be reused the next time.
-
-.. plot::
-   :context:
-   :nofigs:
-
-   import hyoga
-   ds = hyoga.open.example('pism.alps.out.2d.nc')
-
 .. note::
 
    Hyoga also provides functions to open datasets with an age coordinate in ka
    (see :ref:`api`). However, if possible I recommend to stick with xarray
    functions for the time being.
+
+Opening online data
+-------------------
+
+A central functionality for hyoga consists in opening web-available data in
+custom projections for numerical ice-sheet modelling. Internally, hyoga will
+download the original data, typically global, store a copy in the cache
+directory (``~/.cache/hyoga/``), reproject to the desired modelling domain, and
+return an :class:`xarray.Dataset`.
+
+Currently two types of input datasets are supported: "bootstrapping" and
+"atmospheric". The bootstrapping file contains bedrock and/or surface
+topography. The atmosphere file contains a monthly climatology of air
+temperature and precipitation needed to force a positive degree-day model.
+This nomenclature follows that introduced by PISM, and the resulting datasets
+are ready to export as PISM input files using :meth:`.Dataset.to_netcdf`.
+
+.. currentmodule:: hyoga.open
+
+.. autosummary::
+   :toctree: generated/
+
+   atmosphere
+   bootstrap
+
+.. warning::
+
+   Running these for the first time will download and deflate ca. 12 GB data
+   from the web. Broken or partially downloaded files are not handled and will
+   need to be manually deleted from the cache directory (``~/.cache/hyoga``) in
+   case of interrupted downloads.
+
+.. _xarray: https//xarray.pydata.org
