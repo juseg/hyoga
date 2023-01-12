@@ -26,6 +26,13 @@ What's new
 v0.3.0 (unreleased)
 -------------------
 
+Breaking changes
+~~~~~~~~~~~~~~~~
+
+- Add rioxarray_ as a required dependency (see new features).
+
+.. _rioxarray: https://corteva.github.io/rioxarray
+
 New features
 ~~~~~~~~~~~~
 
@@ -40,6 +47,8 @@ Bug fixes
 
 - Add workaround for scipy 0.10.0 bug in profile interpolation with mixed data
   types (https://github.com/scipy/scipy/issues/17718, :issue:`58`, :pull:`59`).
+- Vector plot methods are now compatible with rioxarray CRS and CF grid mapping
+  (using ``decode_coords='all'``, :issue:`52`, :pull:`61`).
 
 .. _v0.2.2:
 
