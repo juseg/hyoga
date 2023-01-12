@@ -54,4 +54,53 @@ are ready to export as PISM input files using :meth:`.Dataset.to_netcdf`.
    need to be manually deleted from the cache directory (``~/.cache/hyoga``) in
    case of interrupted downloads.
 
+PISM example run
+----------------
+
+The following EPSG code and coordinate bounds describe a Universal Transverse
+Mercator (UTM) zone 32 projection covering the European Alps. This is the
+format for the data used in the :doc:`/examples/index`. ::
+
+   import hyoga
+
+   # UTM-32 projection, WGS 84 datum
+   crs = 'epsg:32632'
+
+   # west, south, east, north bounds
+   bounds = [150e3, 4820e3, 1050e3, 5420e3]
+
+The following will prepare a simple bootstrapping dataset containing bedrock
+topography from GEBCO_ with a horizontal resolution of a 1 km, and save it to
+a PISM-readable NetCDF file::
+
+   ds = hyoga.open.bootstrap(crs=crs, bounds=bounds, resolution=1000)
+   ds.to_netcdf('boot.nc')
+
+For the atmospheric forcing, we reduce the input air temperature by six degrees
+to simulate glacial conditions. The resulting file contains 24 high-resolution,
+monthly temperature and precipitation grid from CHELSA_, hence reprojecting the
+data can take several minutes. ::
+
+   ds = hyoga.open.atmosphere(crs=crs, bounds=bounds, resolution=1000)
+   ds['air_temp'] -= 6
+   ds.to_netcdf('atm.nc')
+
+Both input files are now ready to be used in a simple paleo-glacier modelling
+run on the alps::
+
+   mpiexec -n 4 pismr \
+       -i boot.nc -bootstrap -o run.nc -ys 0 -ye 100 \
+       -atmosphere given,elevation_change \
+           -atmosphere.given.periodic \
+           -atmosphere_given_file atm.nc \
+           -atmosphere_lapse_rate_file atm.nc \
+       -surface pdd \
+           -surface.pdd.std_dev.periodic
+
+Since the input data are global, the ``crs`` and ``bounds`` can be modified to
+run this setup anywhere on Earth. The results can be viewed in e.g. ``ncview``,
+or plotted in hyoga using functionality described in the following pages.
+
 .. _xarray: https//xarray.pydata.org
+.. _CHELSA: https://chelsa-climate.org
+.. _GEBCO: https://www.gebco.net
