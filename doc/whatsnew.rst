@@ -50,6 +50,12 @@ Bug fixes
 - Vector plot methods are now compatible with rioxarray CRS and CF grid mapping
   (using ``decode_coords='all'``, :issue:`52`, :pull:`61`).
 
+Documentation
+~~~~~~~~~~~~~
+
+- Document opening reprojected bootstrapping and atmospheric online data, and
+  rework parts of datasets chapter outline (:issue:`53`, :pull:`63`).
+
 .. _v0.2.2:
 
 v0.2.2 (16 Dec. 2022)

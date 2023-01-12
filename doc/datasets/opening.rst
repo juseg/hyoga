@@ -4,8 +4,8 @@
 Opening datasets
 ================
 
-Reading output files
---------------------
+Reading local files
+-------------------
 
 Hyoga acts as a thin wrapper around a much more powerful Python library called
 xarray_. Xarray is used to open a dataset that can be processed by hyoga.
@@ -17,117 +17,90 @@ us with a :class:`xarray.Dataset` object ready to use with hyoga::
    import xarray as xr
    ds = xr.open_dataset('yourfile.nc')
 
-However, for the sake of this documentation, we use an example dataset. This
-will download a PISM output file from an online repository, and store it into a
-``~/.cache/hyoga`` directory so that it can be reused the next time.
-
-.. plot::
-   :context:
-   :nofigs:
-
-   import hyoga
-   ds = hyoga.open.example('pism.alps.out.2d.nc')
-
 .. note::
 
    Hyoga also provides functions to open datasets with an age coordinate in ka
    (see :ref:`api`). However, if possible I recommend to stick with xarray
    functions for the time being.
 
-Selecting variables
+Opening online data
 -------------------
 
-Xarray itself provides powerful ways to explore, index, subset and aggregate
-datasets. Here again hyoga is only adding a thin layer of functionality. As
-soon as hyoga (or any submodule) has been imported, this new functionality will
-be available in a special ``.hyoga`` attribute called "dataset accessor":
+A central functionality for hyoga consists in opening web-available data in
+custom projections for numerical ice-sheet modelling. Internally, hyoga will
+download the original data, typically global, store a copy in the cache
+directory (``~/.cache/hyoga/``), reproject to the desired modelling domain, and
+return an :class:`xarray.Dataset`.
 
-.. plot::
-   :context:
-   :nofigs:
+Currently two types of input datasets are supported: "bootstrapping" and
+"atmospheric". The bootstrapping file contains bedrock and/or surface
+topography. The atmosphere file contains a monthly climatology of air
+temperature and precipitation needed to force a positive degree-day model.
+This nomenclature follows that introduced by PISM, and the resulting datasets
+are ready to export as PISM input files using :meth:`.Dataset.to_netcdf`.
 
-   ds.hyoga
+.. currentmodule:: hyoga.open
 
-One thing to note in particular, is that hyoga never accesses model variables
-by their "short names". For instance, while ``thk``, refers to the ice
-thickness in PISM, it may refer to a different quantity, or to nothing at all,
-in another ice-sheet model. This is where `CF standard names`_ come into play.
-To access ice thickness by its standard name you may use:
+.. autosummary::
+   :toctree: generated/
 
-.. plot::
-   :context:
-   :nofigs:
+   atmosphere
+   bootstrap
 
-   var = ds.hyoga.getvar('land_ice_thickness')
+.. warning::
 
-If a particular variable is missing, hyoga will additionally try to reconstruct
-it from others, such as the sum of bedrock altitude and ice thickness for
-surface altitude, or the norm of velocity components for its magnitude.
+   Running these for the first time will download and deflate ca. 12 GB data
+   from the web. Broken or partially downloaded files are not handled and will
+   need to be manually deleted from the cache directory (``~/.cache/hyoga``) in
+   case of interrupted downloads.
 
-.. plot::
-   :context:
-   :nofigs:
+PISM example run
+----------------
 
-   ds.hyoga.getvar('surface_altitude')
-   ds.hyoga.getvar('magnitude_of_land_ice_surface_velocity')
+The following EPSG code and coordinate bounds describe a Universal Transverse
+Mercator (UTM) zone 32 projection covering the European Alps. This is the
+format for the data used in the :doc:`/examples/index`. ::
 
-This mechanism can be disabled using ``infer=False``. Because surface altitude
-is not actually present in the example dataset, the following would raise an
-exception::
+   import hyoga
 
-   ds.hyoga.getvar('surface_altitude', infer=False)
+   # UTM-32 projection, WGS 84 datum
+   crs = 'epsg:32632'
 
-Because `CF standard names`_ for land ice variables are relatively recent,
-older ice sheet models may not include them in output metadata. For PISM, a
-mechanism has been implemented to fill (some of) these missing standard names
-during initialization.
+   # west, south, east, north bounds
+   bounds = [150e3, 4820e3, 1050e3, 5420e3]
 
-.. note::
+The following will prepare a simple bootstrapping dataset containing bedrock
+topography from GEBCO_ with a horizontal resolution of a 1 km, and save it to
+a PISM-readable NetCDF file::
 
-   While hyoga has only been tested with PISM so far, I hope it
-   will become compatible with some other glacier and ice sheet models in the
-   future. If you want to make your glacier model compatible with hyoga, please
-   consider implementing `CF standard names`_.
+   ds = hyoga.open.bootstrap(crs=crs, bounds=bounds, resolution=1000)
+   ds.to_netcdf('boot.nc')
 
-Adding new variables
---------------------
+For the atmospheric forcing, we reduce the input air temperature by six degrees
+to simulate glacial conditions. The resulting file contains 24 high-resolution,
+monthly temperature and precipitation grid from CHELSA_, hence reprojecting the
+data can take several minutes. ::
 
-New variables can be added using using xarray_'s dictionary interface or
-methods such as :meth:`xarray.Dataset.assign`. Besides, hyoga provides a
-dataset method to assign new variables by their standard name.
+   ds = hyoga.open.atmosphere(crs=crs, bounds=bounds, resolution=1000)
+   ds['air_temp'] -= 6
+   ds.to_netcdf('atm.nc')
 
-.. plot::
-   :context:
-   :nofigs:
+Both input files are now ready to be used in a simple paleo-glacier modelling
+run on the alps::
 
-   bedrock = ds.hyoga.getvar('bedrock_altitude')
-   thickness = ds.hyoga.getvar('land_ice_thickness')
-   surface = bedrock + thickness
-   new = ds.hyoga.assign(surface_altitude=surface)
+   mpiexec -n 4 pismr \
+       -i boot.nc -bootstrap -o run.nc -ys 0 -ye 100 \
+       -atmosphere given,elevation_change \
+           -atmosphere.given.periodic \
+           -atmosphere_given_file atm.nc \
+           -atmosphere_lapse_rate_file atm.nc \
+       -surface pdd \
+           -surface.pdd.std_dev.periodic
 
-This returns a new dataset including the surface altitude variable. Some
-control on the variable (short) name can be achieved by preceding the
-``assign`` call with :meth:`xarray.DataArray.rename`.
-
-.. plot::
-   :context:
-   :nofigs:
-
-   surface = surface.rename('surface')
-   ds = ds.hyoga.assign(surface_altitude=surface)
-   assert 'surface' in ds
-
-However, this only works if the data does not already contain a variable with
-the standard name ``surface_altitude``. In that case, that variable's data is
-quietly replaced, and the variable is not renamed.
-
-.. plot::
-   :context:
-   :nofigs:
-
-   surface = surface.rename('name_to_ignore')
-   ds = ds.hyoga.assign(surface_altitude=surface)
-   assert 'name_to_ignore' not in ds
+Since the input data are global, the ``crs`` and ``bounds`` can be modified to
+run this setup anywhere on Earth. The results can be viewed in e.g. ``ncview``,
+or plotted in hyoga using functionality described in the following pages.
 
 .. _xarray: https//xarray.pydata.org
-.. _`CF standard names`: http://cfconventions.org/standard-names.html
+.. _CHELSA: https://chelsa-climate.org
+.. _GEBCO: https://www.gebco.net

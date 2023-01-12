@@ -1,8 +1,108 @@
 .. Copyright (c) 2022, Julien Seguinot (juseg.github.io)
 .. GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
-Masking and interpolation
-=========================
+Masking and selection
+=====================
+
+Selecting variables
+-------------------
+
+Xarray itself provides powerful ways to explore, index, subset and aggregate
+datasets. Here again hyoga is only adding a thin layer of functionality. As
+soon as hyoga (or any submodule) has been imported, this new functionality will
+be available in a special ``.hyoga`` attribute called "dataset accessor":
+
+.. plot::
+   :context:
+   :nofigs:
+
+   import hyoga
+   ds = hyoga.open.example('pism.alps.out.2d.nc')
+   ds.hyoga
+
+One thing to note in particular, is that hyoga never accesses model variables
+by their "short names". For instance, while ``thk``, refers to the ice
+thickness in PISM, it may refer to a different quantity, or to nothing at all,
+in another ice-sheet model. This is where `CF standard names`_ come into play.
+To access ice thickness by its standard name you may use:
+
+.. plot::
+   :context:
+   :nofigs:
+
+   var = ds.hyoga.getvar('land_ice_thickness')
+
+If a particular variable is missing, hyoga will additionally try to reconstruct
+it from others, such as the sum of bedrock altitude and ice thickness for
+surface altitude, or the norm of velocity components for its magnitude.
+
+.. plot::
+   :context:
+   :nofigs:
+
+   ds.hyoga.getvar('surface_altitude')
+   ds.hyoga.getvar('magnitude_of_land_ice_surface_velocity')
+
+This mechanism can be disabled using ``infer=False``. Because surface altitude
+is not actually present in the example dataset, the following would raise an
+exception::
+
+   ds.hyoga.getvar('surface_altitude', infer=False)
+
+Because `CF standard names`_ for land ice variables are relatively recent,
+older ice sheet models may not include them in output metadata. For PISM, a
+mechanism has been implemented to fill (some of) these missing standard names
+during initialization.
+
+.. note::
+
+   While hyoga has only been tested with PISM so far, I hope it
+   will become compatible with some other glacier and ice sheet models in the
+   future. If you want to make your glacier model compatible with hyoga, please
+   consider implementing `CF standard names`_.
+
+Adding new variables
+--------------------
+
+New variables can be added using using xarray_'s dictionary interface or
+methods such as :meth:`xarray.Dataset.assign`. Besides, hyoga provides a
+dataset method to assign new variables by their standard name.
+
+.. plot::
+   :context:
+   :nofigs:
+
+   bedrock = ds.hyoga.getvar('bedrock_altitude')
+   thickness = ds.hyoga.getvar('land_ice_thickness')
+   surface = bedrock + thickness
+   new = ds.hyoga.assign(surface_altitude=surface)
+
+This returns a new dataset including the surface altitude variable. Some
+control on the variable (short) name can be achieved by preceding the
+``assign`` call with :meth:`xarray.DataArray.rename`.
+
+.. plot::
+   :context:
+   :nofigs:
+
+   surface = surface.rename('surface')
+   ds = ds.hyoga.assign(surface_altitude=surface)
+   assert 'surface' in ds
+
+However, this only works if the data does not already contain a variable with
+the standard name ``surface_altitude``. In that case, that variable's data is
+quietly replaced, and the variable is not renamed.
+
+.. plot::
+   :context:
+   :nofigs:
+
+   surface = surface.rename('name_to_ignore')
+   ds = ds.hyoga.assign(surface_altitude=surface)
+   assert 'name_to_ignore' not in ds
+
+.. _xarray: https//xarray.pydata.org
+.. _`CF standard names`: http://cfconventions.org/standard-names.html
 
 Masking variables
 -----------------
@@ -60,122 +160,3 @@ These methods behave like :meth:`xarray.Dataset.where`: they replace data
 values with `np.nan` outside the where condition. However, they are meant to
 only affect "glacier variables" (currently any variable whose standard name
 does not start with ``bedrock_altitude``).
-
-Grid interpolation
-------------------
-
-For enhanced visuals, hyoga supports interpolating and remasking model output
-onto a different (usually higher-resolution) topography. This produces an image
-which deviates somewhat from the model results, but with detail potentially
-improving readability.
-
-A necessary first step in many cases is to compute the bedrock deformation due
-to isostatic adjustment. If the dataset was produced by a model including
-bedrock deformation, there will be a systematic offset between the model
-bedrock topography and the new topography onto which data are interpolated.
-
-.. warning::
-   Assigning isostasy is not strictly necessary for interpolation to succeed,
-   but omitting it would produce errors in the new ice mask. Of course, it can
-   be safely omitted if the model run does not include isostasy.
-
-In this case, we compute the bedrock deformation by comparing bedrock altitude
-in the dataset with bedrock altitude in the initial state:
-
-.. plot::
-   :context:
-   :nofigs:
-
-   ds = hyoga.open.example('pism.alps.out.2d.nc')
-   ds = ds.hyoga.assign_isostasy(hyoga.open.example('pism.alps.in.boot.nc'))
-
-The method :meth:`~.Dataset.hyoga.assign_isostasy` assigns a new variable
-(standard name ``bedrock_altitude_change_due_to_isostatic_adjustment``). Next
-we run :meth:`~.Dataset.hyoga.interp`
-which interpolates all variables, and recalculates an ice mask based on the new
-topographies, corrected for bedrock depression in this case. This uses yet
-another demo file, which contains high-resolution topographic data over a small
-part of the model domain.
-
-.. plot::
-   :context:
-   :nofigs:
-
-   ds = ds.hyoga.interp(hyoga.open.example('pism.alps.vis.refined.nc'))
-
-The new dataset can be plotted in the same way as any other hyoga dataset, only
-with a much higher resolution.
-
-.. plot::
-   :context:
-
-   ds.hyoga.plot.bedrock_altitude(center=False)
-   ds.hyoga.plot.surface_velocity(vmin=1e1, vmax=1e3)
-   ds.hyoga.plot.surface_altitude_contours()
-   ds.hyoga.plot.ice_margin(edgecolor='0.25')
-   ds.hyoga.plot.scale_bar()
-
-Profile interpolation
----------------------
-
-Profile interpolation aggregates variables with two horizontal dimensions (and
-possibly more dimensions) along a profile curve (or surface) defined by a
-sequence of (x, y) points. Let us draw a linear cross-section across the
-example dataset and plot this line on a map.
-
-.. plot::
-   :context: reset
-
-   # prepare a linear profile
-   import numpy as np
-   x = np.linspace(250e3, 450e3, 21)
-   y = np.linspace(5200e3, 5000e3, 21)
-   points = list(zip(x, y))
-
-   # plot profile line on a map
-   ds = hyoga.open.example('pism.alps.out.2d.nc')
-   ds.hyoga.plot.bedrock_altitude(center=False)
-   ds.hyoga.plot.ice_margin(facecolor='tab:blue')
-   plt.plot(x, y, color='tab:red', marker='x')
-
-The accessor method :meth:`~.Dataset.hyoga.profile` can be used to linearly
-interpolate the gridded dataset onto these coordinates, producing a new dataset
-where the ``x`` and ``y`` coordinates are swapped for a new coordinate ``d``,
-for the distance along the profile.
-
-.. plot::
-   :context: close-figs
-
-   profile = ds.hyoga.profile(points)
-   profile.hyoga.getvar('bedrock_altitude').plot(color='0.25')
-   profile.hyoga.getvar('surface_altitude').plot(color='C0')
-
-An additional ``interval`` keyword can be passed to control the horizontal
-resolution of the new profile dataset. This is particularly useful if the
-sequence of ``points`` is not regularly spaced.
-
-.. plot::
-   :context: close-figs
-
-   # prepare three subplots
-   fig, axes = plt.subplots(nrows=3, sharex=True, sharey=True)
-
-   # 10, 3, and 1 km resolutions
-   for ax, interval in zip(axes, [10e3, 3e3, 1e3]):
-       profile = ds.hyoga.profile(points, interval=interval)
-       profile.hyoga.getvar('bedrock_altitude').plot(ax=ax, color='0.25')
-       profile.hyoga.getvar('surface_altitude').plot(ax=ax, color='C0')
-
-   # remove duplicate labels
-   for ax in axes[:2]:
-       ax.set_xlabel('')
-   for ax in axes[::2]:
-       ax.set_ylabel('')
-
-The sequence of points in the above example does not have to form a straight
-line. Besides, it can also be provided as a :class:`numpy.ndarray`, a
-:class:`geopandas.GeoDataFrame`, or a path to a vector file containing a
-single, linestring geometry. Here is a more advanced example using a custom
-shapefile provided in the example data.
-
-.. plot:: ../examples/interp/plot_profile_altitudes.py
