@@ -49,6 +49,7 @@ v0.3.x Inputs
 - |x| :func:`hyoga.open.atmosphere`
 - |x| :func:`hyoga.open.bootstrap`
 - |-| :func:`hyoga.open.timeseries`
+- |x| :doc:`datasets/opening`
 
 v0.2.x Cartography
 ------------------
@@ -119,8 +120,8 @@ Documentation
 ~~~~~~~~~~~~~
 
 - |x| :doc:`datasets/plotting`
-- |x| :doc:`datasets/opening`
-- |x| :doc:`datasets/masking`
+- |x| :doc:`datasets/masking`, renamed in :ref:`v0.3.0`
+- |x| :doc:`datasets/refining`, renamed in :ref:`v0.3.0`
 - |x| :doc:`examples/index`
 - |x| :doc:`api/index`
 - |x| :doc:`whatsnew`
