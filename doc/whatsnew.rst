@@ -33,6 +33,11 @@ Breaking changes
 
 .. _rioxarray: https://corteva.github.io/rioxarray
 
+Deprecations
+~~~~~~~~~~~~
+
+- Remove :meth:`.Dataset.hyoga.interp` ``threshold``, deprecated in v0.1.2_.
+
 New features
 ~~~~~~~~~~~~
 

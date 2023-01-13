@@ -317,7 +317,7 @@ class HyogaDataset:
         raise ValueError(
             f"No variable found with standard name {standard_name}.")
 
-    def interp(self, datasource, ax=None, sigma=None, threshold=None):
+    def interp(self, datasource, ax=None, sigma=None):
         """Interpolate onto higher resolution topography for visualization.
 
         Parameters
@@ -340,17 +340,6 @@ class HyogaDataset:
             data. This parameter activates a mechanism that attempts to smooth
             shallow slopes with little effect on steep mountains. The value
             for ``sigma`` is the gaussian window size in projections units.
-        threshold: float, optional
-            Thickness threshold used to compute a glacier mask. The mask will
-            be refined after interpolation, so that any mountains in the
-            high-resolution topography that are higher than the interpolated
-            ice surface will appear as nunataks in the visualization.
-
-            .. deprecated:: 0.1.2
-                will be removed in version 0.3. To apply a thickness mask, use
-                :attr:`hyoga.config.glacier_masking_point` or
-                :meth:`xarray.Dataset.hyoga.assign_icemask` before calling
-                `interp`.
 
         Returns
         -------
@@ -385,14 +374,6 @@ class HyogaDataset:
         # NOTE: add a wrapper something like ensure_var, maybe setvar?
         ds = self.assign(
             surface_altitude=self.getvar('surface_altitude').rename('usurf'))
-
-        # if threshold is present, compute an ice mask
-        if threshold is not None:
-            warnings.warn(
-                "the threshold argument is deprecated and will be removed in "
-                "v0.3.0, use assign_icemask instead.", FutureWarning)
-            icemask = ds.hyoga.getvar('land_ice_thickness') >= threshold
-            ds = ds.hyoga.assign_icemask(icemask)
 
         # make sure ice mask is present and has numeric type
         icemask = ds.hyoga.getvar('land_ice_area_fraction')
