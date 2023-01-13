@@ -87,8 +87,13 @@ def _reproject_data_array(da, crs, bounds, resolution):
     west, south, east, north = bounds
     transform = affine.Affine(resolution, 0, west, 0, resolution, south)
 
+    # compute output shape
+    cols = int((east-west)/resolution)
+    rows = int((north-south)/resolution)
+    shape = (rows, cols)
+
     # reproject to new crs
-    da = da.rio.reproject(crs, transform=transform, resampling=1)
+    da = da.rio.reproject(crs, transform=transform, resampling=1, shape=shape)
 
     # clip to exact bounds
     da = da.rio.clip_box(*bounds)
