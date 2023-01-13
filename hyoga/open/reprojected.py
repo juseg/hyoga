@@ -95,9 +95,6 @@ def _reproject_data_array(da, crs, bounds, resolution):
     # reproject to new crs
     da = da.rio.reproject(crs, transform=transform, resampling=1, shape=shape)
 
-    # clip to exact bounds
-    da = da.rio.clip_box(*bounds)
-
     # return reprojected data
     return da
 
