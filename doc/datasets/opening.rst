@@ -32,20 +32,13 @@ download the original data, typically global, store a copy in the cache
 directory (``~/.cache/hyoga/``), reproject to the desired modelling domain, and
 return an :class:`xarray.Dataset`.
 
-Currently two types of input datasets are supported: "bootstrapping" and
-"atmospheric". The bootstrapping file contains bedrock and/or surface
-topography. The atmosphere file contains a monthly climatology of air
+Currently two types of input datasets are supported: bootstrapping and
+atmospheric, respectively returned by :func:`hyoga.open.bootstrap` and
+:func:`hyoga.open.atmosphere`. The bootstrapping data contains bedrock and/or
+surface topography. The atmosphere data contains a monthly climatology of air
 temperature and precipitation needed to force a positive degree-day model.
 This nomenclature follows that introduced by PISM, and the resulting datasets
 are ready to export as PISM input files using :meth:`.Dataset.to_netcdf`.
-
-.. currentmodule:: hyoga.open
-
-.. autosummary::
-   :toctree: generated/
-
-   atmosphere
-   bootstrap
 
 .. warning::
 
@@ -94,8 +87,7 @@ run on the alps::
            -atmosphere.given.periodic \
            -atmosphere_given_file atm.nc \
            -atmosphere_lapse_rate_file atm.nc \
-       -surface pdd \
-           -surface.pdd.std_dev.periodic
+       -surface pdd
 
 Since the input data are global, the ``crs`` and ``bounds`` can be modified to
 run this setup anywhere on Earth. The results can be viewed in e.g. ``ncview``,
