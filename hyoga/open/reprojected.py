@@ -80,9 +80,9 @@ def _open_climatology(source='chelsa', variable='tas'):
 def _reproject_data_array(da, crs, bounds, resolution):
     """Reproject data array to exact bounds via affine transform."""
     da = da.rio.clip_box(crs=crs, *bounds)
-    bounds = da.rio.transform_bounds(crs)
-    xoffset = bounds[0] - bounds[0] % resolution
-    yoffset = bounds[1] - bounds[1] % resolution
+    transform_bounds = da.rio.transform_bounds(crs)
+    xoffset = transform_bounds[0] - transform_bounds[0] % resolution
+    yoffset = transform_bounds[1] - transform_bounds[1] % resolution
     transform = affine.Affine(resolution, 0, xoffset, 0, resolution, yoffset)
     da = da.rio.reproject(crs, transform=transform, resampling=1)
     da = da.rio.clip_box(*bounds)
