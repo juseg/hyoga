@@ -1,10 +1,10 @@
-.. Copyright (c) 2021-2022, Julien Seguinot (juseg.github.io)
+.. Copyright (c) 2021-2023, Julien Seguinot (juseg.github.io)
 .. GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
 Hyoga
 =====
 
-Hyoga is a small Python_ library to visualize ice-sheet model datasets.
+Hyoga is a Python_ library to prepare and visualize ice-sheet model datasets.
 It acts as a thin wrapper around GeoPandas_ and xarray_ for CF_-compliant
 datasets on regular grids used for instance in PISM_. Hyoga (氷河) is the
 Japanese word for glacier (lit. ice river).

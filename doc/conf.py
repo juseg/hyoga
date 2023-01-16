@@ -1,4 +1,4 @@
-# Copyright (c) 2021, Julien Seguinot (juseg.github.io)
+# Copyright (c) 2021-2023, Julien Seguinot (juseg.github.io)
 # GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
 """Sphinx configuration file for hyoga documentation."""
@@ -11,10 +11,10 @@ import sphinx_gallery.sorting
 # -- Project information -----------------------------------------------------
 
 project = 'hyoga'
-copyright = '2021-2022'
+copyright = '2021-2023'
 author = 'Julien Seguinot'
-version = '0.2 Bale'
-release = '0.2.2'
+version = '0.3 Cocuy'
+release = '0.3.0'
 
 
 # -- General configuration ---------------------------------------------------

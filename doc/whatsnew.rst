@@ -1,4 +1,4 @@
-.. Copyright (c) 2021-2022, Julien Seguinot (juseg.github.io)
+.. Copyright (c) 2021-2023, Julien Seguinot (juseg.github.io)
 .. GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
 .. currentmodule:: hyoga
@@ -23,8 +23,19 @@ What's new
 
 .. _v0.3.0:
 
-v0.3.0 (unreleased)
--------------------
+v0.3.0 Cocuy (16 Jan. 2023)
+---------------------------
+
+.. plot:: ../examples/whatsnew/plot_v003_cocuy.py
+   :include-source: false
+
+This release turns hyoga into more than just a visualization tool. Two
+functions were added to :doc:`open </datasets/opening>` online elevation data
+(GEBCO_) and monthly climatologies (CHELSA_) in custom projections that can be
+used as PISM_ input files for paleoglacier modelling about anywhere on Earth.
+Minor bugs were fixed. Code coverage decreased to 67 percent.
+
+.. _PISM: https://pism.io
 
 Breaking changes
 ~~~~~~~~~~~~~~~~
@@ -42,10 +53,13 @@ New features
 ~~~~~~~~~~~~
 
 - Add :func:`hyoga.open.bootstrap` to open global elevation data from either
-  GEBCO or CHELSA as bootstrapping data for PISM (:issue:`1`, :pull:`51`,
-  :issue:`54`, :pull:`55`, :issue:`57`, :pull:`60`, :pull:`62`, :pull:`64`).
-- Add :func:`hyoga.open.atmosphere` to open monthly climatologies from CHELSA
+  GEBCO_ or CHELSA_ as bootstrapping data for PISM (:issue:`1`, :pull:`51`,
+  :issue:`54`, :pull:`55`, :issue:`57`, :pull:`60`, :pull:`62`).
+- Add :func:`hyoga.open.atmosphere` to open monthly climatologies from CHELSA_
   as atmospheric data for PISM (:issue:`3`, :pull:`56`).
+
+.. _CHELSA: https://chelsa-climate.org
+.. _GEBCO: https://www.gebco.net
 
 Bug fixes
 ~~~~~~~~~
