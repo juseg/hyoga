@@ -99,7 +99,7 @@ def _reproject_data_array(da, crs, bounds, resolution):
     return da
 
 
-def atmosphere(crs, bounds, resolution=1e3):
+def atmosphere(crs, bounds, resolution=1e3, buffer=0):
     """
     Open atmospheric data from online datasets for PISM.
 
@@ -177,6 +177,15 @@ def atmosphere(crs, bounds, resolution=1e3):
         time_bounds=(('time', 'nv'), bounds))
     ds.time.attrs.update(
         bounds='time_bounds', calendar='noleap', units='days since 1-1-1')
+
+    # add temperature buffer at domain edges
+    # IDEA: add instead accessor method ds.hyoga.buffer(width, **values)
+    if buffer > 0:
+        buffer_temp = 50
+        ds.air_temp[:, :+buffer, :] = buffer_temp
+        ds.air_temp[:, -buffer:, :] = buffer_temp
+        ds.air_temp[:, :, :+buffer] = buffer_temp
+        ds.air_temp[:, :, -buffer:] = buffer_temp
 
     # convert precipitation to kg m-2 day-1
     ds['precipitation'] /= xr.DataArray(months, coords={'time': ds.time})
