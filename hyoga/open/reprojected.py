@@ -221,7 +221,7 @@ def atmosphere(crs, bounds, resolution=1e3):
     return ds
 
 
-def bootstrap(crs, bounds, bedrock='gebco', resolution=1e3):
+def bootstrap(crs, bounds, bedrock='gebco', heatflow='luc19', resolution=1e3):
     """
     Open bootstrapping data from online datasets for PISM.
 
@@ -264,8 +264,12 @@ def bootstrap(crs, bounds, bedrock='gebco', resolution=1e3):
     da.attrs.update(standard_name='bedrock_altitude')
     ds = ds.assign(bedrock=da)
 
-    # clear scaling attributes
-    _clear_scaling_attributes(ds)
+    # add reprojected geothermal heat flow
+    da = _open_heatflow(source=heatflow)
+    da = _reproject_data_array(da, crs, bounds, resolution)
+    da.attrs.update(standard_name=(
+        'upward_geothermal_heat_flux_at_ground_level_in_land_ice'))
+    ds = ds.assign(heatflow=da)
 
     # return projected dataset
     return ds
