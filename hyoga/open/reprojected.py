@@ -10,6 +10,7 @@ Geographic reprojection is handled by rioxarray.
 
 import affine
 import numpy as np
+import pandas as pd
 import xarray as xr
 import rioxarray  # noqa pylint: disable=unused-import
 
@@ -72,6 +73,27 @@ def _open_climatology(source='chelsa', variable='tas'):
     # invalid sources
     else:
         raise ValueError(f'{source} is not a valid climatology source.')
+
+    # return selected data array
+    return da
+
+
+def _open_heatflow(source='luc19'):
+    """Open geothermal heat flow from online source."""
+
+    # GEBCO global elevation data
+    if source == 'luc19':
+        # FIXME download the file
+        # downloader = hyoga.open.downloader.ZipDownloader()
+        path = '~/.cache/hyoga/heatflow/HFgrid14.csv'
+        df = pd.read_csv(path, sep=';', index_col=('latitude', 'longiyude'))
+        da = df.to_xarray().rename(latitude='y', longiyude='x').HF_pred
+        # FIXME homogenize grid mapping attribute name
+        da = da.rio.write_crs('+proj=longlat +datum=WGS84')
+
+    # invalid sources
+    else:
+        raise ValueError(f'{source} is not a valid heat flow source.')
 
     # return selected data array
     return da
