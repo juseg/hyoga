@@ -22,13 +22,9 @@ def plot_domain(ax, crs, name, properties):
     west, south, east, north = bounds
     vertices = [(west, south), (east, south), (east, north), (west, north)]
     polygon = shapely.geometry.Polygon(vertices)
-    domain = geopandas.GeoSeries(polygon).set_crs(
-        f'+proj=laea +lat_0={lat} +lon_0={lon} +ellps=WGS84')
-    centroid = domain.centroid.to_crs(crs)
+    domain_crs = f'+proj=laea +lat_0={lat} +lon_0={lon} +ellps=WGS84'
+    domain = geopandas.GeoSeries(polygon).set_crs(domain_crs)
     domain.to_crs(crs).plot(ax=ax, ec='tab:red', fc='none')
-    ax.annotate(
-        name, xy=(centroid.x, centroid.y), xytext=(0, 12),
-        textcoords='offset points', ha='center')
 
 
 def plot_domains(ax, crs):
@@ -61,7 +57,48 @@ plt.show()
 
 # %%
 # North America
-plot_domains_map(crs='+proj=laea +lat_0=55 +lon_0=-133 +ellps=WGS84 +units=m')
+plot_domains_map(crs='+proj=laea +lat_0=54 +lon_0=-133 +ellps=WGS84')
+plt.title('Modelling domains (North America)')
+plt.xlim(-3000e3, 3000e3)
+plt.ylim(-2000e3, 2000e3)
+plt.show()
+
+# %%
+# South America
+plot_domains_map(crs='+proj=laea +lat_0=-24 +lon_0=-58 +ellps=WGS84')
+plt.title('Modelling domains (South America)')
+plt.xlim(-6000e3, 6000e3)
+plt.ylim(-4500e3, 4500e3)
+plt.show()
+
+# %%
+# Europe
+plot_domains_map(crs='+proj=laea +lat_0=56 +lon_0=21 +ellps=WGS84')
+plt.title('Modelling domains (Europe)')
+plt.xlim(-3000e3, 3000e3)
+plt.ylim(-2000e3, 2000e3)
+plt.show()
+
+# %%
+# Africa
+plot_domains_map(crs='+proj=laea +lat_0=3 +lon_0=35 +ellps=WGS84')
+plt.title('Modelling domains (Africa)')
+plt.xlim(-3000e3, 3000e3)
+plt.ylim(-2000e3, 2000e3)
+plt.show()
+
+# %%
+# Asia
+plot_domains_map(crs='+proj=laea +lat_0=55 +lon_0=105 +ellps=WGS84')
+plt.title('Modelling domains (Asia)')
+plt.xlim(-4500e3, 4500e3)
+plt.ylim(-3000e3, 3000e3)
+plt.show()
+
+# %%
+# Oceania
+plot_domains_map(crs='+proj=laea +lat_0=-43 +lon_0=158 +ellps=WGS84')
+plt.title('Modelling domains (Oceania)')
 plt.xlim(-3000e3, 3000e3)
 plt.ylim(-2000e3, 2000e3)
 plt.show()
