@@ -66,7 +66,8 @@ def _open_climatology(source='chelsa', variable='tas'):
             f'GLOBAL/climatologies/1981-2010/{variable}/{basename}',
             f'chelsa/{basename}') for basename in basenames)
         ds = xr.open_mfdataset(
-            paths, combine='nested', concat_dim='time', decode_cf=True)
+            paths, combine='nested', concat_dim='time', chunks={'y': 120},
+            decode_cf=True)
         da = ds.band_data.squeeze()
 
     # invalid sources
