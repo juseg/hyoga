@@ -1,4 +1,4 @@
-.. Copyright (c) 2021-2023, Julien Seguinot (juseg.github.io)
+.. Copyright (c) 2021-2024, Julien Seguinot (juseg.dev)
 .. GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
 .. currentmodule:: hyoga
@@ -20,6 +20,16 @@
 
 What's new
 ==========
+
+.. _v0.3.1:
+
+v0.3.1 (unreleased)
+-------------------
+
+Internal changes
+~~~~~~~~~~~~~~~~
+
+- Test (and support) Python 3.11 and 3.12 (:pull:`77`).
 
 .. _v0.3.0:
 
