@@ -1,4 +1,4 @@
-# Copyright (c) 2022, Julien Seguinot (juseg.github.io)
+# Copyright (c) 2022-2024, Julien Seguinot (juseg.dev)
 # GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
 """
@@ -66,8 +66,7 @@ def _open_climatology(source='chelsa', variable='tas'):
             f'GLOBAL/climatologies/1981-2010/{variable}/{basename}',
             f'chelsa/{basename}') for basename in basenames)
         ds = xr.open_mfdataset(
-            paths, combine='nested', concat_dim='time', chunks={'y': 120},
-            decode_cf=True)
+            paths, combine='nested', concat_dim='time', decode_cf=True)
         da = ds.band_data.squeeze()
 
     # invalid sources
