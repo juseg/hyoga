@@ -26,6 +26,11 @@ What's new
 v0.3.1 (unreleased)
 -------------------
 
+Breaking changes
+~~~~~~~~~~~~~~~~
+
+- Require Python 3.9 or newer (:pull:`78`).
+
 Bug fixes
 ~~~~~~~~~
 
