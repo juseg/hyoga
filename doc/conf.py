@@ -11,7 +11,7 @@ import sphinx_gallery.sorting
 # -- Project information -----------------------------------------------------
 
 project = 'hyoga'
-copyright = '2021-2023'
+copyright = '2021-2024'
 author = 'Julien Seguinot'
 version = '0.3 Cocuy'
 release = '0.3.0'
