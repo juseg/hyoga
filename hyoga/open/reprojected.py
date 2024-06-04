@@ -69,6 +69,24 @@ def _open_climatology(source='chelsa', variable='tas'):
             paths, combine='nested', concat_dim='time', decode_cf=True)
         da = ds.band_data.squeeze()
 
+    # CHELSA-TraCE21k global climatologies
+    elif source == 'chelsa-trace' and variable == 'tas':
+        tasmin = _open_climatology(source, variable='tasmin')
+        tasmax = _open_climatology(source, variable='tasmax')
+        return (tasmin+tasmax) / 2 / 10 - 273.15
+    elif source == 'chelsa-trace':
+        downloader = hyoga.open.downloader.CacheDownloader()
+        basenames = (
+            f'CHELSA_TraCE21k_{variable}_{month+1}_-200_V1.0.tif'
+            for month in range(12))
+        paths = (downloader(
+            'https://os.zhdk.cloud.switch.ch/envicloud/chelsa/chelsa_V1/'
+            f'chelsa_trace/{variable}/{basename}', f'chelsa-trace/{basename}')
+            for basename in basenames)
+        ds = xr.open_mfdataset(
+            paths, combine='nested', concat_dim='time', decode_cf=True)
+        da = ds.band_data.squeeze()
+
     # invalid sources
     else:
         raise ValueError(f'{source} is not a valid climatology source.')
