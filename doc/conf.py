@@ -1,4 +1,4 @@
-# Copyright (c) 2021-2023, Julien Seguinot (juseg.github.io)
+# Copyright (c) 2021-2024, Julien Seguinot (juseg.dev)
 # GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
 """Sphinx configuration file for hyoga documentation."""
@@ -111,7 +111,6 @@ html_favicon = '_static/ico/hyoga_favicon.ico'
 # sphinx html theme
 html_theme = 'sphinx_book_theme'
 html_theme_options = {
-    'logo_only': True,
     'repository_url': 'https://github.com/juseg/hyoga',
     'repository_branch': 'main',
     'use_download_button': True,
@@ -119,8 +118,6 @@ html_theme_options = {
     'use_fullscreen_button': True,
     'use_issues_button': False,
     'use_repository_button': True,
-    'logo_only': True,
-    'extra_navbar': None,
     'extra_footer': (
         'Currently developed within a '
         '<a href="https://mohnfoundation.no/en/">Trond Mohn Foundation</a> '
