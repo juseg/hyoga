@@ -26,6 +26,13 @@ What's new
 v0.3.1 (unreleased)
 -------------------
 
+Bug fixes
+~~~~~~~~~
+
+- Add missing optional dependency to dask_ (:issue:`73`, :pull:`76`).
+
+.. _dask: https://www.dask.org
+
 Internal changes
 ~~~~~~~~~~~~~~~~
 
