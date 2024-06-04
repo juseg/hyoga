@@ -118,11 +118,6 @@ html_theme_options = {
     'use_fullscreen_button': True,
     'use_issues_button': False,
     'use_repository_button': True,
-    'extra_footer': (
-        'Currently developed within a '
-        '<a href="https://mohnfoundation.no/en/">Trond Mohn Foundation</a> '
-        '<a href="https://mountainsinmotion.w.uib.no">project</a> at the '
-        '<a href="https://www.uib.no/en">University of Bergen</a>.'),
     'toc_title': 'Page contents'}
 
 # static files copied to build
