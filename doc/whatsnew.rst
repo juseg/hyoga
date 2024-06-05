@@ -26,10 +26,16 @@ What's new
 v0.3.1 (unreleased)
 -------------------
 
+Breaking changes
+~~~~~~~~~~~~~~~~
+
+- Require Python 3.9 or newer (:pull:`78`).
+
 Bug fixes
 ~~~~~~~~~
 
-- Add missing optional dependency to dask_ (:issue:`73`, :pull:`76`).
+- Add missing optional dependency to dask_ (:issue:`74`, :pull:`76`).
+- Fix incompatibility with cf_xarray_ 0.8.0 (:issue:`73`, :pull:`78`).
 
 .. _dask: https://www.dask.org
 

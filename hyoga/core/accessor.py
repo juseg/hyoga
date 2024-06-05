@@ -1,4 +1,4 @@
-# Copyright (c) 2021-2022, Julien Seguinot (juseg.github.io)
+# Copyright (c) 2021-2024, Julien Seguinot (juseg.dev)
 # GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
 """
@@ -179,8 +179,8 @@ class HyogaDataset:
                     f"{variable_name}_ instead", UserWarning)
                 variable_name += '_'
 
-            # link variable data to short name
-            variables[variable_name] = data
+            # link variable data to short name (skip coords, see #74)
+            variables[variable_name] = data.variable
 
         # assign new variables and return a new dataset
         return self._ds.assign(variables)
