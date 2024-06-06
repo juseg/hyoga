@@ -21,8 +21,8 @@ ax = plt.subplot()
 with hyoga.open.example('pism.alps.out.2d.nc') as ds:
 
     # compute surface altitude and remove bedrock altitude
-    ds['usurf'] = ds.hyoga.getvar('surface_altitude')
-    ds = ds.drop('topg')
+    ds = ds.hyoga.assign(surface_altitude=ds.hyoga.getvar('surface_altitude'))
+    ds = ds.drop_vars(ds.hyoga.getvar('bedrock_altitude').name)
 
     # compute isostatic adjustment from a reference input topography
     ds = ds.hyoga.assign_isostasy(hyoga.open.example('pism.alps.in.boot.nc'))
