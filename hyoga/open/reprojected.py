@@ -95,6 +95,10 @@ def _reproject_data_array(da, crs, bounds, resolution):
     # reproject to new crs
     da = da.rio.reproject(crs, transform=transform, resampling=1, shape=shape)
 
+    # rename grid_mapping to avoid different values in datasets (#72)
+    da = da.rename({da.encoding['grid_mapping']: 'spatial_ref'})
+    da.encoding.update(grid_mapping='spatial_ref')
+
     # return reprojected data
     return da
 
