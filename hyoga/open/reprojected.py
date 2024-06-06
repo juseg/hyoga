@@ -146,6 +146,9 @@ def atmosphere(crs, bounds, resolution=1e3):
     February lasts 28.2 days. Due to the no-leap calendar, February
     precipitations are condensed over a slightly shorter period of 28 days,
     which overestimates daily rates. However, the total amount is unaffected.
+
+    Any **grid_mapping** variable in the source data will be renamed to
+    'spatial_ref' to avoid returning a dataset with multiple grid mappings.
     """
 
     # future parameters:
@@ -229,6 +232,12 @@ def bootstrap(crs, bounds, bedrock='gebco', resolution=1e3):
         The resulting dataset containing surface variables with the requested
         ``crs``, ``bounds``, and ``resolution``. Use ``ds.to_netcdf()`` to
         export as PISM bootstrapping file.
+
+    Notes
+    -----
+
+    Any **grid_mapping** variable in the source data will be renamed to
+    'spatial_ref' to avoid returning a dataset with multiple grid mappings.
     """
 
     # future parameters
