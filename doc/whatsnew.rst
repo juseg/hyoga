@@ -36,8 +36,14 @@ Bug fixes
 
 - Add missing optional dependency to dask_ (:issue:`74`, :pull:`76`).
 - Fix incompatibility with cf_xarray_ 0.8.0 (:issue:`73`, :pull:`78`).
+- Fix multiple mappings in reprojected datasets (:issue:`72`, :pull:`81`).
 
 .. _dask: https://www.dask.org
+
+Documentation
+~~~~~~~~~~~~~
+
+- Fix build errors, warnings, outdated credits (:issue:`79`, :pull:`80`).
 
 Internal changes
 ~~~~~~~~~~~~~~~~
