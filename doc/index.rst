@@ -1,4 +1,4 @@
-.. Copyright (c) 2021-2023, Julien Seguinot (juseg.github.io)
+.. Copyright (c) 2021-2024, Julien Seguinot (juseg.dev)
 .. GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
 Hyoga
@@ -14,13 +14,6 @@ Japanese word for glacier (lit. ice river).
 .. _PISM: https://pism.io
 .. _Python: https://python.org
 .. _xarray: https://xarray.pydata.org/en/stable/
-
-Since April 2022, development has been funded by a Trond Mohn Foundation (TMS_)
-research project_ on alpine biodiversity at the University of Bergen (UiB_).
-
-.. _TMS: https://mohnfoundation.no/en/
-.. _UiB: https://www.uib.no/en
-.. _project: mountainsinmotion.w.uib.no
 
 .. raw:: html
 

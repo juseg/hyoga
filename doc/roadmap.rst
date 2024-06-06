@@ -1,4 +1,4 @@
-.. Copyright (c) 2022, Julien Seguinot (juseg.github.io)
+.. Copyright (c) 2022-2024, Julien Seguinot (juseg.dev)
 .. GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
 Development roadmap
@@ -13,8 +13,8 @@ development roadmap over user requests.
 
 Until I come up with better contributing guidelines and co, here is an evolving
 document that I use to keep track of my progress and plan future releases, some
-kind of incremental version of the :doc:`api`, with a glimpse into the future.
-I hope to release ``v0.5.0`` sometime in Spring 2023.
+kind of incremental version of the :doc:`api/index`, with a glimpse into the
+future. I hope to release ``v0.5.0`` sometime in Spring 2025.
 
 .. |x| raw:: html
 
