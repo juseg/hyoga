@@ -43,7 +43,7 @@ Bug fixes
 Documentation
 ~~~~~~~~~~~~~
 
-- Fix build errors, warnings, outdated credits (:issue:`79`, :pull:`80`).
+- Fix build errors, warnings, credits (:issue:`79`, :pull:`80`, :pull:`82`).
 
 Internal changes
 ~~~~~~~~~~~~~~~~
