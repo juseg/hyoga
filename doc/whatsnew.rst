@@ -23,13 +23,25 @@ What's new
 
 .. _v0.3.1:
 
-v0.3.1 (unreleased)
--------------------
+v0.3.1 (10 Jun. 2024)
+---------------------
+
+This small bug-fix release brings hyoga up-to-date with its dependencies
+following an unintended lapse in development. Support was added for recent
+versions of Python and cf_xarray_, and other minor bugs were fixed, reviving
+the foundation for upcoming improvements and new features in future releases.
+Code coverage remains at 67 percent.
 
 Breaking changes
 ~~~~~~~~~~~~~~~~
 
 - Require Python 3.9 or newer (:pull:`78`).
+
+Deprecations
+~~~~~~~~~~~~
+
+- Remove :func:`hyoga.demo.pism_gridded`, deprecated in v0.1.1_ (:pull:`85`).
+- Remove :func:`hyoga.demo.pism_series`, deprecated in v0.1.1_ (:pull:`85`).
 
 Bug fixes
 ~~~~~~~~~
@@ -43,12 +55,14 @@ Bug fixes
 Documentation
 ~~~~~~~~~~~~~
 
-- Fix build errors, warnings, credits (:issue:`79`, :pull:`80`, :pull:`82`).
+- Fix build errors and warnings (:issue:`79`, :pull:`80`).
+- Update funding credits (:pull:`80`, :pull:`84`).
 
 Internal changes
 ~~~~~~~~~~~~~~~~
 
 - Test (and support) Python 3.11 and 3.12 (:pull:`77`).
+- Upgrade to Python 3.12 on Read the Docs (:pull:`82`).
 
 .. _v0.3.0:
 
