@@ -34,8 +34,8 @@ Breaking changes
 Deprecations
 ~~~~~~~~~~~~
 
-- Remove :func:`hyoga.demo.pism_gridded`, deprecated in v0.1.1_.
-- Remove :func:`hyoga.demo.pism_series`, deprecated in v0.1.1_.
+- Remove :func:`hyoga.demo.pism_gridded`, deprecated in v0.1.1_ (:pull:`85`).
+- Remove :func:`hyoga.demo.pism_series`, deprecated in v0.1.1_ (:pull:`85`).
 
 Bug fixes
 ~~~~~~~~~
