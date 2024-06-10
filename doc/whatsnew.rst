@@ -31,6 +31,12 @@ Breaking changes
 
 - Require Python 3.9 or newer (:pull:`78`).
 
+Deprecations
+~~~~~~~~~~~~
+
+- Remove :func:`hyoga.demo.pism_gridded`, deprecated in v0.1.1_.
+- Remove :func:`hyoga.demo.pism_series`, deprecated in v0.1.1_.
+
 Bug fixes
 ~~~~~~~~~
 
