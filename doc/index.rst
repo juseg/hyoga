@@ -45,9 +45,31 @@ Japanese word for glacier (lit. ice river).
    roadmap
    whatsnew
 
+.. Hint::
+
+   Development is currently funded by Research Foundation -- Flanders (FWO_)
+   Odysseus Type II project GlaciersMD_ within the bglacier_ group at Vrije
+   Universiteit Brussel (VUB_).
+
+.. _FWO: https://www.fwo.be
+.. _GlaciersMD: https://hydr.vub.be/projects/GlaciersMD
+.. _bglacier: https://hydr.vub.be/research-groups/bglacier
+.. _vub: https://vub.be
+
 .. admonition:: Citing
 
    Every hyoga release is long-term archived in Zenodo_ and attributed a DOI.
+   If you use hyoga in a publication, please refer to the corresponding Zenodo
+   version DOI, as well as the following article based on an early version of
+   hyoga, e.g. for ``v0.3.0``:
+
+   - Julien Seguinot. (2023). Hyoga: paleoglacier modelling framework (v0.3.0).
+     *Zenodo*. https://doi.org/10.5281/zenodo.7541127
+
+   - J. Seguinot and I. Delaney. Last-glacial-cycle glacier erosion potential
+     in the Alps. *Earth Surf. Dynam.*, 9:923–935,
+     https://doi.org/10.5194/esurf-9-923-2021, 2021.
+
    This badge always indicates the latest record: |doi|.
 
 .. |doi| image:: https://zenodo.org/badge/227465038.svg
