@@ -45,6 +45,17 @@ Japanese word for glacier (lit. ice river).
    roadmap
    whatsnew
 
+.. Hint::
+
+   Development is currently funded by Research Foundation -- Flanders (FWO_)
+   Odysseus Type II project GlaciersMD_ within the bglacier_ group at Vrije
+   Universiteit Brussel (VUB_).
+
+.. _FWO: https://www.fwo.be
+.. _GlaciersMD: https://hydr.vub.be/projects/GlaciersMD
+.. _bglacier: https://hydr.vub.be/research-groups/bglacier
+.. _vub: https://vub.be
+
 .. admonition:: Citing
 
    Every hyoga release is long-term archived in Zenodo_ and attributed a DOI.
