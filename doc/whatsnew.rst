@@ -26,6 +26,12 @@ What's new
 v0.3.1 (10 Jun. 2024)
 ---------------------
 
+This small bug-fix release brings hyoga up-to-date with its dependencies
+following an unintended lapse in development. Support was added for recent
+versions of Python and cf_xarray_, and other minor bugs were fixed, reviving
+the foundation for upcoming improvements and new features in future releases.
+Code coverage remains at 67 percent.
+
 Breaking changes
 ~~~~~~~~~~~~~~~~
 
