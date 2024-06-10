@@ -43,12 +43,14 @@ Bug fixes
 Documentation
 ~~~~~~~~~~~~~
 
-- Fix build errors, warnings, credits (:issue:`79`, :pull:`80`, :pull:`82`).
+- Fix build errors and warnings (:issue:`79`, :pull:`80`).
+- Update funding credits (:pull:`80`, :pull:`84`).
 
 Internal changes
 ~~~~~~~~~~~~~~~~
 
 - Test (and support) Python 3.11 and 3.12 (:pull:`77`).
+- Upgrade to Python 3.12 on Read the Docs (:pull:`82`).
 
 .. _v0.3.0:
 
