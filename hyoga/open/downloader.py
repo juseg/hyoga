@@ -102,6 +102,37 @@ class CacheDownloader(Downloader):
         return os.path.join(xdg_cache, 'hyoga', path)
 
 
+class CW5E5DailyDownloader(CacheDownloader):
+    """A class to download CHELSA-W5E5 daily means by variable, year and month.
+
+    Call parameters
+    ---------------
+    variable : 'tasmax', 'tas', 'tasmin', 'rsds', 'pr'
+        The short name for the CHELSA-W5E5 variable downloaded among:
+        - daily mean precipitation ('pr', kg m-2 s-1),
+        - daily mean surface downwelling shortwave dadiation ('rsds', W m-2),
+        - daily mean near-surface air temperature ('tas', K),
+        - daily maximum near surface air temperature ('tasmax', K),
+        - daily minimum near surface air temperature ('tasmin', K).
+    year : int
+        The year in which data is downloaded between 1979 and 2016.
+    month : int
+        The month for which data is downloaded data between 1 and 12.
+    """
+
+    def url(self, *args):
+        variable, year, month = args
+        return (
+            f'https://files.isimip.org/ISIMIP3a/InputData/climate/atmosphere/'
+            f'obsclim/global/daily/historical/CHELSA-W5E5/chelsa-w5e5_obsclim_'
+            f'{variable}_30arcsec_{year:d}{month:02d}.nc')
+
+    def path(self, *args):
+        variable, year, month = args
+        return super().path(
+            None, f'cw5e5/daily/cw5e5.{variable}.day.{year:d}.{month:02d}.nc')
+
+
 class OSFDownloader(CacheDownloader):
     """A class to download files by record key from osf.io.
 
