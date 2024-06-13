@@ -1,0 +1,89 @@
+# Copyright (c) 2024, Julien Seguinot (juseg.dev)
+# GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
+
+"""
+This module provide so-called aggregator classes for computing multiyear means
+and standard deviations needed by hyoga. Aggregator objects are callables that
+may trigger downloads, open multi-file datasets, aggregate statistics, store
+them in hyoga's cache directory, and return a path to that file.
+"""
+
+import os.path
+import xarray as xr
+import hyoga.open.downloader
+
+
+class Aggregator():
+    """A callable that aggregates input files and returns an output path.
+
+    This is a base class for callable aggregator. Customization can be done by
+    subclassing and overwriting the following methods:
+
+    * :meth:`inputs`: return local paths of input files.
+    * :meth:`output`: return local path of aggregated file.
+    * :meth:`check`: check whether output file is present or valid.
+    * :meth:`aggregate`: actually aggregate the data from input files.
+
+    Call parameters
+    ---------------
+    inputs : str
+        A list of paths of files to aggregate.
+    output : str
+        The local path of the aggregated file.
+
+    Returns
+    -------
+    output : str
+        The local path of the aggregated file.
+    """
+
+    def __call__(self, *args, **kwargs):
+        """See class documentation for actual signature.
+
+        Parameters
+        ----------
+        *args :
+            Positional arguments passed to :meth:`inputs` and :meth:`output`.
+            These two methods need to have compatible signatures.
+        **kwargs :
+            Keyword arguments are passed to :meth:`aggregate` to alter the
+            aggregation recipe. This is used to provide a custom function.
+        """
+        inputs = self.inputs(*args)
+        output = self.output(*args)
+        if not self.check(output):
+            self.aggregate(inputs, output, **kwargs)
+        return output
+
+    def inputs(self, *args):
+        """Return local paths of input files."""
+        return args[0]
+
+    def output(self, *args):
+        """Return local path of aggregated file."""
+        return args[1]
+
+    def check(self, path):
+        """Check whether output file is present."""
+        return os.path.isfile(path)
+
+    def aggregate(self, inputs, output, recipe='avg'):
+        """Aggregate `inputs` into `output` file."""
+
+        # open inputs as multi-file dataset
+        with xr.open_mfdataset(
+                inputs, chunks={'lat': 300, 'lon': 300},
+                preprocess=lambda ds: ds.assign(
+                    lat=ds.lat.astype('f4'), lon=ds.lon.astype('f4')),
+                # parallel=False,
+                ) as ds:
+            ds = getattr(
+                ds, recipe.replace('avg', 'mean'))('time', keep_attrs=True)
+
+            # FIXME implement proper tiling
+            ds = ds.sel(lon=slice(5, 10), lat=slice(43, 48))
+
+            # store output as netcdf and return path
+            print(f"aggregating {output} ...")
+            ds.to_netcdf(output, compute=False).compute()
+            return output
