@@ -13,6 +13,7 @@ import numpy as np
 import xarray as xr
 import rioxarray  # noqa pylint: disable=unused-import
 
+import hyoga.open.aggregator
 import hyoga.open.downloader
 
 
@@ -68,6 +69,14 @@ def _open_climatology(source='chelsa', variable='tas'):
         ds = xr.open_mfdataset(
             paths, combine='nested', concat_dim='time', decode_cf=True)
         da = ds.band_data.squeeze()
+
+    # CHELSA 1981-2010 global climatologies
+    elif source == 'cw5e5':
+        aggregator = hyoga.open.aggregator.CW5E5ClimateAggregator()
+        start, end = 1981, 2010  # FIXME allow custom aggregation period
+        paths = (aggregator(variable, start, end, mon) for mon in range(1, 12))
+        da = xr.open_mfdataset(
+            paths, combine='nested', concat_dim='time', decode_cf=True)
 
     # invalid sources
     else:
