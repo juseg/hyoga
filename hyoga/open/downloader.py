@@ -1,4 +1,4 @@
-# Copyright (c) 2022, Julien Seguinot (juseg.github.io)
+# Copyright (c) 2024, Julien Seguinot (juseg.dev)
 # GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
 """
@@ -129,8 +129,8 @@ class CW5E5DailyDownloader(CacheDownloader):
 
     def path(self, *args):
         variable, year, month = args
-        return super().path(
-            None, f'cw5e5/daily/cw5e5.{variable}.day.{year:d}.{month:02d}.nc')
+        return super().path(None, os.path.join(
+            'cw5e5', 'daily', f'cw5e5.{variable}.day.{year:d}.{month:02d}.nc'))
 
 
 class OSFDownloader(CacheDownloader):
