@@ -63,9 +63,9 @@ class Aggregator():
         """Return local path of aggregated file."""
         return args[1]
 
-    def check(self, path):
+    def check(self, output):
         """Check whether output file is present."""
-        return os.path.isfile(path)
+        return os.path.isfile(output)
 
     def aggregate(self, inputs, output, recipe='avg'):
         """Aggregate `inputs` into `output` file."""
@@ -89,7 +89,7 @@ class Aggregator():
             return output
 
 
-class CW5E5ClimateAggregator(Aggregator):
+class CW5E5TiledAggregator(Aggregator):
     """An aggregator to compute CHELSA-W5E5 climatologies from daily means.
 
     Call parameters
@@ -109,19 +109,68 @@ class CW5E5ClimateAggregator(Aggregator):
         The month for which data is downloaded data between 1 and 12.
     """
 
+    def _get_all_coords(self):
+        """Return corner coordinates for all tiles."""
+        # FIXME loop globally
+        return ((lat, lon) for lat in (0, 30) for lon in (0, 30))
+
+    def _get_tile_path(self, pattern, lat, lon):
+        """Return tile path from pattern and corner coordinates."""
+        llat = f'{'n' if (lat >= 0) else 's'}{abs(lat):02d}'
+        llon = f'{'e' if (lon >= 0) else 'w'}{abs(lon):02d}'
+        return pattern.format(llat+llon)
+
     def inputs(self, *args):
-        """Return paths of input files, downloading as necessary."""
         variable, start, end, month = args
         downloader = hyoga.open.downloader.CW5E5DailyDownloader()
         years = range(start, end+1)
         paths = (downloader(variable, year, month) for year in years)
         return paths
 
-    def output(self, *args):
-        """Return path of downloaded file."""
+    def _pattern(self, *args):
         variable, start, end, month = args
         xdg_cache = os.environ.get("XDG_CACHE_HOME", os.path.join(
             os.path.expanduser('~'), '.cache'))
         return os.path.join(
             xdg_cache, 'hyoga', 'cw5e5', 'clim', f'cw5e5.{variable}.mon.'
-            f'{start % 100:02d}{end % 100:02d}.avg.{month:02d}.nc')
+            f'{start % 100:02d}{end % 100:02d}.avg.{{}}.{month:02d}.nc')
+
+    def output(self, *args):
+        pattern = self._pattern(*args)
+        coords = self._get_all_coords()
+        return [self._get_tile_path(pattern, *latlon) for latlon in coords]
+
+    def check(self, output):
+        return all(os.path.isfile(tilepath) for tilepath in output)
+
+    def aggregate(self, inputs, output, recipe='avg'):
+        """Aggregate tiled `inputs` to files matching `output` pattern."""
+
+        # create directory if missing
+        os.makedirs(os.path.dirname(output[0]), exist_ok=True)
+
+        # open inputs as multi-file dataset
+        with xr.open_mfdataset(
+                inputs, chunks={'lat': 300, 'lon': 300},
+                preprocess=lambda ds: ds.assign(
+                    lat=ds.lat.astype('f4'), lon=ds.lon.astype('f4')),
+                ) as ds:
+
+            # for each tile
+            for tilepath, (lat, lon) in zip(output, self._get_all_coords()):
+
+                # check wether tile file exists
+                if os.path.isfile(tilepath):
+                    continue
+
+                # aggregate a 30x30 degree tile
+                tile = ds.sel(lon=slice(lon, lon+30), lat=slice(lat, lat+30))
+                recipe = recipe.replace('avg', 'mean')
+                tile = getattr(tile, recipe)('time', keep_attrs=True)
+
+                # store output as netcdf and return path
+                print(f"aggregating {tilepath} ...")
+                tile.to_netcdf(tilepath)
+
+        # return multi-tile output pattern
+        return output

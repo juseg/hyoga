@@ -72,11 +72,14 @@ def _open_climatology(source='chelsa', variable='tas'):
 
     # CHELSA 1981-2010 global climatologies
     elif source == 'cw5e5':
-        aggregator = hyoga.open.aggregator.CW5E5ClimateAggregator()
+        aggregator = hyoga.open.aggregator.CW5E5TiledAggregator()
         start, end = 1981, 2010  # FIXME allow custom aggregation period
-        paths = (aggregator(variable, start, end, mon) for mon in range(1, 12))
-        da = xr.open_mfdataset(
-            paths, combine='nested', concat_dim='time', decode_cf=True)
+        # FIXME aggregator does not return dimension time, thus we need a
+        # combination of combine_nested and combine_by_coords.
+        da = xr.combine_nested(
+            [xr.open_mfdataset(aggregator(variable, start, end, mon))
+                for mon in range(1, 3)],
+            concat_dim='time')
 
     # invalid sources
     else:
