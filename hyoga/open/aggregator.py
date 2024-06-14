@@ -89,6 +89,28 @@ class Aggregator():
             return output
 
 
+# IDEA: implement intermediate TiledAggregator
+class TiledAggregator(Aggregator):
+    """An aggregator that splits global data split into 30x30 degree tiles.
+
+    Call parameters
+    ---------------
+    inputs : str
+        A list of paths of files to aggregate.
+    pattern : str
+        A format string for the aggregated tile paths.
+
+    Returns
+    -------
+    output : str
+        The local paths of the aggregated files.
+    """
+
+    def pattern(self, *args):
+        """Return aggregated tile path pattern as a format string."""
+        raise NotImplementedError("This should be implemented in subclasses.")
+
+
 class CW5E5TiledAggregator(Aggregator):
     """An aggregator to compute CHELSA-W5E5 climatologies from daily means.
 
