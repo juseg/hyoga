@@ -112,7 +112,8 @@ def _reproject_data_array(da, crs, bounds, resolution):
     return da
 
 
-def atmosphere(crs, bounds, resolution=1e3):
+def atmosphere(
+        crs, bounds, temperature='chelsa', precipitation=None, resolution=1e3):
     """
     Open atmospheric data from online datasets for PISM.
 
@@ -126,6 +127,10 @@ def atmosphere(crs, bounds, resolution=1e3):
     bounds : (west, south, east, north)
         Extent for the resulting dataset in projected coordinates given by
         ``crs``, will be passed to Dataset.rio.clip_box.
+    precipitation : 'chelsa' or 'cw5e5', optional
+        Precipitation rate data source, default to same as temperature.
+    temperature : 'chelsa' or 'cw5e5', optional
+        Near-surface air temperature data source, default to 'chelsa'.
     resolution : float, optional
         Resolution for the output dataset in projected coordinates given by
         ``crs``, will be passed to Dataset.rio.reproject.
@@ -163,18 +168,17 @@ def atmosphere(crs, bounds, resolution=1e3):
     # future parameters:
     # - domain : str, optional
     #     Modelling domain defining geographic projection and bounds.
-    # - temperature : 'chelsa', optional
-    #     Near-surface air temperature data source, default to 'chelsa'.
-    # - precipitation : 'chelsa', optional
-    #     Precipitation rate data source, default to same as temperature.
     # - elevation : 'chelsa', optional
     #     Surface elevation for time-lapse corrections, default to same as
     #     temperature.
 
+    # use temperature source by default
+    precipitation = precipitation or temperature
+
     # open reprojected online data
-    temp = _open_climatology(variable='tas')
+    temp = _open_climatology(source=temperature, variable='tas')
     temp = _reproject_data_array(temp, crs, bounds, resolution)
-    prec = _open_climatology(variable='pr')
+    prec = _open_climatology(source=precipitation, variable='pr')
     prec = _reproject_data_array(prec, crs, bounds, resolution)
     elev = _open_elevation(source='chelsa')
     elev = _reproject_data_array(elev, crs, bounds, resolution)
