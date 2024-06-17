@@ -83,9 +83,6 @@ class Aggregator():
             ds = getattr(
                 ds, recipe.replace('avg', 'mean'))('time', keep_attrs=True)
 
-            # FIXME implement proper tiling
-            ds = ds.sel(lon=slice(5, 10), lat=slice(43, 48))
-
             # store output as netcdf and return path
             print(f"aggregating {output} ...")
             ds.to_netcdf(output, compute=False).compute()
