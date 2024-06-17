@@ -70,6 +70,9 @@ class Aggregator():
     def aggregate(self, inputs, output, recipe='avg'):
         """Aggregate `inputs` into `output` file."""
 
+        # create directory if missing
+        os.makedirs(os.path.dirname(output), exist_ok=True)
+
         # open inputs as multi-file dataset
         with xr.open_mfdataset(
                 inputs, chunks={'lat': 300, 'lon': 300},
