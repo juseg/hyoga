@@ -76,16 +76,15 @@ class Aggregator():
         # open inputs as multi-file dataset
         with xr.open_mfdataset(
                 inputs, chunks={'lat': 300, 'lon': 300},
+                # FIXME this is a mixed-precision workaround specific to CW5E5
                 preprocess=lambda ds: ds.assign(
-                    lat=ds.lat.astype('f4'), lon=ds.lon.astype('f4')),
-                # parallel=False,
-                ) as ds:
+                    lat=ds.lat.astype('f4'), lon=ds.lon.astype('f4'))) as ds:
             ds = getattr(
                 ds, recipe.replace('avg', 'mean'))('time', keep_attrs=True)
 
             # store output as netcdf and return path
             print(f"aggregating {output} ...")
-            ds.to_netcdf(output, compute=False).compute()
+            ds.to_netcdf(output)
             return output
 
 
