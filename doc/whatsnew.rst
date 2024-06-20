@@ -21,6 +21,16 @@
 What's new
 ==========
 
+.. _v0.3.2:
+
+v0.3.2 (unreleased)
+-------------------
+
+Bug fixes
+~~~~~~~~~
+
+- Add newly missing requirement of `numpy<2` (:issue:`90`, :pull:`91`).
+
 .. _v0.3.1:
 
 v0.3.1 (10 Jun. 2024)
