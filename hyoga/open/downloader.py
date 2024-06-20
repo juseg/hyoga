@@ -1,4 +1,4 @@
-# Copyright (c) 2022, Julien Seguinot (juseg.github.io)
+# Copyright (c) 2024, Julien Seguinot (juseg.dev)
 # GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
 """
@@ -100,6 +100,37 @@ class CacheDownloader(Downloader):
         xdg_cache = os.environ.get("XDG_CACHE_HOME", os.path.join(
             os.path.expanduser('~'), '.cache'))
         return os.path.join(xdg_cache, 'hyoga', path)
+
+
+class CW5E5DailyDownloader(CacheDownloader):
+    """A class to download CHELSA-W5E5 daily means by variable, year and month.
+
+    Call parameters
+    ---------------
+    variable : 'tasmax', 'tas', 'tasmin', 'rsds', 'pr'
+        The short name for the CHELSA-W5E5 variable downloaded among:
+        - daily mean precipitation ('pr', kg m-2 s-1),
+        - daily mean surface downwelling shortwave dadiation ('rsds', W m-2),
+        - daily mean near-surface air temperature ('tas', K),
+        - daily maximum near surface air temperature ('tasmax', K),
+        - daily minimum near surface air temperature ('tasmin', K).
+    year : int
+        The year in which data is downloaded between 1979 and 2016.
+    month : int
+        The month for which data is downloaded data between 1 and 12.
+    """
+
+    def url(self, *args):
+        variable, year, month = args
+        return (
+            f'https://files.isimip.org/ISIMIP3a/InputData/climate/atmosphere/'
+            f'obsclim/global/daily/historical/CHELSA-W5E5/chelsa-w5e5_obsclim_'
+            f'{variable}_30arcsec_{year:d}{month:02d}.nc')
+
+    def path(self, *args):
+        variable, year, month = args
+        return super().path(None, os.path.join(
+            'cw5e5', 'daily', f'cw5e5.{variable}.day.{year:d}.{month:02d}.nc'))
 
 
 class OSFDownloader(CacheDownloader):

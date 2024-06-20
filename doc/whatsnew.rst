@@ -26,10 +26,24 @@ What's new
 v0.3.2 (unreleased)
 -------------------
 
+New features
+~~~~~~~~~~~~
+
+- Add ``temperature`` and ``precipitation`` arguments, and CHELSA-W5E5_
+  (aliased ``'cw5e5'``) as a new temperature and precipitation data source in
+  :func:`hyoga.open.atmosphere` (:issue:`86`, :pull:`87`).
+
+.. _CHELSA-W5E5: https://chelsa-climate.org/chelsa-w5e5-v1-0-daily-climate-data-at-1km-resolution/
+
 Bug fixes
 ~~~~~~~~~
 
-- Add newly missing requirement of `numpy<2` (:issue:`90`, :pull:`91`).
+- Add newly missing requirement of ``numpy<2`` (:issue:`90`, :pull:`91`).
+
+Internal changes
+~~~~~~~~~~~~~~~~
+
+- Add aggregators in :mod:`hyoga.open.aggregator` (:issue:`86`, :pull:`87`).
 
 .. _v0.3.1:
 
