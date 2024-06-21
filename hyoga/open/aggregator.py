@@ -183,10 +183,11 @@ class CW5E5TiledAggregator(Aggregator):
                 if os.path.isfile(tilepath):
                     continue
 
-                # aggregate a 30x30 degree tile
+                # aggregate a 30x30 degree tile (use groupby to keep time)
                 tile = ds.sel(lon=slice(lon, lon+30), lat=slice(lat, lat+30))
                 recipe = recipe.replace('avg', 'mean')
-                tile = getattr(tile, recipe)('time', keep_attrs=True)
+                tile = tile.groupby('time.month')
+                tile = getattr(tile, recipe)(keep_attrs=True)
 
                 # store output as netcdf and return path
                 print(f"aggregating {tilepath} ...")
