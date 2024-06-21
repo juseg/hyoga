@@ -132,8 +132,8 @@ class CW5E5TiledAggregator(Aggregator):
 
     def _get_all_coords(self):
         """Return corner coordinates for all tiles."""
-        lats = range(-90, 90, 10)
-        lons = range(-180, 180, 10)
+        lats = range(-90, 90, 30)
+        lons = range(-180, 180, 30)
         return ((lat, lon) for lat in lats for lon in lons)
 
     def _get_tile_path(self, pattern, lat, lon):
