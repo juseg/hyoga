@@ -138,8 +138,8 @@ class CW5E5TiledAggregator(Aggregator):
 
     def _get_tile_path(self, pattern, lat, lon):
         """Return tile path from pattern and corner coordinates."""
-        llat = f'{'n' if (lat >= 0) else 's'}{abs(lat):02d}'
-        llon = f'{'e' if (lon >= 0) else 'w'}{abs(lon):03d}'
+        llat = f'{"n" if (lat >= 0) else "s"}{abs(lat):02d}'
+        llon = f'{"e" if (lon >= 0) else "w"}{abs(lon):03d}'
         return pattern.format(llat+llon)
 
     def inputs(self, *args):
