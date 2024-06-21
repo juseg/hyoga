@@ -173,11 +173,8 @@ class CW5E5TiledAggregator(Aggregator):
         os.makedirs(os.path.dirname(output[0]), exist_ok=True)
 
         # open inputs as multi-file dataset
-        with xr.open_mfdataset(
-                inputs, chunks={'lat': 300, 'lon': 300},
-                preprocess=lambda ds: ds.assign(
-                    lat=ds.lat.astype('f4'), lon=ds.lon.astype('f4')),
-                ) as ds:
+        with xr.open_mfdataset(inputs, preprocess=lambda ds: ds.assign(
+                lat=ds.lat.astype('f4'), lon=ds.lon.astype('f4'))) as ds:
 
             # for each tile
             for tilepath, (lat, lon) in zip(output, self._get_all_coords()):
