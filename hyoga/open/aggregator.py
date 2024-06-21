@@ -70,22 +70,21 @@ class Aggregator():
     def aggregate(self, inputs, output, recipe='avg'):
         """Aggregate `inputs` into `output` file."""
 
+        # create directory if missing
+        os.makedirs(os.path.dirname(output), exist_ok=True)
+
         # open inputs as multi-file dataset
         with xr.open_mfdataset(
                 inputs, chunks={'lat': 300, 'lon': 300},
+                # FIXME this is a mixed-precision workaround specific to CW5E5
                 preprocess=lambda ds: ds.assign(
-                    lat=ds.lat.astype('f4'), lon=ds.lon.astype('f4')),
-                # parallel=False,
-                ) as ds:
+                    lat=ds.lat.astype('f4'), lon=ds.lon.astype('f4'))) as ds:
             ds = getattr(
                 ds, recipe.replace('avg', 'mean'))('time', keep_attrs=True)
 
-            # FIXME implement proper tiling
-            ds = ds.sel(lon=slice(5, 10), lat=slice(43, 48))
-
             # store output as netcdf and return path
             print(f"aggregating {output} ...")
-            ds.to_netcdf(output, compute=False).compute()
+            ds.to_netcdf(output)
             return output
 
 
@@ -143,6 +142,7 @@ class CW5E5TiledAggregator(Aggregator):
         return pattern.format(llat+llon)
 
     def inputs(self, *args):
+        """Return paths of input files, downloading as necessary."""
         variable, start, end, month = args
         downloader = hyoga.open.downloader.CW5E5DailyDownloader()
         years = range(start, end+1)
