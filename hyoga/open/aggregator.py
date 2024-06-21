@@ -132,13 +132,14 @@ class CW5E5TiledAggregator(Aggregator):
 
     def _get_all_coords(self):
         """Return corner coordinates for all tiles."""
-        # FIXME loop globally
-        return ((lat, lon) for lat in (0, 30) for lon in (0, 30))
+        lats = range(-90, 90, 10)
+        lons = range(-180, 180, 10)
+        return ((lat, lon) for lat in lats for lon in lons)
 
     def _get_tile_path(self, pattern, lat, lon):
         """Return tile path from pattern and corner coordinates."""
         llat = f'{'n' if (lat >= 0) else 's'}{abs(lat):02d}'
-        llon = f'{'e' if (lon >= 0) else 'w'}{abs(lon):02d}'
+        llon = f'{'e' if (lon >= 0) else 'w'}{abs(lon):03d}'
         return pattern.format(llat+llon)
 
     def inputs(self, *args):
