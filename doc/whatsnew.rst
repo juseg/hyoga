@@ -31,7 +31,8 @@ New features
 
 - Add ``temperature`` and ``precipitation`` arguments, and CHELSA-W5E5_
   (aliased ``'cw5e5'``) as a new temperature and precipitation data source in
-  :func:`hyoga.open.atmosphere` (:issue:`86`, :pull:`87`).
+  :func:`hyoga.open.atmosphere` (:issue:`86`, :pull:`87`), aggregated on 30x30
+  degree tiles (:issue:`88`, :pull:`92`).
 
 .. _CHELSA-W5E5: https://chelsa-climate.org/chelsa-w5e5-v1-0-daily-climate-data-at-1km-resolution/
 
@@ -43,7 +44,8 @@ Bug fixes
 Internal changes
 ~~~~~~~~~~~~~~~~
 
-- Add aggregators in :mod:`hyoga.open.aggregator` (:issue:`86`, :pull:`87`).
+- Add aggregators in :mod:`hyoga.open.aggregator` (:issue:`86`, :issue:`88`,
+  :pull:`87`, :pull:`92`).
 
 .. _v0.3.1:
 
