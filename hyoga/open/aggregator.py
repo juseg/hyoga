@@ -88,7 +88,6 @@ class Aggregator():
             return output
 
 
-# IDEA: implement intermediate TiledAggregator
 class TiledAggregator(Aggregator):
     """An aggregator that splits global data split into 30x30 degree tiles.
 
@@ -105,12 +104,32 @@ class TiledAggregator(Aggregator):
         The local paths of the aggregated files.
     """
 
+    def _get_all_coords(self):
+        """Return corner coordinates for all tiles."""
+        lats = range(-90, 90, 30)
+        lons = range(-180, 180, 30)
+        return ((lat, lon) for lat in lats for lon in lons)
+
+    def _get_tile_path(self, pattern, lat, lon):
+        """Return tile path from pattern and corner coordinates."""
+        llat = f'{"n" if (lat >= 0) else "s"}{abs(lat):02d}'
+        llon = f'{"e" if (lon >= 0) else "w"}{abs(lon):03d}'
+        return pattern.format(llat+llon)
+
+    def check(self, output):
+        return all(os.path.isfile(tilepath) for tilepath in output)
+
+    def output(self, *args):
+        pattern = self.pattern(*args)
+        coords = self._get_all_coords()
+        return [self._get_tile_path(pattern, *latlon) for latlon in coords]
+
     def pattern(self, *args):
         """Return aggregated tile path pattern as a format string."""
         raise NotImplementedError("This should be implemented in subclasses.")
 
 
-class CW5E5TiledAggregator(Aggregator):
+class CW5E5TiledAggregator(TiledAggregator):
     """An aggregator to compute CHELSA-W5E5 climatologies from daily means.
 
     Call parameters
@@ -130,18 +149,6 @@ class CW5E5TiledAggregator(Aggregator):
         The month for which data is downloaded data between 1 and 12.
     """
 
-    def _get_all_coords(self):
-        """Return corner coordinates for all tiles."""
-        lats = range(-90, 90, 30)
-        lons = range(-180, 180, 30)
-        return ((lat, lon) for lat in lats for lon in lons)
-
-    def _get_tile_path(self, pattern, lat, lon):
-        """Return tile path from pattern and corner coordinates."""
-        llat = f'{"n" if (lat >= 0) else "s"}{abs(lat):02d}'
-        llon = f'{"e" if (lon >= 0) else "w"}{abs(lon):03d}'
-        return pattern.format(llat+llon)
-
     def inputs(self, *args):
         """Return paths of input files, downloading as necessary."""
         variable, start, end, month = args
@@ -150,21 +157,13 @@ class CW5E5TiledAggregator(Aggregator):
         paths = (downloader(variable, year, month) for year in years)
         return paths
 
-    def _pattern(self, *args):
+    def pattern(self, *args):
         variable, start, end, month = args
         xdg_cache = os.environ.get("XDG_CACHE_HOME", os.path.join(
             os.path.expanduser('~'), '.cache'))
         return os.path.join(
             xdg_cache, 'hyoga', 'cw5e5', 'clim', f'cw5e5.{variable}.mon.'
             f'{start % 100:02d}{end % 100:02d}.avg.{{}}.{month:02d}.nc')
-
-    def output(self, *args):
-        pattern = self._pattern(*args)
-        coords = self._get_all_coords()
-        return [self._get_tile_path(pattern, *latlon) for latlon in coords]
-
-    def check(self, output):
-        return all(os.path.isfile(tilepath) for tilepath in output)
 
     def aggregate(self, inputs, output, recipe='avg'):
         """Aggregate tiled `inputs` to files matching `output` pattern."""
