@@ -147,9 +147,9 @@ class CW5E5TiledAggregator(TiledAggregator):
             os.path.expanduser('~'), '.cache'))
         return os.path.join(
             xdg_cache, 'hyoga', 'cw5e5', 'clim', f'cw5e5.{variable}.mon.'
-            f'{start % 100:02d}{end % 100:02d}.avg.{{}}.{month:02d}.nc')
+            f'{start % 100:02d}{end % 100:02d}.std.{{}}.{month:02d}.nc')
 
-    def aggregate(self, inputs, output, recipe='avg'):
+    def aggregate(self, inputs, output, recipe='std'):
         """Aggregate tiled `inputs` to files matching `output` pattern."""
 
         # create directory if missing
