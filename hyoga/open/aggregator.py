@@ -113,6 +113,80 @@ class TiledAggregator(Aggregator):
         raise NotImplementedError("This should be implemented in subclasses.")
 
 
+class CERA5TiledAggregator(TiledAggregator):
+    """An aggregator to split CHELSA-ERA5 climatologies into tiles.
+
+    Call parameters
+    ---------------
+    variable : 'tasmax', 'tas', 'tasmin', 'rsds', 'pr'
+        The short name for the CHELSA-W5E5 variable aggregated among:
+        - daily mean precipitation ('pr', kg m-2 s-1),
+        - daily mean surface downwelling shortwave dadiation ('rsds', W m-2),
+        - daily mean near-surface air temperature ('tas', K),
+        - daily maximum near surface air temperature ('tasmax', K),
+        - daily minimum near surface air temperature ('tasmin', K).
+    start : int
+        The aggregation start year between 1979 and 2016.
+    end : int
+        The aggregation end year between 1979 and 2016.
+    month : int
+        The month for which data is downloaded data between 1 and 12.
+    """
+
+    def inputs(self, *args):
+        """Return paths of input files, downloading as necessary."""
+        # FIXME consider moving tifs to e.g. .cache/hyoga/cera5/geotiff
+        variable, month = args
+        downloader = hyoga.open.downloader.CacheDownloader()
+        basename = f'CHELSA_{variable}_{month:02d}_1981-2010_V.2.1.tif'
+        paths = downloader(
+            'https://os.zhdk.cloud.switch.ch/envicloud/chelsa/chelsa_V2/'
+            f'GLOBAL/climatologies/1981-2010/{variable}/{basename}',
+            f'chelsa/{basename}')
+        return paths
+
+    def pattern(self, *args):
+        variable, month = args
+        xdg_cache = os.environ.get("XDG_CACHE_HOME", os.path.join(
+            os.path.expanduser('~'), '.cache'))
+        return os.path.join(
+            xdg_cache, 'hyoga', 'cera5', 'clim',
+            f'cera5.{variable}.mon.8110.avg.{{}}.{month:02d}.nc')
+
+    def aggregate(self, inputs, output):
+        """Aggregate tiled `inputs` to files matching `output` pattern."""
+
+        # create directory if missing
+        os.makedirs(os.path.dirname(output[0]), exist_ok=True)
+
+        # open inputs as multi-file dataset
+        with xr.open_dataarray(inputs) as ds:
+
+            # for each tile
+            for tilepath, (lat, lon) in zip(output, self._get_all_coords()):
+
+                # check wether tile file exists
+                if os.path.isfile(tilepath):
+                    continue
+
+                # crop a 30x30 degree tile
+                # FIXME rename (x, y) to (lon, lat), band_data to (tas, pr)?
+                # FIXME flip decreasing latitudes to match CW5E5 data?
+                month = int(tilepath.split('.')[-2])
+                tile = ds.sel(x=slice(lon, lon+30), y=slice(lat+30, lat))
+                tile = tile.squeeze('band', drop=True)
+                tile = tile.assign_coords(month=month)
+                tile = tile.expand_dims('month')
+
+                # store output as netcdf and return path
+                # FIXME new files are much heavier than the original
+                print(f"aggregating {tilepath} ...")
+                tile.to_netcdf(tilepath)
+
+        # return multi-tile output pattern
+        return output
+
+
 class CW5E5TiledAggregator(TiledAggregator):
     """An aggregator to compute CHELSA-W5E5 climatologies from daily means.
 
