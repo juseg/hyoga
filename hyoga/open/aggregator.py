@@ -118,17 +118,12 @@ class CERA5TiledAggregator(TiledAggregator):
 
     Call parameters
     ---------------
-    variable : 'tasmax', 'tas', 'tasmin', 'rsds', 'pr'
-        The short name for the CHELSA-W5E5 variable aggregated among:
-        - daily mean precipitation ('pr', kg m-2 s-1),
-        - daily mean surface downwelling shortwave dadiation ('rsds', W m-2),
+    variable : 'pr', 'tas', 'tasmax', 'tasmin'
+        The short name for the CHELSA-ERA5 variable aggregated among:
+        - daily mean precipitation ('pr', kg m-2 month-1),
         - daily mean near-surface air temperature ('tas', K),
         - daily maximum near surface air temperature ('tasmax', K),
         - daily minimum near surface air temperature ('tasmin', K).
-    start : int
-        The aggregation start year between 1979 and 2016.
-    end : int
-        The aggregation end year between 1979 and 2016.
     month : int
         The month for which data is downloaded data between 1 and 12.
     """
@@ -192,7 +187,7 @@ class CW5E5TiledAggregator(TiledAggregator):
 
     Call parameters
     ---------------
-    variable : 'tasmax', 'tas', 'tasmin', 'rsds', 'pr'
+    variable : 'pr', 'rsds', 'tas', 'tasmax', 'tasmin'
         The short name for the CHELSA-W5E5 variable aggregated among:
         - daily mean precipitation ('pr', kg m-2 s-1),
         - daily mean surface downwelling shortwave dadiation ('rsds', W m-2),
