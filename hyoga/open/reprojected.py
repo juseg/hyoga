@@ -73,8 +73,7 @@ def _open_climatology(source='chelsa', variable='tas'):
     # CHELSA-ERA5 1981-2010 global climatologies
     elif source == 'cera5':
         aggregator = hyoga.open.aggregator.CERA5TiledAggregator()
-        paths = (aggregator(variable, mon) for mon in range(1, 13))
-        paths = [path for month in paths for path in month]
+        paths = aggregator(variable)
         da = xr.open_mfdataset(paths, decode_coords='all').band_data
         da.attrs.update(_FillValue=np.nan)  # so values show in ncview
 

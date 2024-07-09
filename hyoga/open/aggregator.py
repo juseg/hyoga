@@ -124,29 +124,29 @@ class CERA5TiledAggregator(TiledAggregator):
         - daily mean near-surface air temperature ('tas', K),
         - daily maximum near surface air temperature ('tasmax', K),
         - daily minimum near surface air temperature ('tasmin', K).
-    month : int
-        The month for which data is downloaded data between 1 and 12.
     """
 
     def inputs(self, *args):
         """Return paths of input files, downloading as necessary."""
         # FIXME consider moving tifs to e.g. .cache/hyoga/cera5/geotiff
-        variable, month = args
+        variable, = args
         downloader = hyoga.open.downloader.CacheDownloader()
-        basename = f'CHELSA_{variable}_{month:02d}_1981-2010_V.2.1.tif'
-        paths = downloader(
+        basenames = [
+            f'CHELSA_{variable}_{month:02d}_1981-2010_V.2.1.tif'
+            for month in range(1, 13)]
+        paths = [downloader(
             'https://os.zhdk.cloud.switch.ch/envicloud/chelsa/chelsa_V2/'
             f'GLOBAL/climatologies/1981-2010/{variable}/{basename}',
-            f'chelsa/{basename}')
+            f'chelsa/{basename}') for basename in basenames]
         return paths
 
     def pattern(self, *args):
-        variable, month = args
+        variable, = args
         xdg_cache = os.environ.get("XDG_CACHE_HOME", os.path.join(
             os.path.expanduser('~'), '.cache'))
         return os.path.join(
             xdg_cache, 'hyoga', 'cera5', 'clim',
-            f'cera5.{variable}.mon.8110.avg.{{}}.{month:02d}.nc')
+            f'cera5.{variable}.mon.8110.avg.{{}}.nc')
 
     def aggregate(self, inputs, output):
         """Aggregate tiled `inputs` to files matching `output` pattern."""
@@ -155,7 +155,8 @@ class CERA5TiledAggregator(TiledAggregator):
         os.makedirs(os.path.dirname(output[0]), exist_ok=True)
 
         # open inputs as multi-file dataset
-        with xr.open_dataarray(inputs) as ds:
+        with xr.open_mfdataset(
+                inputs, combine='nested', concat_dim='month') as ds:
 
             # for each tile
             for tilepath, (lat, lon) in zip(output, self._get_all_coords()):
@@ -167,11 +168,9 @@ class CERA5TiledAggregator(TiledAggregator):
                 # crop a 30x30 degree tile
                 # FIXME rename (x, y) to (lon, lat), band_data to (tas, pr)?
                 # FIXME flip decreasing latitudes to match CW5E5 data?
-                month = int(tilepath.split('.')[-2])
                 tile = ds.sel(x=slice(lon, lon+30), y=slice(lat+30, lat))
                 tile = tile.squeeze('band', drop=True)
-                tile = tile.assign_coords(month=month)
-                tile = tile.expand_dims('month')
+                tile.band_data.encoding.update(_FillValue=-9999)
 
                 # store output as netcdf and return path
                 # FIXME new files are much heavier than the original
