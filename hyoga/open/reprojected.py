@@ -70,7 +70,15 @@ def _open_climatology(source='chelsa', variable='tas'):
             paths, combine='nested', concat_dim='time', decode_cf=True)
         da = ds.band_data.squeeze()
 
-    # CHELSA 1981-2010 global climatologies
+    # CHELSA-ERA5 1981-2010 global climatologies
+    elif source == 'cera5':
+        aggregator = hyoga.open.aggregator.CERA5TiledAggregator()
+        paths = (aggregator(variable, mon) for mon in range(1, 13))
+        paths = [path for month in paths for path in month]
+        da = xr.open_mfdataset(paths, decode_coords='all').band_data
+        da.attrs.update(_FillValue=np.nan)  # so values show in ncview
+
+    # CHELSA-W5E5 1981-2010 global climatologies
     elif source == 'cw5e5':
         aggregator = hyoga.open.aggregator.CW5E5TiledAggregator()
         start, end = 1981, 2010  # FIXME allow custom aggregation period
