@@ -9,6 +9,8 @@ them in hyoga's cache directory, and return a path to that file.
 """
 
 import os.path
+import subprocess
+import tempfile
 import xarray as xr
 import hyoga.open.downloader
 
@@ -171,9 +173,17 @@ class CW5E5TiledAggregator(TiledAggregator):
                 tile = tile.groupby('time.month')
                 tile = getattr(tile, recipe)(keep_attrs=True)
 
-                # store output as netcdf and return path
+                # store as uncompressed netcdf
                 print(f"aggregating {tilepath} ...")
                 tile.to_netcdf(tilepath)
+
+                # nccopy compression beats xarray by far
+                print(f"compressing {tilepath} ...")
+                dirname, basename = os.path.split(tilepath)
+                with tempfile.NamedTemporaryFile(
+                        dir=dirname, prefix=basename+'.') as tmp:
+                    subprocess.run(['nccopy', '-sd6', tilepath, tmp.name])
+                    os.replace(tmp.name, tilepath)
 
         # return multi-tile output pattern
         return output
