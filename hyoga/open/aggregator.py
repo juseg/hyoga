@@ -9,6 +9,8 @@ them in hyoga's cache directory, and return a path to that file.
 """
 
 import os.path
+import subprocess
+import tempfile
 import xarray as xr
 import hyoga.open.downloader
 
@@ -172,10 +174,17 @@ class CERA5TiledAggregator(TiledAggregator):
                 tile = tile.squeeze('band', drop=True)
                 tile.band_data.encoding.update(_FillValue=-9999)
 
-                # store output as netcdf and return path
-                # FIXME new files are much heavier than the original
+                # store as uncompressed netcdf
                 print(f"aggregating {tilepath} ...")
                 tile.to_netcdf(tilepath)
+
+                # nccopy compression beats xarray by far
+                print(f"compressing {tilepath} ...")
+                dirname, basename = os.path.split(tilepath)
+                with tempfile.NamedTemporaryFile(
+                        dir=dirname, prefix=basename+'.') as tmp:
+                    subprocess.run(['nccopy', '-sd6', tilepath, tmp.name])
+                    os.replace(tmp.name, tilepath)
 
         # return multi-tile output pattern
         return output
