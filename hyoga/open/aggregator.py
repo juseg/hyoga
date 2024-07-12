@@ -129,25 +129,24 @@ class CW5E5TiledAggregator(TiledAggregator):
         The aggregation start year between 1979 and 2016.
     end : int
         The aggregation end year between 1979 and 2016.
-    month : int
-        The month for which data is downloaded data between 1 and 12.
     """
 
     def inputs(self, *args):
         """Return paths of input files, downloading as necessary."""
-        variable, start, end, month = args
+        variable, start, end = args
         downloader = hyoga.open.downloader.CW5E5DailyDownloader()
-        years = range(start, end+1)
-        paths = (downloader(variable, year, month) for year in years)
+        paths = [
+            downloader(variable, year, month)
+            for month in range(1, 13) for year in range(start, end+1)]
         return paths
 
     def pattern(self, *args):
-        variable, start, end, month = args
+        variable, start, end = args
         xdg_cache = os.environ.get("XDG_CACHE_HOME", os.path.join(
             os.path.expanduser('~'), '.cache'))
         return os.path.join(
             xdg_cache, 'hyoga', 'cw5e5', 'clim', f'cw5e5.{variable}.mon.'
-            f'{start % 100:02d}{end % 100:02d}.avg.{{}}.{month:02d}.nc')
+            f'{start % 100:02d}{end % 100:02d}.avg.{{}}.nc')
 
     def aggregate(self, inputs, output, recipe='avg'):
         """Aggregate tiled `inputs` to files matching `output` pattern."""
