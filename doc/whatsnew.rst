@@ -33,7 +33,7 @@ New features
   (aliased ``'cw5e5'``) as a new temperature and precipitation data source in
   :func:`hyoga.open.atmosphere` (:issue:`86`, :pull:`87`), aggregated on 30x30
   degree tiles (:issue:`88`, :pull:`92`), concatenated yearly (:issue:`99`,
-  :pull:`100`).
+  :pull:`100`), and compressed with netCDF-4 (:issue:`101`, :pull:`102`).
 
 .. _CHELSA-W5E5: https://chelsa-climate.org/chelsa-w5e5-v1-0-daily-climate-data-at-1km-resolution/
 
@@ -46,7 +46,7 @@ Internal changes
 ~~~~~~~~~~~~~~~~
 
 - Add aggregators in :mod:`hyoga.open.aggregator` (:issue:`86`, :issue:`88`,
-  :issue:`99`, :pull:`87`, :pull:`92`, :pull:`100`).
+  :issue:`99`, :issue:`101`, :pull:`87`, :pull:`92`, :pull:`100`, :pull:`102`).
 
 .. _v0.3.1:
 
