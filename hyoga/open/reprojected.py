@@ -40,7 +40,7 @@ def _open_elevation(source='gebco'):
     elif source == 'chelsa':
         downloader = hyoga.open.downloader.CacheDownloader()
         path = downloader(
-            'https://os.zhdk.cloud.switch.ch/envicloud/chelsa/chelsa_V2/'
+            'https://os.zhdk.cloud.switch.ch/chelsav2/'
             'GLOBAL/input/dem_latlong.nc', 'chelsa/dem_latlong.nc')
         da = xr.open_dataarray(path, decode_coords='all')
         da = da.isel(lat=slice(None, None, -1))
@@ -63,7 +63,7 @@ def _open_climatology(source='chelsa', variable='tas'):
             f'CHELSA_{variable}_{month+1:02d}_1981-2010_V.2.1.tif'
             for month in range(12))
         paths = (downloader(
-            'https://os.zhdk.cloud.switch.ch/envicloud/chelsa/chelsa_V2/'
+            'https://os.zhdk.cloud.switch.ch/chelsav2/'
             f'GLOBAL/climatologies/1981-2010/{variable}/{basename}',
             f'chelsa/{basename}') for basename in basenames)
         ds = xr.open_mfdataset(
