@@ -1,4 +1,4 @@
-.. Copyright (c) 2021-2024, Julien Seguinot (juseg.dev)
+.. Copyright (c) 2021-2025, Julien Seguinot (juseg.dev)
 .. GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
 .. currentmodule:: hyoga
@@ -41,6 +41,7 @@ Bug fixes
 ~~~~~~~~~
 
 - Add newly missing requirement of ``numpy<2`` (:issue:`90`, :pull:`91`).
+- Fix CHELSA_-2.1 download urls (:issue:`103`, :pull:`104`).
 
 Internal changes
 ~~~~~~~~~~~~~~~~
