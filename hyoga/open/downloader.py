@@ -1,4 +1,4 @@
-# Copyright (c) 2024, Julien Seguinot (juseg.dev)
+# Copyright (c) 2024-2025, Julien Seguinot (juseg.dev)
 # GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
 """
@@ -47,7 +47,8 @@ class Downloader:
             These two methods need to have compatible signatures.
         **kwargs :
             Keyword arguments are passed to :meth:`get` to alter the download
-            recipe. This is used to provide a member filename in an archive.
+            recipe. This is used to provide a member filename in an archive,
+            and additional arguments to the HTTP GET request.
         """
         url = self.url(*args)
         path = self.path(*args)
@@ -67,14 +68,14 @@ class Downloader:
         """Check whether file is present."""
         return os.path.isfile(path)
 
-    def get(self, url, path):
+    def get(self, url, path, **kwargs):
         """Download online `url` to local `path`."""
 
         # create directory if missing
         os.makedirs(os.path.dirname(path), exist_ok=True)
 
         # open url and raise any http error
-        with requests.get(url, stream=True, timeout=5) as request:
+        with requests.get(url, stream=True, timeout=5, **kwargs) as request:
             request.raise_for_status()
 
             # download file chunks
@@ -162,7 +163,7 @@ class ArchiveDownloader(CacheDownloader):
         Member file to extract from archive, default to basename of ``path``.
     """
 
-    def get(self, url, path, member=None):
+    def get(self, url, path, member=None, **kwargs):
 
         # save archive as named online
         outdir, basename = os.path.split(path)
@@ -171,7 +172,7 @@ class ArchiveDownloader(CacheDownloader):
 
         # download it only if missing
         if not super().check(archivepath):
-            super().get(url, archivepath)
+            super().get(url, archivepath, **kwargs)
 
         # by default assume member name is path basename
         member = member or basename
