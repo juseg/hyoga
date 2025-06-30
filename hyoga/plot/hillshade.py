@@ -1,4 +1,4 @@
-# Copyright (c) 2018-2022, Julien Seguinot (juseg.github.io)
+# Copyright (c) 2018-2025, Julien Seguinot (juseg.dev)
 # GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
 """
@@ -6,26 +6,16 @@ Shaded relief plotting tools.
 """
 
 import numpy as np
-import xarray as xr
 
 
 def _compute_gradient(darray):
     """Compute gradient along a all dimensions of a data array."""
 
-    # extract coordinate data
-    dims = darray.dims
-    coords = [darray[d].data for d in dims]
+    # differentiate along all dimensions
+    gradient = (darray.differentiate(dim) for dim in darray.dims)
 
-    # apply numpy.gradient
-    darray = xr.apply_ufunc(np.gradient, darray, *coords,
-                            input_core_dims=(dims,)+dims,
-                            output_core_dims=[('n',)+dims])
-
-    # add vector component coordinate
-    darray = darray.assign_coords(n=list(dims))
-
-    # return as single dataarray
-    return darray
+    # return as a generator
+    return gradient
 
 
 def _compute_hillshade(darray, altitude=30.0, azimuth=315.0):
