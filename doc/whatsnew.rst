@@ -37,6 +37,11 @@ New features
 
 .. _CHELSA-W5E5: https://chelsa-climate.org/chelsa-w5e5-v1-0-daily-climate-data-at-1km-resolution/
 
+Breaking changes
+~~~~~~~~~~~~~~~~
+
+- Require Matplotlib 3.5 or newer (:issue:`107`, :pull:`108`).
+
 Bug fixes
 ~~~~~~~~~
 
@@ -44,6 +49,8 @@ Bug fixes
 - Fix CHELSA_-2.1 download urls (:issue:`103`, :pull:`104`).
 - Fix Ehlers et al. (2011) download error (:issue:`109`, :pull:`110`).
 - Add Sphinx config path in `.readthedocs.yaml` (:issue:`105`, :pull:`106`).
+- Fix broken colormap registration in some recent matplotlib versions
+  (:issue:`107`, :pull:`108`).
 
 Internal changes
 ~~~~~~~~~~~~~~~~
