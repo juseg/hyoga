@@ -1,4 +1,4 @@
-# Copyright (c) 2018-2022, Julien Seguinot (juseg.github.io)
+# Copyright (c) 2018-2025, Julien Seguinot (juseg.dev)
 # GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
 """
@@ -77,9 +77,5 @@ COLORMAPS = {
 COLORMAPS['Topographic'].set_under('#A7DFD2')
 
 # register colormaps with matplotlib
-if mpl.__version__ >= '3.5':
-    for cmap in COLORMAPS.values():
-        mpl.colormaps.register(cmap)
-else:
-    for cmap in COLORMAPS.values():
-        mpl.cm.register_cmap(cmap=cmap)
+for cmap in COLORMAPS.values():
+    mpl.colormaps.register(cmap)
