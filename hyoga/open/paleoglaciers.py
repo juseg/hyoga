@@ -1,4 +1,4 @@
-# Copyright (c) 2021-2022, Julien Seguinot (juseg.github.io)
+# Copyright (c) 2021-2025, Julien Seguinot (juseg.dev)
 # GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
 """
@@ -19,8 +19,9 @@ def _download_paleoglaciers_ehl11():
     url = ('http://static.us.elsevierhealth.com/ehlers_digital_maps/'
            'digital_maps_02_all_other_files.zip')
     downloader = hyoga.open.downloader.ShapeZipDownloader()
-    return (
-        downloader(url, path) for path in ('lgm.shp', 'lgm_alpen.shp'))
+    headers = {'User-Agent': 'Mozilla'}
+    paths = ('lgm.shp', 'lgm_alpen.shp')
+    return (downloader(url, path, headers=headers) for path in paths)
 
 
 def _download_paleoglaciers_bat19():
