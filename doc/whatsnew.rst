@@ -45,12 +45,13 @@ Breaking changes
 Bug fixes
 ~~~~~~~~~
 
-- Add newly missing requirement of ``numpy<2`` (:issue:`90`, :pull:`91`).
 - Fix CHELSA_-2.1 download urls (:issue:`103`, :pull:`104`).
 - Fix Ehlers et al. (2011) download error (:issue:`109`, :pull:`110`).
 - Add Sphinx config path in `.readthedocs.yaml` (:issue:`105`, :pull:`106`).
 - Fix broken colormap registration in some recent matplotlib versions
   (:issue:`107`, :pull:`108`).
+- Fix incompatibility with Numpy 2 and newer (:issue:`90`, :issue:`111`,
+  :pull:`91` :issue:`112`).
 
 Internal changes
 ~~~~~~~~~~~~~~~~
