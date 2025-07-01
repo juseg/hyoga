@@ -198,6 +198,14 @@ def atmosphere(
     ds.time.attrs.update(
         bounds='time_bounds', calendar='noleap', units='days since 1-1-1')
 
+    # convert temperature to degC
+    # FIXME prefer cw5e5 (SI) units?
+    if temperature == 'chelsa':
+        assert 'units' not in ds.air_temp.attrs
+    elif temperature == 'cw5e5':
+        assert ds.air_temp.units == 'K'
+        ds['air_temp'] -= 273.15
+
     # convert precipitation to kg m-2 day-1
     ds['precipitation'] /= xr.DataArray(months, coords={'time': ds.time})
 
