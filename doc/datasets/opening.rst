@@ -1,4 +1,4 @@
-.. Copyright (c) 2021-2022, Julien Seguinot (juseg.github.io)
+.. Copyright (c) 2021-2025, Julien Seguinot (juseg.dev)
 .. GNU General Public License v3.0+ (https://www.gnu.org/licenses/gpl-3.0.txt)
 
 Opening datasets
@@ -42,8 +42,9 @@ are ready to export as PISM input files using :meth:`.Dataset.to_netcdf`.
 
 .. warning::
 
-   Running these for the first time will download and deflate ca. 12 GB data
-   from the web. Broken or partially downloaded files are not handled and will
+   Running these for the first time will download and deflate ca. 12 GB global
+   data in the default case, and ca. 1.2 TB in the case of `cw5e5` atmosphere
+   source. Broken or partially downloaded files are not handled and instead
    need to be manually deleted from the cache directory (``~/.cache/hyoga``) in
    case of interrupted downloads.
 
@@ -81,7 +82,7 @@ data can take several minutes. ::
 Both input files are now ready to be used in a simple paleo-glacier modelling
 run on the alps::
 
-   mpiexec -n 4 pismr \
+   mpiexec -n 4 pism \
        -i boot.nc -bootstrap -o run.nc -ys 0 -ye 100 \
        -atmosphere given,elevation_change \
            -atmosphere.given.periodic \
