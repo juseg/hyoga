@@ -198,29 +198,28 @@ def atmosphere(
     ds.time.attrs.update(
         bounds='time_bounds', calendar='noleap', units='days since 1-1-1')
 
-    # convert temperature to degC
-    # FIXME prefer cw5e5 (SI) units?
+    # convert temperature to K
     if temperature == 'chelsa':
         assert 'units' not in ds.air_temp.attrs
+        ds['air_temp'] += 273.15
     elif temperature == 'cw5e5':
         assert ds.air_temp.units == 'K'
-        ds['air_temp'] -= 273.15
 
-    # convert precipitation to kg m-2 day-1
+    # convert precipitation to kg m-2 s-1
     if precipitation == 'chelsa':
         assert 'units' not in ds.precipitation.attrs
-        ds['precipitation'] /= xr.DataArray(months, coords={'time': ds.time})
+        ds['precipitation'] /= (
+            3600 * 24 * xr.DataArray(months, coords={'time': ds.time}))
     elif precipitation == 'cw5e5':
         assert ds.precipitation.units == 'kg m-2 s-1'
-        ds['precipitation'] *= 3600 * 24
 
     # set variable attributes
     ds.air_temp.attrs.update(
         long_name='near-surface air temperature',
-        standard_name='air_temperature', units='degC')
+        standard_name='air_temperature', units='K')
     ds.precipitation.attrs.update(
         long_name='mean annual precipitation rate',
-        standard_name='precipitation_flux', units='kg m-2 day-1')
+        standard_name='precipitation_flux', units='kg m-2 s-1')
     ds.elevation.attrs.update(
         long_name='ice surface altitude',
         standard_name='surface_altitude', units='m')
