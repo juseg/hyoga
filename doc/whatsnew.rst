@@ -37,6 +37,11 @@ New features
 - Open atmosphere datasets in International System (SI) units; potentially a
   breaking change for non-unit-agnostic models (:issue:`94`, :pull:`113`).
 
+.. warning::
+   Support for CHELSA-W5E5 is currently experimental. It requires 1.2 terabytes
+   of free disk space for cacheing, comes with a known bug (:issue:`114`) and a
+   long to-do list of planned improvements (:issue:`95`).
+
 .. _CHELSA-W5E5: https://chelsa-climate.org/chelsa-w5e5-v1-0-daily-climate-data-at-1km-resolution/
 
 Breaking changes
