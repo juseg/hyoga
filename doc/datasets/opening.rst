@@ -43,10 +43,10 @@ are ready to export as PISM input files using :meth:`.Dataset.to_netcdf`.
 .. warning::
 
    Running these for the first time will download and deflate ca. 12 GB global
-   data in the default case, and ca. 1.2 TB in the case of `cw5e5` atmosphere
-   source. Broken or partially downloaded files are not handled and instead
-   need to be manually deleted from the cache directory (``~/.cache/hyoga``) in
-   case of interrupted downloads.
+   data in the default case, and ca. 1.2 TB in the case of ``'cw5e5'``
+   atmosphere source. Broken or partially downloaded files are not handled and
+   instead need to be manually deleted from the cache directory
+   (``~/.cache/hyoga``) in case of interrupted downloads.
 
 PISM example run
 ----------------
