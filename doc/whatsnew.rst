@@ -26,7 +26,7 @@ What's new
 v0.3.2 (1 Jul 2025)
 -------------------
 
-This release brings experimental support for aggregated CHELSA_W5E5_ climate as
+This release brings experimental support for aggregated CHELSA-W5E5_ climate as
 an alternative source for atmosphere :doc:`datasets </datasets/opening>`, which
 now use SI units. Bugs were fixed repairing the download of paleoglacier vector
 data and enabling compatibility with most recent versions of Numpy, Matplotlib,
