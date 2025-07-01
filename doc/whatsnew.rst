@@ -60,6 +60,7 @@ Internal changes
 
 - Add aggregators in :mod:`hyoga.open.aggregator` (:issue:`86`, :issue:`88`,
   :issue:`99`, :issue:`101`, :pull:`87`, :pull:`92`, :pull:`100`, :pull:`102`).
+- Test (and support) Python 3.13 (:pull:`115`).
 
 .. _v0.3.1:
 
