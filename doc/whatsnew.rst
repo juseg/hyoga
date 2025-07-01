@@ -23,8 +23,14 @@ What's new
 
 .. _v0.3.2:
 
-v0.3.2 (unreleased)
+v0.3.2 (1 Jul 2025)
 -------------------
+
+This release brings experimental support for aggregated CHELSA-W5E5_ climate as
+an alternative source for atmosphere :doc:`datasets </datasets/opening>`, which
+now use SI units. Bugs were fixed repairing the download of paleoglacier vector
+data and enabling compatibility with most recent versions of Numpy, Matplotlib,
+and Read the Docs. Code coverage decreased to 63 percent.
 
 New features
 ~~~~~~~~~~~~
@@ -36,6 +42,11 @@ New features
   :pull:`100`), and compressed with netCDF-4 (:issue:`101`, :pull:`102`).
 - Open atmosphere datasets in International System (SI) units; potentially a
   breaking change for non-unit-agnostic models (:issue:`94`, :pull:`113`).
+
+.. warning::
+   Support for CHELSA-W5E5 is currently experimental. It requires 1.2 terabytes
+   of free disk space for cacheing, comes with a known bug (:issue:`114`) and a
+   long to-do list of planned improvements (:issue:`95`).
 
 .. _CHELSA-W5E5: https://chelsa-climate.org/chelsa-w5e5-v1-0-daily-climate-data-at-1km-resolution/
 
