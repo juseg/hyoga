@@ -76,6 +76,7 @@ def _open_climatology(source='chelsa', variable='tas'):
         start, end = 1981, 2010  # FIXME allow custom aggregation period
         paths = aggregator(variable, start, end)
         ds = xr.open_mfdataset(paths, decode_cf=True)
+        ds = ds.rename_dims(month='time')  # FIXME move to aggregator?
         da = ds[variable].rio.write_crs('+proj=longlat +datum=WGS84')
 
     # invalid sources
