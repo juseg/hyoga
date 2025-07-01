@@ -23,7 +23,7 @@ What's new
 
 .. _v0.3.2:
 
-v0.3.2 (unreleased)
+v0.3.2 (1 Jul 2025)
 -------------------
 
 New features
