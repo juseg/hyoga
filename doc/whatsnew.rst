@@ -34,6 +34,8 @@ New features
   :func:`hyoga.open.atmosphere` (:issue:`86`, :pull:`87`), aggregated on 30x30
   degree tiles (:issue:`88`, :pull:`92`), concatenated yearly (:issue:`99`,
   :pull:`100`), and compressed with netCDF-4 (:issue:`101`, :pull:`102`).
+- Open atmosphere datasets in International System (SI) units; potentially a
+  breaking change for non-unit-agnostic models (:issue:`94`, :pull:`113`).
 
 .. _CHELSA-W5E5: https://chelsa-climate.org/chelsa-w5e5-v1-0-daily-climate-data-at-1km-resolution/
 

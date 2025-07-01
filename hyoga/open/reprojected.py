@@ -76,6 +76,7 @@ def _open_climatology(source='chelsa', variable='tas'):
         start, end = 1981, 2010  # FIXME allow custom aggregation period
         paths = aggregator(variable, start, end)
         ds = xr.open_mfdataset(paths, decode_cf=True)
+        ds = ds.rename_dims(month='time')  # FIXME move to aggregator?
         da = ds[variable].rio.write_crs('+proj=longlat +datum=WGS84')
 
     # invalid sources
@@ -117,8 +118,6 @@ def atmosphere(
     """
     Open atmospheric data from online datasets for PISM.
 
-    Currently a single dataset (CHELSA) is supported.
-
     Parameters
     ----------
     crs : str
@@ -154,7 +153,8 @@ def atmosphere(
     twelfth of that, not a calendar month. In addition, Python's ``cftime``
     (and thus xarray) does not understand the unit '365 days'.
 
-    Similarly, precipitation rates are converted to daily. According to CHELSA
+    CHELSA-2.1 **temperature** and **precipitation rates** are converted to the
+    SI **units** 'K' and 'kg m-2 s-1'. According to the CHELSA-2.1
     docs monthly climatologies "represent averages for the calendar month". The
     1981--2010 period contains 6 leap years over 30 years, so the average
     February lasts 28.2 days. Due to the no-leap calendar, February
@@ -198,16 +198,28 @@ def atmosphere(
     ds.time.attrs.update(
         bounds='time_bounds', calendar='noleap', units='days since 1-1-1')
 
-    # convert precipitation to kg m-2 day-1
-    ds['precipitation'] /= xr.DataArray(months, coords={'time': ds.time})
+    # convert temperature to K
+    if temperature == 'chelsa':
+        assert 'units' not in ds.air_temp.attrs
+        ds['air_temp'] += 273.15
+    elif temperature == 'cw5e5':
+        assert ds.air_temp.units == 'K'
+
+    # convert precipitation to kg m-2 s-1
+    if precipitation == 'chelsa':
+        assert 'units' not in ds.precipitation.attrs
+        ds['precipitation'] /= (
+            3600 * 24 * xr.DataArray(months, coords={'time': ds.time}))
+    elif precipitation == 'cw5e5':
+        assert ds.precipitation.units == 'kg m-2 s-1'
 
     # set variable attributes
     ds.air_temp.attrs.update(
         long_name='near-surface air temperature',
-        standard_name='air_temperature', units='degC')
+        standard_name='air_temperature', units='K')
     ds.precipitation.attrs.update(
         long_name='mean annual precipitation rate',
-        standard_name='precipitation_flux', units='kg m-2 day-1')
+        standard_name='precipitation_flux', units='kg m-2 s-1')
     ds.elevation.attrs.update(
         long_name='ice surface altitude',
         standard_name='surface_altitude', units='m')
