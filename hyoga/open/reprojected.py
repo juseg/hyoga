@@ -207,7 +207,12 @@ def atmosphere(
         ds['air_temp'] -= 273.15
 
     # convert precipitation to kg m-2 day-1
-    ds['precipitation'] /= xr.DataArray(months, coords={'time': ds.time})
+    if precipitation == 'chelsa':
+        assert 'units' not in ds.precipitation.attrs
+        ds['precipitation'] /= xr.DataArray(months, coords={'time': ds.time})
+    elif precipitation == 'cw5e5':
+        assert ds.precipitation.units == 'kg m-2 s-1'
+        ds['precipitation'] *= 3600 * 24
 
     # set variable attributes
     ds.air_temp.attrs.update(
