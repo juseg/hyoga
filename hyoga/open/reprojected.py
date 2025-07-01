@@ -117,8 +117,6 @@ def atmosphere(
     """
     Open atmospheric data from online datasets for PISM.
 
-    Currently a single dataset (CHELSA) is supported.
-
     Parameters
     ----------
     crs : str
@@ -154,7 +152,8 @@ def atmosphere(
     twelfth of that, not a calendar month. In addition, Python's ``cftime``
     (and thus xarray) does not understand the unit '365 days'.
 
-    Similarly, precipitation rates are converted to daily. According to CHELSA
+    CHELSA-2.1 **temperature** and **precipitation rates** are converted to the
+    SI **units** 'K' and 'kg m-2 s-1'. According to the CHELSA-2.1
     docs monthly climatologies "represent averages for the calendar month". The
     1981--2010 period contains 6 leap years over 30 years, so the average
     February lasts 28.2 days. Due to the no-leap calendar, February
