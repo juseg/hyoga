@@ -24,7 +24,7 @@ SEQUENCES = {
         (-500,  '#ACDBFB'),     # :750  500  250
         (-250,  '#B9E3FF'),     # :375  250  125
         (-100,  '#C6ECFF'),     # :150  100   50
-        (-0,    '#D8F2FE')]],   # :  0    0    0 light blue
+        (-1e-6, '#D8F2FE')]],   # :  0    0    0 light blue
 
     # topographic levels optimized for [0, 9000] and example rescaling
     'Topographic': [(level/9000, color) for (level, color) in [
@@ -64,8 +64,8 @@ SEQUENCES.update({
     # glossy hillshading
     'Glossy': [
         (0.0, '#ffffffff'),     # solid white
-        (0.5, '#ffffff00'),     # transparent white
-        (0.5, '#00000000'),     # transparent black
+        (0.5-1e-6, '#ffffff00'),     # transparent white
+        (0.5+1e-6, '#00000000'),     # transparent black
         (1.0, '#000000ff')]})   # solid black
 
 # colormaps dictionary (4k colors to avoid striping in plains)
