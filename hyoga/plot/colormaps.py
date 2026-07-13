@@ -24,7 +24,7 @@ SEQUENCES = {
         (-500,  '#ACDBFB'),     # :750  500  250
         (-250,  '#B9E3FF'),     # :375  250  125
         (-100,  '#C6ECFF'),     # :150  100   50
-        (-1e-6, '#D8F2FE')]],   # :  0    0    0 light blue
+        (-0,    '#D8F2FE')]],   # :  0    0    0 light blue
 
     # topographic levels optimized for [0, 9000] and example rescaling
     'Topographic': [(level/9000, color) for (level, color) in [
@@ -53,8 +53,8 @@ SEQUENCES.update({
 
     # elevational levels with sea level in the middle
     'Elevational': (
-        [(0.0+0.5*l, c) for (l, c) in SEQUENCES['Bathymetric']] +
-        [(0.5+0.5*l, c) for (l, c) in SEQUENCES['Topographic']]),
+        [(0.0+0.5*l-1e-6*(l==1), c) for (l, c) in SEQUENCES['Bathymetric']] +
+        [(0.5+0.5*l+1e-6*(l==0), c) for (l, c) in SEQUENCES['Topographic']]),
 
     # matte hillshading
     'Matte': [
