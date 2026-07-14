@@ -53,8 +53,8 @@ SEQUENCES.update({
 
     # elevational levels with sea level in the middle
     'Elevational': (
-        [(0.0+0.5*l, c) for (l, c) in SEQUENCES['Bathymetric']] +
-        [(0.5+0.5*l, c) for (l, c) in SEQUENCES['Topographic']]),
+        [(0.0+0.5*l-1e-6*(l==1), c) for (l, c) in SEQUENCES['Bathymetric']] +
+        [(0.5+0.5*l+1e-6*(l==0), c) for (l, c) in SEQUENCES['Topographic']]),
 
     # matte hillshading
     'Matte': [
@@ -64,8 +64,8 @@ SEQUENCES.update({
     # glossy hillshading
     'Glossy': [
         (0.0, '#ffffffff'),     # solid white
-        (0.5, '#ffffff00'),     # transparent white
-        (0.5, '#00000000'),     # transparent black
+        (0.5-1e-6, '#ffffff00'),     # transparent white
+        (0.5+1e-6, '#00000000'),     # transparent black
         (1.0, '#000000ff')]})   # solid black
 
 # colormaps dictionary (4k colors to avoid striping in plains)

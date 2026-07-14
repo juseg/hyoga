@@ -26,6 +26,16 @@ What's new
 v0.3.2 (1 Jul 2025)
 -------------------
 
+Breaking changes
+~~~~~~~~~~~~~~~~
+
+- Fix compatibility with Matplotlib 3.11.0  (:issue:`119`, :pull:`120`).
+
+.. _v0.3.2:
+
+v0.3.2 (1 Jul 2025)
+-------------------
+
 This release brings experimental support for aggregated CHELSA-W5E5_ climate as
 an alternative source for atmosphere :doc:`datasets </datasets/opening>`, which
 now use SI units. Bugs were fixed repairing the download of paleoglacier vector
