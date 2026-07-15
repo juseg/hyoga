@@ -26,10 +26,15 @@ What's new
 v0.3.2 (1 Jul 2025)
 -------------------
 
-Breaking changes
-~~~~~~~~~~~~~~~~
+Bug fixes
+~~~~~~~~~
 
 - Fix compatibility with Matplotlib 3.11.0  (:issue:`119`, :pull:`120`).
+
+Documentation
+~~~~~~~~~~~~~
+
+- Fix build errors and warnings (:issue:`121`, :pull:`122`).
 
 .. _v0.3.2:
 
