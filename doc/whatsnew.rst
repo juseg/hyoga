@@ -35,6 +35,9 @@ Documentation
 ~~~~~~~~~~~~~
 
 - Fix build errors and warnings (:issue:`121`, :pull:`122`).
+- Relax pandas_ version cap to build the docs (:issue:`83`, :pull:`123`).
+
+.. _pandas: https://pandas.pydata.org
 
 .. _v0.3.2:
 
